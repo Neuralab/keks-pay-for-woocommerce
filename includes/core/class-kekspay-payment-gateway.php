@@ -191,6 +191,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       $this->show_receipt_message();
 
       echo $this->checkout_handler->generate_url( $order );
+      echo $this->checkout_handler->generate_qr( $order );
     }
 
     /**

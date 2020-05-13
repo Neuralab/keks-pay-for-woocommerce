@@ -90,23 +90,6 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway_IPN' ) ) {
     }
 
     /**
-     * Check if local signature matches with one from KEKS Pay ($params).
-     *
-     * @param  WC_Order  $order
-     * @param  array     $params
-     * @param  boolean   $use_deprecated_id Defaults to false.
-     * @return boolean
-     */
-    public function is_signature_match( $order, $params ) {
-      $signature_p1 = $transaction_id . '#' . $order_number . '#' . $order->get_total() . '#' . $order->get_currency();
-      $signature_p2 = $params['status'] . '#' . $params['time'] . '#' . get_option( 'kekspay_secret', '' );
-
-      $local_signature = md5( $signature_p1 . '#' . $signature_p2 );
-
-      return $local_signature !== $params['signature'];
-    }
-
-    /**
      * Should be used as a callback URL for KEKS Pay API checkout request.
      */
     public function do_checkout_status() {

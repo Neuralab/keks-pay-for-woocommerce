@@ -34,6 +34,11 @@ return apply_filters(
       'default'     => __( 'Your account has been charged and your transaction is successful.', 'kekspay' ),
       'desc_tip'    => true,
     ),
+    'webhook'          => array(
+      'title'       => __( 'Webhook Endpoint', 'kekspay' ),
+      'type'        => 'title',
+      'description' => Kekspay_Payment_Gateway::settings_webhook(),
+    ),
     'webshop-options' => array(
       'title'       => __( 'Webshop data', 'kekspay' ),
       'type'        => 'title',

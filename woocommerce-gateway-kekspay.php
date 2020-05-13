@@ -76,6 +76,10 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
       add_action( 'plugins_loaded', array( $this, 'check_requirements' ) );
 
       require_once( 'includes/core/class-kekspay-payment-gateway.php' );
+      require_once( 'includes/core/class-kekspay-payment-gateway-ipn.php' );
+
+      $ipn = new Kekspay_Payment_Gateway_IPN();
+      $ipn->register();
 
       add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'add_settings_link' ) );
 
@@ -93,7 +97,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
      */
     public static function register_constants() {
       if ( ! defined( 'KEKSPAY_PLUGIN_ID' ) ) {
-        define( 'KEKSPAY_PLUGIN_ID', 'nrlb-kekspay-woocommerce' );
+        define( 'KEKSPAY_PLUGIN_ID', 'erste-kekspay-woocommerce' );
       }
       if ( ! defined( 'KEKSPAY_DIR_PATH' ) ) {
         define( 'KEKSPAY_DIR_PATH', plugin_dir_path( __FILE__ ) );

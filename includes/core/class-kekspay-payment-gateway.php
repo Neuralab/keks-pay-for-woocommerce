@@ -32,12 +32,20 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
     private $logger;
 
     /**
+     * Checkout handler.
+     *
+     * @var Kekspay_Payment_Gateway_Checkout_Handler
+     */
+    private $checkout_handler;
+
+    /**
      * Class constructor with basic gateway's setup.
      *
      * @param bool $init Should the class attributes be initialized.
      */
     public function __construct() {
       require_once( KEKSPAY_DIR_PATH . '/includes/utilities/class-kekspay-logger.php' );
+      require_once( KEKSPAY_DIR_PATH . '/includes/core/class-kekspay-payment-gateway-checkout-handler.php' );
 
       $this->id                 = KEKSPAY_PLUGIN_ID;
       $this->method_title       = __( 'KEKS Pay', 'kekspay' );
@@ -49,7 +57,8 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 
       $this->supports = array( 'products' );
 
-      $this->logger = new Kekspay_Logger( isset( $this->settings['use-logger'] ) && 'yes' === $this->settings['use-logger'] );
+      $this->logger           = new Kekspay_Logger( isset( $this->settings['use-logger'] ) && 'yes' === $this->settings['use-logger'] );
+      $this->checkout_handler = new Kekspay_Payment_Gateway_Checkout_Handler();
 
       $this->title = esc_attr( $this->settings['title'] );
 
@@ -180,9 +189,8 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
         $order->save();
       }
       $this->show_receipt_message();
-      ?>
-        <a href="https://kekspay.hr/sokolpay" class="button"><?php esc_html_e( 'Pay', 'kekspay' ) ?></a>
-      <?php
+
+      echo $this->checkout_handler->generate_url( $order );
     }
 
     /**
@@ -205,6 +213,22 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       return array(
         'result'   => 'success',
         'redirect' => $order->get_checkout_payment_url( true ),
+      );
+    }
+
+    /**
+     * Creates endpoint message for settings.
+     *
+     * @return string
+     */
+    public static function settings_webhook() {
+      return sprintf(
+        __( 'You will need to add this webhook endpoint %1$s %2$s %3$s to your %4$s KEKS Pay account settings %5$s, which will enable your webshop to recieve charge notifications from KEKS Pay.', 'kekspay' ),
+        '<strong style="background-color:#ddd;">',
+        Kekspay_Payment_Gateway_IPN::get_webhook_url(),
+        '</strong>',
+        '<a href="https://dashboard.stripe.com/account/webhooks" target="_blank">',
+        '</a>'
       );
     }
   }

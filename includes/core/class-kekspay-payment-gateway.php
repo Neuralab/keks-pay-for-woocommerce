@@ -34,9 +34,9 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
     /**
      * Checkout handler.
      *
-     * @var Kekspay_Payment_Gateway_Checkout_Handler
+     * @var Kekspay_App_Data
      */
-    private $checkout_handler;
+    private $app_data;
 
     /**
      * Class constructor with basic gateway's setup.

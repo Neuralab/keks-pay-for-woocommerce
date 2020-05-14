@@ -72,6 +72,30 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway_IPN' ) ) {
     }
 
     /**
+     * Die with error and given message, encoded as JSON, and set HTTP response status.
+     *
+     * @param string $message Message description about the failure of request.
+     */
+    private function respond_error( $message ) {
+      status_header( 400 );
+      header( 'content-type: application/json; charset=utf-8' );
+
+      $encoded_message = wp_json_encode(
+        array(
+          'status'  => -1,
+          'message' => $message,
+        )
+      );
+
+      if ( ! $encoded_message ) {
+        $this->logger->log( 'Failed to encode API response message.', 'error' );
+        $encoded_message = -1;
+      }
+
+      die( $encoded_message );
+    }
+
+    /**
      * Return assoc array of parameters from either 'php://input' (POST request
      * body), or $_REQUEST.
      *
@@ -96,13 +120,15 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway_IPN' ) ) {
       $params = $this->resolve_params();
       if ( empty( $params ) ) {
         $this->logger->log( 'Missing params for status checkout API endpoint.', 'error' );
-        $this->respond(
-          array(
-            'is_success' => false,
-            'message'    => 'Missing parameters.',
-          ),
-          400
-        );
+        $this->respond_error( 'Missing parameters.' );
+      }
+
+      // Check if required params are recieved.
+      foreach ( array( 'bill_id', 'status' ) as $required_param ) {
+        if ( ! isset( $params[ $required_param ] ) ) {
+          $this->logger->log( 'Missing ' . $required_param . ' param for status checkout API endpoint.', 'error' );
+          $this->respond_error( 'Missing or corrupt parametar ' . $required_param . '.' );
+        }
       }
 
       $order_id = wc_get_order_id_by_order_key( $params['bill_id'] );
@@ -113,22 +139,16 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway_IPN' ) ) {
       $order = wc_get_order( $order_id );
       if ( ! $order ) {
         $this->logger->log( 'Failed to find order ' . $order_id . ' for status checkout API endpoint.', 'error' );
-        $this->respond(
-          array(
-            'is_success' => false,
-            'message'    => 'Couldn\'t find corresponding order.',
-          ),
-          500
-        );
+        $this->respond_error( 'Couldn\'t find corresponding order ' . $params['bill_id'] . '.' );
       }
 
-      $order->set_status( 'processing', __( 'Payment completed via KEKS Pay', 'kekspay' ) );
+      $order->set_status( 'processing', __( 'Payment completed via KEKS Pay.', 'kekspay' ) );
       $order->save();
 
       $this->respond(
         array(
-          'is_success' => true,
-          'message'    => 'OK',
+          'status'  => 0,
+          'message' => 'Accepted',
         )
       );
     }

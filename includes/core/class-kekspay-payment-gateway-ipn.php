@@ -105,6 +105,23 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway_IPN' ) ) {
         );
       }
 
+      $order_id = wc_get_order_id_by_order_key( $params['bill_id'] );
+      if ( empty( $order_id ) ) {
+        $order_id = intval( $params['bill_id'] );
+      }
+
+      $order = wc_get_order( $order_id );
+      if ( ! $order ) {
+        $this->logger->log( 'Failed to find order ' . $order_id . ' for status checkout API endpoint.', 'error' );
+        $this->respond(
+          array(
+            'is_success' => false,
+            'message'    => 'Couldn\'t find corresponding order.',
+          ),
+          500
+        );
+      }
+
       $order->set_status( 'processing', __( 'Payment completed via KEKS Pay', 'kekspay' ) );
       $order->save();
 

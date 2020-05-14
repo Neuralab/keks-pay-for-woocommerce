@@ -2,7 +2,7 @@
 /**
  * Plugin Name: KEKS Pay for WooCommerce
  * Plugin URI: https://www.kekspay.hr/
- * Description: KEKS Pay gateway for WooCommerce.
+ * Description: KEKS Pay payment gateway for WooCommerce.
  * Version: 1.0
  * Requires at least: 5.0
  * Requires PHP: 5.6

@@ -45,7 +45,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      */
     public function __construct() {
       require_once( KEKSPAY_DIR_PATH . '/includes/utilities/class-kekspay-logger.php' );
-      require_once( KEKSPAY_DIR_PATH . '/includes/core/class-kekspay-payment-gateway-checkout-handler.php' );
+      require_once( KEKSPAY_DIR_PATH . '/includes/utilities/class-kekspay-app-data.php' );
 
       $this->id                 = KEKSPAY_PLUGIN_ID;
       $this->method_title       = __( 'KEKS Pay', 'kekspay' );
@@ -57,8 +57,8 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 
       $this->supports = array( 'products' );
 
-      $this->logger           = new Kekspay_Logger( isset( $this->settings['use-logger'] ) && 'yes' === $this->settings['use-logger'] );
-      $this->checkout_handler = new Kekspay_Payment_Gateway_Checkout_Handler();
+      $this->logger   = new Kekspay_Logger( isset( $this->settings['use-logger'] ) && 'yes' === $this->settings['use-logger'] );
+      $this->app_data = new Kekspay_App_Data();
 
       $this->title = esc_attr( $this->settings['title'] );
 
@@ -188,10 +188,11 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
         $order->add_meta_data( 'in_test_mode', 'yes', true );
         $order->save();
       }
+
       $this->show_receipt_message();
 
-      echo $this->checkout_handler->generate_url( $order );
-      echo $this->checkout_handler->generate_qr( $order );
+      echo '<a href="' . $this->app_data->get_url( $order ) . '" class="button" target="_blank">' . __( 'Pay', 'kekspay' ) . '</a>';
+      echo '<img src="' . $this->app_data->get_qr_code( $order ) . '" alt="">';
     }
 
     /**

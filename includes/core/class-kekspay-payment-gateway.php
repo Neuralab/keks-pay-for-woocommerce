@@ -203,15 +203,6 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
         <div class="kekspay-qr">
           <?php echo $this->app_data->display_kekspay_qr( $order ); ?>
         </div>
-        <div class="kekspay-order">
-        <?php
-        printf(
-          esc_html__( 'You can check the %1$s order status %2$s here.', 'kekspay' ),
-          '<a href="' . $order->get_view_order_url() . '">',
-          '</a>'
-        );
-        ?>
-        </div>
       <?php
 
       do_action( 'kekspay_receipt_after_payment_data', $order, $this->settings );

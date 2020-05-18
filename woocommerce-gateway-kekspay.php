@@ -170,7 +170,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
      */
     public function check_is_test_mode() {
       if ( 'yes' === self::get_gateway_settings( 'in-test-mode' ) ) {
-        $this->admin_notice( __( 'KEKS PAy is currently in sandbox/test mode, disable it for live web shops.', 'kekspay' ), 'warning' );
+        $this->admin_notice( __( 'KEKS Pay is currently in sandbox/test mode, disable it for live web shops.', 'kekspay' ), 'warning' );
       }
     }
 

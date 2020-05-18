@@ -69,8 +69,8 @@ if ( ! class_exists( 'Kekspay_App_Data' ) ) {
     public function get_payment_data( $order ) {
       return array(
         'qr_type' => 1,
-        'cid'     => $this->settings['webshop-cid'],
-        'tid'     => $this->settings['webshop-tid'],
+        'cid'     => $this->settings['in-test-mode'] ? $this->settings['test-webshop-cid'] : $this->settings['webshop-cid'],
+        'tid'     => $this->settings['in-test-mode'] ? $this->settings['test-webshop-tid'] : $this->settings['webshop-tid'],
         'bill_id' => $order->get_order_key(),
         'amount'  => $order->get_total(),
         'store'   => get_bloginfo( 'name' ),
@@ -120,6 +120,36 @@ if ( ! class_exists( 'Kekspay_App_Data' ) ) {
       $qr_url  = $this->uploads['qr_url'] . $qr_name;
 
       return file_exists( $qr_path ) ? $qr_url : $this->generate_qr_code( $order, $qr_path );
+    }
+
+    /**
+     * Format QR Code with html for display.
+     *
+     * @param  object $order Order for which to fetch QR code.
+     * @return string        Path to or base64 encoded QR code for mobile app wrapped in img tags.
+     */
+    public function display_kekspay_qr( $order ) {
+      return apply_filters( 'kekspay_qr_code_image', '<img id="kekspay-qr-code" src="' . $this->get_qr_code( $order ) . '">' );
+    }
+
+    /**
+     * Format Keks pay url with html for display
+     *
+     * @param  object $order Order for which to get the pay url.
+     * @return string        Link for payment.
+     */
+    public function display_kekspay_url( $order ) {
+      $attrs = apply_filters(
+        'kekspay_pay_link_attributes',
+        array(
+          'id'     => 'kekspay-pay-url',
+          'class'  => 'button',
+          'target' => '_blank',
+          'label'  => __( 'Pay via app', 'kekspay' ),
+        )
+      );
+
+      return apply_filters( 'kekspay_pay_link', '<a id="' . esc_attr( $attrs['id'] ) . '" href="' . $this->get_url( $order ) . '" class="' . esc_attr( $attrs['class'] ) . '" target="' . esc_attr( $attrs['target'] ) . '">' . esc_html( $attrs['label'] ) . '</a>' );
     }
 
   }

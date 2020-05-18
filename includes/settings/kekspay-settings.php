@@ -21,10 +21,17 @@ return apply_filters(
       'desc_tip'    => true,
     ),
     'description-msg'  => array(
-      'title'       => __( 'Description', 'kekspay' ),
+      'title'       => __( 'Checkout description', 'kekspay' ),
       'type'        => 'textarea',
       'description' => __( 'Payment method description that the customer will see on the checkout page.', 'kekspay' ),
       'default'     => __( 'Launch the app directly if using mobile device or simply scan the QR code to pay.', 'kekspay' ),
+      'desc_tip'    => true,
+    ),
+    'receipt-msg'      => array(
+      'title'       => __( 'Payment description', 'kekspay' ),
+      'type'        => 'textarea',
+      'description' => __( 'Payment method description showed to the customer with the QR code.', 'kekspay' ),
+      'default'     => __( 'Use your KEKS Pay mobile app to complete the payment.', 'kekspay' ),
       'desc_tip'    => true,
     ),
     'confirmation-msg' => array(
@@ -39,7 +46,7 @@ return apply_filters(
       'type'        => 'title',
       'description' => Kekspay_Payment_Gateway::settings_webhook(),
     ),
-    'webshop-options' => array(
+    'webshop-options'  => array(
       'title'       => __( 'Webshop data', 'kekspay' ),
       'type'        => 'title',
       'description' => '',
@@ -53,6 +60,20 @@ return apply_filters(
     ),
     'webshop-tid'      => array(
       'title'       => __( 'Webshop TID', 'kekspay' ),
+      'type'        => 'text',
+      'description' => __( 'Unique id for point of service within Webshop system. Will be given in advance by KEKS', 'kekspay' ),
+      'default'     => '',
+      'desc_tip'    => true,
+    ),
+    'test-webshop-cid' => array(
+      'title'       => __( 'TEST Webshop CID', 'kekspay' ),
+      'type'        => 'text',
+      'description' => __( 'Unique id for Webshop within KEKS system. Will be given in advance by KEKS', 'kekspay' ),
+      'default'     => '',
+      'desc_tip'    => true,
+    ),
+    'test-webshop-tid' => array(
+      'title'       => __( 'TEST Webshop TID', 'kekspay' ),
       'type'        => 'text',
       'description' => __( 'Unique id for point of service within Webshop system. Will be given in advance by KEKS', 'kekspay' ),
       'default'     => '',

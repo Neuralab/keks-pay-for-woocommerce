@@ -49,7 +49,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 
       $this->id                 = KEKSPAY_PLUGIN_ID;
       $this->method_title       = __( 'KEKS Pay', 'kekspay' );
-      $this->method_description = __( 'Take payments using KEKS pay app. Customers pay by launching it directly if on mobile device or by scanning the QR code.', 'kekspay' );
+      $this->method_description = __( 'Allow customers to complete payments using KEKS Pay mobile app.', 'kekspay' );
       $this->has_fields         = true;
 
       $this->init_form_fields();
@@ -62,13 +62,13 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 
       $this->title = esc_attr( $this->settings['title'] );
 
-      $this->add_actions();
+      $this->add_hooks();
     }
 
     /**
-     * Register different actions.
+     * Register different hooks.
      */
-    private function add_actions() {
+    private function add_hooks() {
       add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
       add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'do_receipt_page' ) );
       add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'do_order_confirmation' ) );
@@ -162,8 +162,8 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      * Echo redirect message on the 'receipt' page.
      */
     private function show_receipt_message() {
-      if ( isset( $this->settings['receipt-redirect-msg'] ) && ! empty( $this->settings['receipt-redirect-msg'] ) ) {
-        echo '<p>' . wptexturize( $this->settings['receipt-redirect-msg'] ) . '</p>';
+      if ( isset( $this->settings['receipt-msg'] ) && ! empty( $this->settings['receipt-msg'] ) ) {
+        echo '<p>' . wptexturize( $this->settings['receipt-msg'] ) . '</p>';
       }
     }
 
@@ -191,8 +191,30 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 
       $this->show_receipt_message();
 
-      echo '<a href="' . $this->app_data->get_url( $order ) . '" class="button" target="_blank">' . __( 'Pay', 'kekspay' ) . '</a>';
-      echo '<img src="' . $this->app_data->get_qr_code( $order ) . '" alt="">';
+      do_action( 'kekspay_receipt_before_payment_data', $order, $this->settings );
+
+      ?>
+        <div class="kekspay-url">
+          <div class="div">
+            <?php echo $this->app_data->display_kekspay_url( $order ); ?>
+          </div>
+          <small><a href="#" qr-code-trigger><?php esc_html_e( 'Having troubles with the link? Click here to show QR code.', 'kekspay' ); ?></a></small>
+        </div>
+        <div class="kekspay-qr">
+          <?php echo $this->app_data->display_kekspay_qr( $order ); ?>
+        </div>
+        <div class="kekspay-order">
+        <?php
+        printf(
+          esc_html__( 'You can check the %1$s order status %2$s here.', 'kekspay' ),
+          '<a href="' . $order->get_view_order_url() . '">',
+          '</a>'
+        );
+        ?>
+        </div>
+      <?php
+
+      do_action( 'kekspay_receipt_after_payment_data', $order, $this->settings );
     }
 
     /**
@@ -225,11 +247,9 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      */
     public static function settings_webhook() {
       return sprintf(
-        __( 'You will need to add this webhook endpoint %1$s %2$s %3$s to your %4$s KEKS Pay account settings %5$s, which will enable your webshop to recieve charge notifications from KEKS Pay.', 'kekspay' ),
-        '<strong style="background-color:#ddd;">',
-        Kekspay_Payment_Gateway_IPN::get_webhook_url(),
-        '</strong>',
-        '<a href="https://dashboard.stripe.com/account/webhooks" target="_blank">',
+        __( 'Please add this webhook endpoint %1$s to your %2$s KEKS Pay account settings %3$s, which will enable your webshop to recieve payment notifications from KEKS Pay.', 'kekspay' ),
+        '<strong><code class="kekspay-webhook">' . Kekspay_Payment_Gateway_IPN::get_webhook_url() . '</code></strong>',
+        '<a href="https://kekspay.hr" target="_blank">',
         '</a>'
       );
     }

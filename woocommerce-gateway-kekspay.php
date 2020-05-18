@@ -99,6 +99,9 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
       if ( ! defined( 'KEKSPAY_PLUGIN_ID' ) ) {
         define( 'KEKSPAY_PLUGIN_ID', 'erste-kekspay-woocommerce' );
       }
+      if ( ! defined( 'KEKSPAY_PLUGIN_VERSION' ) ) {
+        define( 'KEKSPAY_PLUGIN_VERSION', '1.0' );
+      }
       if ( ! defined( 'KEKSPAY_DIR_PATH' ) ) {
         define( 'KEKSPAY_DIR_PATH', plugin_dir_path( __FILE__ ) );
       }
@@ -228,23 +231,34 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
      * Register plugin's admin JS script.
      */
     public function register_admin_script() {
-      wp_enqueue_script( 'kekspay-admin-script', KEKSPAY_DIR_URL . '/assets/js/kekspay-admin.js', array( 'jquery' ), '1.0.5', true );
-      wp_localize_script(
-        'kekspay-admin-script',
-        'kekspayAdminScript',
-        array(
-          'url'               => admin_url( 'admin-ajax.php' ),
-          'test_mode'         => self::get_gateway_settings( 'in-test-mode' ),
-          'msg_error_default' => __( 'Something went wrong, please refresh the page and try again.', 'kekspay' ),
-        )
-      );
+      $screen    = get_current_screen();
+      $screen_id = $screen ? $screen->id : '';
+
+      if ( strpos( $screen_id, 'wc-settings' ) !== false ) {
+        $section = filter_input( INPUT_GET, 'section', FILTER_SANITIZE_STRING );
+
+        if ( isset( $section ) && KEKSPAY_PLUGIN_ID === $section ) {
+          wp_enqueue_style( 'kekspay-admin-style', KEKSPAY_DIR_URL . '/assets/css/kekspay-admin.css', array(), KEKSPAY_PLUGIN_VERSION );
+          wp_enqueue_script( 'kekspay-admin-script', KEKSPAY_DIR_URL . '/assets/js/kekspay-admin.js', array( 'jquery' ), KEKSPAY_PLUGIN_VERSION, true );
+          wp_localize_script(
+            'kekspay-admin-script',
+            'kekspayAdminScript',
+            array(
+              'url'               => admin_url( 'admin-ajax.php' ),
+              'test_mode'         => self::get_gateway_settings( 'in-test-mode' ),
+              'msg_error_default' => __( 'Something went wrong, please refresh the page and try again.', 'kekspay' ),
+            )
+          );
+        }
+      }
     }
 
     /**
      * Register plugin's client JS script.
      */
     public function register_client_script() {
-      wp_enqueue_script( 'kekspay-client-script', KEKSPAY_DIR_URL . '/assets/js/kekspay.js', array( 'jquery' ), '1.0.5', true );
+      wp_enqueue_style( 'kekspay-client-style', KEKSPAY_DIR_URL . '/assets/css/kekspay.css', array(), KEKSPAY_PLUGIN_VERSION );
+      wp_enqueue_script( 'kekspay-client-script', KEKSPAY_DIR_URL . '/assets/js/kekspay.js', array( 'jquery' ), KEKSPAY_PLUGIN_VERSION, true );
     }
 
     /**

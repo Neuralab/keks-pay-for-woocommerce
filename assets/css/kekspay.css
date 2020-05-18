@@ -1,0 +1,23 @@
+.kekspay-url {
+  display: none;
+}
+
+.kekspay-qr {
+  margin-bottom: 14px;
+}
+
+/**
+ * Target smartphones and touch screen devices
+ *
+ * https://www.w3.org/TR/mediaqueries-4/#mf-interaction
+ */
+@media (hover:none), (hover:on-demand), (pointer:coarse) {
+  .kekspay-qr {
+    display: none;
+  }
+
+  .kekspay-url {
+    display: block;
+    margin-bottom: 14px;
+  }
+}

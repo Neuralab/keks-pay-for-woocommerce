@@ -48,6 +48,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway_IPN' ) ) {
      * @return string
      */
     public static function get_webhook_url() {
+      error_log(print_r(untrailingslashit( WC()->api_request_url( self::$endpoint ) ),true));
       return untrailingslashit( WC()->api_request_url( self::$endpoint ) );
     }
 

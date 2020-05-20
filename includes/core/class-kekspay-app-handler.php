@@ -5,30 +5,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use chillerlan\QRCode\{QRCode, QROptions};
 
-if ( ! class_exists( 'Kekspay_App_Data' ) ) {
+if ( ! class_exists( 'Kekspay_App_Handler' ) ) {
   /**
-   * Kekspay_App_Data class
+   * Kekspay_App_Handler class
    *
    * @since 0.1
    */
-  class Kekspay_App_Data {
+  class Kekspay_App_Handler {
 
     /**
-     * Contains all the payment gateway settings values.
+     * Instance of Kekspay Data class.
      *
-     * @var array
+     * @var Kekspay_Data
      */
-    private $settings;
+    private $data;
 
     /**
-     * Url of kekspay service.
-     *
-     * @var string
-     */
-    private $keks_api_url;
-
-    /**
-     * Url of kekspay service.
+     * WordPress upload directory info.
      *
      * @var array
      */
@@ -37,15 +30,13 @@ if ( ! class_exists( 'Kekspay_App_Data' ) ) {
     /**
      * Class constructor.
      */
-    public function __construct() {
+    public function __construct( $data, $logger ) {
       require_once( KEKSPAY_DIR_PATH . 'vendor/autoload.php' );
-      require_once( KEKSPAY_DIR_PATH . 'includes/utilities/class-kekspay-logger.php' );
 
       $this->set_qr_dir();
 
-      $this->settings     = WC_Kekspay::get_gateway_settings();
-      $this->logger       = new Kekspay_Logger( isset( $this->settings['use-logger'] ) && 'yes' === $this->settings['use-logger'] );
-      $this->keks_api_url = 'https://kekspay.hr/' . ( $this->settings['in-test-mode'] ? 'sokolpay' : 'pay' );
+      $this->data   = $data;
+      $this->logger = $logger;
     }
 
     /**
@@ -69,8 +60,8 @@ if ( ! class_exists( 'Kekspay_App_Data' ) ) {
     public function get_payment_data( $order ) {
       return array(
         'qr_type' => 1,
-        'cid'     => $this->settings['in-test-mode'] ? $this->settings['test-webshop-cid'] : $this->settings['webshop-cid'],
-        'tid'     => $this->settings['in-test-mode'] ? $this->settings['test-webshop-tid'] : $this->settings['webshop-tid'],
+        'cid'     => $this->data->get_settings( 'in-test-mode' ) ? $this->data->get_settings( 'test-webshop-cid' ) : $this->data->get_settings( 'webshop-cid' ),
+        'tid'     => $this->data->get_settings( 'in-test-mode' ) ? $this->data->get_settings( 'test-webshop-tid' ) : $this->data->get_settings( 'webshop-tid' ),
         'bill_id' => $order->get_order_key(),
         'amount'  => $order->get_total(),
         'store'   => get_bloginfo( 'name' ),
@@ -84,7 +75,7 @@ if ( ! class_exists( 'Kekspay_App_Data' ) ) {
      * @return string        Url for mobile app.
      */
     public function get_url( $order ) {
-      return add_query_arg( $this->get_payment_data( $order ), $this->keks_api_url );
+      return add_query_arg( $this->get_payment_data( $order ), $this->data->get_kekspay_endpoint() );
     }
 
     /**

@@ -15,7 +15,7 @@ if ( ! class_exists( 'Kekspay_Logger' ) ) {
      *
      * @var bool
      */
-    public $is_log_enabled = false;
+    public $log_enabled = false;
 
     /**
      * List of valid logger levels, from most to least urgent.
@@ -35,21 +35,9 @@ if ( ! class_exists( 'Kekspay_Logger' ) ) {
 
     /**
      * Init logger.
-     *
-     * @param bool $is_log_enabled Defaults to false.
      */
-    public function __construct( $is_log_enabled = false ) {
-      $this->toggle_logger( $is_log_enabled );
-    }
-
-    /**
-     * Enable logger.
-     *
-     * @param  bool $is_log_enabled
-     * @return void
-     */
-    public function toggle_logger( $is_log_enabled ) {
-      $this->is_log_enabled = $is_log_enabled;
+    public function __construct( $use_logger ) {
+      $this->log_enabled = 'yes' === $use_logger;
     }
 
     /**
@@ -61,7 +49,7 @@ if ( ! class_exists( 'Kekspay_Logger' ) ) {
      * @return bool
      */
     public function log( $message, $level = 'info' ) {
-      if ( ! $this->is_log_enabled ) {
+      if ( ! $this->log_enabled ) {
         return false;
       }
 

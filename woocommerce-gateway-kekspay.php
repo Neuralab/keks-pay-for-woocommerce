@@ -66,6 +66,27 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
     protected static $instance = null;
 
     /**
+     * Instance of Kekspay Instant Payment Notification class.
+     *
+     * @var Kekspay_IPN
+     */
+    private $ipn;
+
+    /**
+     * Instance of Kekspay Data class.
+     *
+     * @var Kekspay_Data
+     */
+    private $data;
+
+    /**
+     * Instance of Kekspay Logger class.
+     *
+     * @var Kekspay_Logger
+     */
+    private $logger;
+
+    /**
      * Class constructor, initialize constants and settings.
      *
      * @since 0.1
@@ -75,12 +96,19 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
 
       add_action( 'plugins_loaded', array( $this, 'check_requirements' ) );
 
+      require_once( 'includes/utilities/class-kekspay-data.php' );
+      require_once( 'includes/utilities/class-kekspay-logger.php' );
+
       require_once( 'includes/core/class-kekspay-payment-gateway.php' );
-      require_once( 'includes/core/class-kekspay-payment-gateway-ipn.php' );
+      require_once( 'includes/core/class-kekspay-ipn.php' );
 
-      $ipn = new Kekspay_Payment_Gateway_IPN();
-      $ipn->register();
+      $this->data   = new Kekspay_Data();
+      $this->logger = new Kekspay_Logger( $this->data->get_settings( 'use-logger' ) );
 
+      $this->ipn = new Kekspay_IPN( $this->data, $this->logger );
+      $this->ipn->register();
+
+      add_filter( 'woocommerce_payment_gateways', array( $this, 'kekspay_add_gateway' ) );
       add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'add_settings_link' ) );
 
       add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_script' ) );
@@ -166,10 +194,18 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
     }
 
     /**
+     * Add KEKS Pay payment method.
+     */
+    public function kekspay_add_gateway( $methods ) {
+      $methods[] = 'Kekspay_Payment_Gateway';
+      return $methods;
+    }
+
+    /**
      * Check if test mode is on and display a notice globally in admin.
      */
     public function check_is_test_mode() {
-      if ( 'yes' === self::get_gateway_settings( 'in-test-mode' ) ) {
+      if ( 'yes' === $this->data->get_settings( 'in-test-mode' ) ) {
         $this->admin_notice( __( 'KEKS Pay is currently in sandbox/test mode, disable it for live web shops.', 'kekspay' ), 'warning' );
       }
     }
@@ -187,7 +223,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
       // Check if there already is payment method with id "nrlb-kekspay-woocommerce".
       $payment_gateways = WC_Payment_Gateways::instance()->payment_gateways();
 
-      if ( isset( $payment_gateways['nrlb-kekspay-woocommerce'] ) && ! $payment_gateways['nrlb-kekspay-woocommerce'] instanceof Kekspay_Payment_Gateway ) {
+      if ( isset( $payment_gateways[ KEKSPAY_PLUGIN_ID ] ) && ! $payment_gateways[ KEKSPAY_PLUGIN_ID ] instanceof Kekspay_Payment_Gateway ) {
         self::admin_notice( __( 'You can only have one KEKS Pay Payment Gateway active at the same time. KEKS Pay for WooCommerce plugin has been deactivated.', 'kekspay' ) );
 
         self::deactivate_self();
@@ -275,26 +311,6 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
     }
 
     /**
-     * Load gateway settings from the database.
-     *
-     * @return array
-     */
-    public static function get_gateway_settings( $setting = false ) {
-      $settings = get_option( 'woocommerce_' . KEKSPAY_PLUGIN_ID . '_settings', array() );
-      return $setting ? isset( $settings[ $setting ] ) ? $settings[ $setting ] : false : $settings;
-    }
-
-    /**
-     * Delete gateway settings. Return true if option is successfully deleted or
-     * false on failure or if option does not exist.
-     *
-     * @return bool
-     */
-    public static function delete_gateway_settings() {
-      return delete_option( 'woocommerce_' . KEKSPAY_PLUGIN_ID . '_settings' ) && delete_option( 'kekspay_plugins_check_required' );
-    }
-
-    /**
      * Installation procedure.
      *
      * @static
@@ -319,7 +335,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
       }
 
       self::register_constants();
-      self::delete_gateway_settings();
+      $this->data->delete_settings();
 
       wp_cache_flush();
     }

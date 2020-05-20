@@ -7,23 +7,18 @@ if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
   return;
 }
 
-/**
- * Register payment gateway's class as a new method of payment.
- *
- * @param array $methods
- * @return array
- */
-function kekspay_add_gateway( $methods ) {
-  $methods[] = 'Kekspay_Payment_Gateway';
-  return $methods;
-}
-add_filter( 'woocommerce_payment_gateways', 'kekspay_add_gateway' );
-
 if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
   /**
    * Kekspay_Payment_Gateway class
    */
   class Kekspay_Payment_Gateway extends WC_Payment_Gateway {
+    /**
+     * Gateway data.
+     *
+     * @var Kekspay_Data
+     */
+    protected $data;
+
     /**
      * Logger.
      *
@@ -32,20 +27,20 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
     private $logger;
 
     /**
-     * Checkout handler.
+     * App data handler.
      *
-     * @var Kekspay_App_Data
+     * @var Kekspay_App_Handler
      */
-    private $app_data;
+    private $app_handler;
 
     /**
      * Class constructor with basic gateway's setup.
-     *
-     * @param bool $init Should the class attributes be initialized.
      */
     public function __construct() {
+      require_once( KEKSPAY_DIR_PATH . '/includes/utilities/class-kekspay-data.php' );
       require_once( KEKSPAY_DIR_PATH . '/includes/utilities/class-kekspay-logger.php' );
-      require_once( KEKSPAY_DIR_PATH . '/includes/utilities/class-kekspay-app-data.php' );
+
+      require_once( KEKSPAY_DIR_PATH . '/includes/core/class-kekspay-app-handler.php' );
 
       $this->id                 = KEKSPAY_PLUGIN_ID;
       $this->method_title       = __( 'KEKS Pay', 'kekspay' );
@@ -57,10 +52,12 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 
       $this->supports = array( 'products' );
 
-      $this->logger   = new Kekspay_Logger( isset( $this->settings['use-logger'] ) && 'yes' === $this->settings['use-logger'] );
-      $this->app_data = new Kekspay_App_Data();
+      $this->data   = new Kekspay_Data();
+      $this->logger = new Kekspay_Logger( $this->data->get_settings( 'use-logger' ) );
 
-      $this->title = esc_attr( $this->settings['title'] );
+      $this->app_handler = new Kekspay_App_Handler( $this->data, $this->logger );
+
+      $this->title = esc_attr( $this->data->get_settings( 'title' ) );
 
       $this->add_hooks();
     }
@@ -103,6 +100,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
     public function admin_options() {
       ?>
       <h2><?php esc_html_e( 'KEKSPay Payment Gateway', 'kekspay' ); ?></h2>
+
       <table class="form-table">
         <?php $this->generate_settings_html(); ?>
       </table>
@@ -126,11 +124,13 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      * @override
      */
     public function payment_fields() {
-      if ( isset( $this->settings['description-msg'] ) && ! empty( $this->settings['description-msg'] ) ) {
-        echo '<p>' . wptexturize( $this->settings['description-msg'] ) . '</p>';
+      $gateway_desc = $this->data->get_settings( 'description-msg' );
+
+      if ( isset( $gateway_desc ) && ! empty( $gateway_desc ) ) {
+        echo '<p>' . wptexturize( $gateway_desc ) . '</p>';
       }
 
-      if ( 'yes' === $this->settings['in-test-mode'] ) {
+      if ( 'yes' === $this->data->get_settings( 'in-test-mode' ) ) {
         $test_mode_notice = '<p><b>' . __( 'Kekspay is currently in sandbox/test mode, disable it for live web shops.', 'kekspay' ) . '</b></p>';
         $test_mode_notice = apply_filters( 'kekspay_payment_description_test_mode_notice', $test_mode_notice );
 
@@ -144,7 +144,8 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      * Echo confirmation message on the 'thank you' page.
      */
     public function do_order_confirmation( $order_id ) {
-      $order = wc_get_order( $order_id );
+      $order             = wc_get_order( $order_id );
+      $confirmation_desc = $this->data->get_settings( 'confirmation-msg' );
 
       if ( $order ) {
         $order->update_meta_data( 'kekspay_status', 'pending_approval' );
@@ -153,8 +154,8 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
         $this->logger->log( 'Failed to find order with ID ' . $order_id . ' while displaying order confirmation.', 'warning' );
       }
 
-      if ( isset( $this->settings['confirmation-msg'] ) && ! empty( $this->settings['confirmation-msg'] ) ) {
-        echo '<p>' . wptexturize( $this->settings['confirmation-msg'] ) . '</p>';
+      if ( isset( $confirmation_desc ) && ! empty( $confirmation_desc ) ) {
+        echo '<p>' . wptexturize( $confirmation_desc ) . '</p>';
       }
     }
 
@@ -162,8 +163,10 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      * Echo redirect message on the 'receipt' page.
      */
     private function show_receipt_message() {
-      if ( isset( $this->settings['receipt-msg'] ) && ! empty( $this->settings['receipt-msg'] ) ) {
-        echo '<p>' . wptexturize( $this->settings['receipt-msg'] ) . '</p>';
+      $receipt_desc = $this->data->get_settings( 'receipt-msg' );
+
+      if ( isset( $receipt_desc ) && ! empty( $receipt_desc ) ) {
+        echo '<p>' . wptexturize( $receipt_desc ) . '</p>';
       }
     }
 
@@ -174,6 +177,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      */
     public function do_receipt_page( $order_id ) {
       $order = wc_get_order( $order_id );
+
       if ( ! $order ) {
         $this->logger->log( 'Failed to find order ' . $order_id . ' while trying to show receipt page.', 'warning' );
         return false;
@@ -182,7 +186,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       $order->add_meta_data( 'kekspay_status', 'pending', true );
       $order->save();
 
-      $is_test_mode = 'yes' === $this->settings['in-test-mode'];
+      $is_test_mode = 'yes' === $this->data->get_settings( 'in-test-mode' );
       if ( $is_test_mode ) {
         $order->add_order_note( __( 'Order was done in <b>test mode</b>.', 'kekspay' ) );
         $order->add_meta_data( 'in_test_mode', 'yes', true );
@@ -191,21 +195,21 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 
       $this->show_receipt_message();
 
-      do_action( 'kekspay_receipt_before_payment_data', $order, $this->settings );
+      do_action( 'kekspay_receipt_before_payment_data', $order, $this->data->get_settings() );
 
       ?>
         <div class="kekspay-url">
           <div class="div">
-            <?php echo $this->app_data->display_kekspay_url( $order ); ?>
+            <?php echo $this->app_handler->display_kekspay_url( $order ); ?>
           </div>
           <small><a href="#" qr-code-trigger><?php esc_html_e( 'Having troubles with the link? Click here to show QR code.', 'kekspay' ); ?></a></small>
         </div>
         <div class="kekspay-qr">
-          <?php echo $this->app_data->display_kekspay_qr( $order ); ?>
+          <?php echo $this->app_handler->display_kekspay_qr( $order ); ?>
         </div>
       <?php
 
-      do_action( 'kekspay_receipt_after_payment_data', $order, $this->settings );
+      do_action( 'kekspay_receipt_after_payment_data', $order, $this->data->get_settings() );
     }
 
     /**
@@ -217,12 +221,12 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      */
     public function process_payment( $order_id ) {
       $order = wc_get_order( $order_id );
+
       if ( ! $order ) {
         $this->logger->log( 'Failed to find order ' . $order_id . ' while trying to process payment.', 'critical' );
         return;
       }
 
-      // Remove cart.
       WC()->cart->empty_cart();
 
       return array(
@@ -231,18 +235,5 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       );
     }
 
-    /**
-     * Creates endpoint message for settings.
-     *
-     * @return string
-     */
-    public static function settings_webhook() {
-      return sprintf(
-        __( 'Please add this webhook endpoint %1$s to your %2$s KEKS Pay account settings %3$s, which will enable your webshop to recieve payment notifications from KEKS Pay.', 'kekspay' ),
-        '<strong><code class="kekspay-webhook">' . Kekspay_Payment_Gateway_IPN::get_webhook_url() . '</code></strong>',
-        '<a href="https://kekspay.hr" target="_blank">',
-        '</a>'
-      );
-    }
   }
 }

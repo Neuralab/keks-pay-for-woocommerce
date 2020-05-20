@@ -44,7 +44,7 @@ return apply_filters(
     'webhook'          => array(
       'title'       => __( 'Webhook Endpoint', 'kekspay' ),
       'type'        => 'title',
-      'description' => Kekspay_Payment_Gateway::settings_webhook(),
+      'description' => Kekspay_Data::get_settings_endpoint_field(),
     ),
     'webshop-options'  => array(
       'title'       => __( 'Webshop data', 'kekspay' ),

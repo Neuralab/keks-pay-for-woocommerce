@@ -3,53 +3,41 @@ if ( ! defined( 'ABSPATH' ) ) {
   exit;
 }
 
-if ( ! class_exists( 'Kekspay_Payment_Gateway_IPN' ) ) {
+if ( ! class_exists( 'Kekspay_IPN' ) ) {
   /**
-   * Kekspay_Payment_Gateway_IPN class
+   * Kekspay_IPN class
    *
    * @since 0.1
    */
-  class Kekspay_Payment_Gateway_IPN {
+  class Kekspay_IPN {
 
     /**
-     * Contains all the payment gateway settings values.
+     * Instance of Kekspay Data class.
      *
-     * @var array
+     * @var Kekspay_Data
      */
-    private $settings;
+    private $data;
 
     /**
-     * Webhook endpoint.
+     * Instance of Kekspay Logger class.
      *
-     * @var array
+     * @var Kekspay_Logger
      */
-    private static $endpoint = 'wc-kekspay';
+    private $logger;
 
     /**
      * Class constructor.
      */
-    public function __construct() {
-      require_once( KEKSPAY_DIR_PATH . '/includes/utilities/class-kekspay-logger.php' );
-
-      $this->settings = WC_Kekspay::get_gateway_settings();
-      $this->logger   = new Kekspay_Logger( isset( $this->settings['use-logger'] ) && 'yes' === $this->settings['use-logger'] );
+    public function __construct( $data, $logger ) {
+      $this->data   = $data;
+      $this->logger = $logger;
     }
 
     /**
      * Initialize all the needed hook methods.
      */
     public function register() {
-      add_action( 'woocommerce_api_' . self::$endpoint, array( $this, 'do_checkout_status' ) );
-    }
-
-    /**
-     * Return full URL of the 'kekspay' endpoint.
-     *
-     * @return string
-     */
-    public static function get_webhook_url() {
-      error_log(print_r(untrailingslashit( WC()->api_request_url( self::$endpoint ) ),true));
-      return untrailingslashit( WC()->api_request_url( self::$endpoint ) );
+      add_action( 'woocommerce_api_' . Kekspay_Data::get_wc_endpoint(), array( $this, 'do_checkout_status' ) );
     }
 
     /**
@@ -143,8 +131,17 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway_IPN' ) ) {
         $this->respond_error( 'Couldn\'t find corresponding order ' . $params['bill_id'] . '.' );
       }
 
-      $order->set_status( 'processing', __( 'Payment completed via KEKS Pay.', 'kekspay' ) );
-      $order->save();
+      if ( (int) $params['status'] !== 0 ) {
+        $this->logger->log( 'Failed to complete payment for order ' . $order_id . ', message: ' . $params['message'], 'error' );
+        $order->add_meta_data( 'kekspay_status', strtolower( $params['message'] ), true );
+        $order->add_order_note( __( 'Payment failed via KEKS Pay.', 'kekspay' ) );
+        $order->save();
+      } else {
+        $this->logger->log( 'Successfully completed payment for order ' . $order_id, 'notice' );
+        $order->set_status( 'processing', __( 'Payment completed via KEKS Pay.', 'kekspay' ) );
+        $order->add_meta_data( 'kekspay_status', strtolower( $params['message'] ), true );
+        $order->save();
+      }
 
       $this->respond(
         array(

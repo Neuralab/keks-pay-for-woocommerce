@@ -116,6 +116,12 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
         $this->respond_error( 'Couldn\'t find corresponding order ' . $params['bill_id'] . '.' );
       }
 
+      // Verify signature recieved.
+      if ( ! hash_equals( Kekspay_Data::get_signature( $order ), $params['signature'] ) ) {
+        Kekspay_Logger::log( 'Failed to verify signature ' . $params['signature'], 'error' );
+        $this->respond_error( 'Signature mismatch, failed to verify.' );
+      }
+
       if ( (int) $params['status'] !== 0 ) {
         Kekspay_Logger::log( 'Failed to complete payment for order ' . $order_id . ', message: ' . $params['message'], 'error' );
         $order->add_meta_data( 'kekspay_status', strtolower( $params['message'] ), true );

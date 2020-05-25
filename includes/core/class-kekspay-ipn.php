@@ -12,31 +12,9 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
   class Kekspay_IPN {
 
     /**
-     * Instance of Kekspay Data class.
-     *
-     * @var Kekspay_Data
-     */
-    private $data;
-
-    /**
-     * Instance of Kekspay Logger class.
-     *
-     * @var Kekspay_Logger
-     */
-    private $logger;
-
-    /**
      * Class constructor.
      */
-    public function __construct( $data, $logger ) {
-      $this->data   = $data;
-      $this->logger = $logger;
-    }
-
-    /**
-     * Initialize all the needed hook methods.
-     */
-    public function register() {
+    public function __construct() {
       add_action( 'woocommerce_api_' . Kekspay_Data::get_wc_endpoint(), array( $this, 'do_checkout_status' ) );
     }
 
@@ -53,7 +31,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
       $encoded_message = wp_json_encode( $message );
 
       if ( ! $encoded_message ) {
-        $this->logger->log( 'Failed to encode API response message.', 'error' );
+        Kekspay_Logger::log( 'Failed to encode API response message.', 'error' );
         $encoded_message = -1;
       }
 
@@ -77,7 +55,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
       );
 
       if ( ! $encoded_message ) {
-        $this->logger->log( 'Failed to encode API response message.', 'error' );
+        Kekspay_Logger::log( 'Failed to encode API response message.', 'error' );
         $encoded_message = -1;
       }
 
@@ -99,7 +77,16 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
         // phpcs:enable
       }
 
-      return $params;
+      if ( $params ) {
+        return array_map(
+          function( $item ) {
+            return filter_var( $item, FILTER_SANITIZE_STRING );
+          },
+          $params
+        );
+      }
+
+      return false;
     }
 
     /**
@@ -107,37 +94,35 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
      */
     public function do_checkout_status() {
       $params = $this->resolve_params();
-      if ( empty( $params ) ) {
-        $this->logger->log( 'Missing params for status checkout API endpoint.', 'error' );
+      // Check if any parametars are received.
+      if ( $params ) {
+        Kekspay_Logger::log( 'Missing params for status checkout API endpoint.', 'error' );
         $this->respond_error( 'Missing parameters.' );
       }
 
       // Check if required params are recieved.
-      foreach ( array( 'bill_id', 'status' ) as $required_param ) {
+      foreach ( array( 'bill_id', 'status', 'signature' ) as $required_param ) {
         if ( ! isset( $params[ $required_param ] ) ) {
-          $this->logger->log( 'Missing ' . $required_param . ' param for status checkout API endpoint.', 'error' );
+          Kekspay_Logger::log( 'Missing ' . $required_param . ' param for status checkout API endpoint.', 'error' );
           $this->respond_error( 'Missing or corrupt parametar ' . $required_param . '.' );
         }
       }
 
-      $order_id = wc_get_order_id_by_order_key( $params['bill_id'] );
-      if ( empty( $order_id ) ) {
-        $order_id = intval( $params['bill_id'] );
-      }
-
-      $order = wc_get_order( $order_id );
+      // Extract order id and check if order exists.
+      $order_id = Kekspay_Data::get_order_id_by_bill_id( $params['bill_id'] );
+      $order    = wc_get_order( $order_id );
       if ( ! $order ) {
-        $this->logger->log( 'Failed to find order ' . $order_id . ' for status checkout API endpoint.', 'error' );
+        Kekspay_Logger::log( 'Failed to find order ' . $order_id . ' for status checkout API endpoint.', 'error' );
         $this->respond_error( 'Couldn\'t find corresponding order ' . $params['bill_id'] . '.' );
       }
 
       if ( (int) $params['status'] !== 0 ) {
-        $this->logger->log( 'Failed to complete payment for order ' . $order_id . ', message: ' . $params['message'], 'error' );
+        Kekspay_Logger::log( 'Failed to complete payment for order ' . $order_id . ', message: ' . $params['message'], 'error' );
         $order->add_meta_data( 'kekspay_status', strtolower( $params['message'] ), true );
         $order->add_order_note( __( 'Payment failed via KEKS Pay.', 'kekspay' ) );
         $order->save();
       } else {
-        $this->logger->log( 'Successfully completed payment for order ' . $order_id, 'notice' );
+        Kekspay_Logger::log( 'Successfully completed payment for order ' . $order_id, 'notice' );
         $order->set_status( 'processing', __( 'Payment completed via KEKS Pay.', 'kekspay' ) );
         $order->add_meta_data( 'kekspay_status', strtolower( $params['message'] ), true );
         $order->save();
@@ -152,3 +137,5 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
     }
   }
 }
+
+new Kekspay_IPN();

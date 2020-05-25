@@ -99,22 +99,16 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
       require_once( 'includes/utilities/class-kekspay-data.php' );
       require_once( 'includes/utilities/class-kekspay-logger.php' );
 
-      require_once( 'includes/core/class-kekspay-payment-gateway.php' );
       require_once( 'includes/core/class-kekspay-ipn.php' );
+      require_once( 'includes/core/class-kekspay-payment-gateway.php' );
 
-      $this->data   = new Kekspay_Data();
-      $this->logger = new Kekspay_Logger( $this->data->get_settings( 'use-logger' ) );
-
-      $this->ipn = new Kekspay_IPN( $this->data, $this->logger );
-      $this->ipn->register();
-
-      add_filter( 'woocommerce_payment_gateways', array( $this, 'kekspay_add_gateway' ) );
+      add_filter( 'woocommerce_payment_gateways', array( $this, 'add_gateway' ) );
       add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'add_settings_link' ) );
 
       add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_script' ) );
       add_action( 'wp_enqueue_scripts', array( $this, 'register_client_script' ) );
-      add_action( 'admin_init', array( $this, 'check_is_test_mode' ) );
       add_action( 'plugins_loaded', array( $this, 'load_textdomain' ), 5 );
+      add_action( 'admin_init', array( $this, 'check_settings' ), 20 );
       add_action( 'admin_init', array( $this, 'check_for_other_kekspay_gateways' ), 1 );
       add_action( 'activated_plugin', array( $this, 'set_kekspay_plugins_check_required' ) );
       add_action( 'woocommerce_admin_field_payment_gateways', array( $this, 'set_kekspay_plugins_check_required' ) );
@@ -196,17 +190,33 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
     /**
      * Add KEKS Pay payment method.
      */
-    public function kekspay_add_gateway( $methods ) {
+    public function add_gateway( $methods ) {
       $methods[] = 'Kekspay_Payment_Gateway';
       return $methods;
     }
 
     /**
-     * Check if test mode is on and display a notice globally in admin.
+     * Check gateway settings and dispatch notice.
      */
-    public function check_is_test_mode() {
-      if ( 'yes' === $this->data->get_settings( 'in-test-mode' ) ) {
+    public function check_settings() {
+      // If payment gateway is not enabled bail.
+      if ( ! Kekspay_Data::enabled() ) {
+        return;
+      }
+
+      // Check if gateway is currently in test mode.
+      if ( Kekspay_Data::test_mode() ) {
         $this->admin_notice( __( 'KEKS Pay is currently in sandbox/test mode, disable it for live web shops.', 'kekspay' ), 'warning' );
+      }
+
+      // Check if all setting keys required for gateway to work are set.
+      if ( ! Kekspay_Data::required_keys_set() ) {
+        $this->admin_notice( __( 'KEKS Pay is almost ready for use, Webshop data needs to be set up before using the gateway.', 'kekspay' ), 'info' );
+      }
+
+      // Check if correct currency is set in webshop.
+      if ( ! Kekspay_Data::currency_supported() ) {
+        $this->admin_notice( __( 'KEKS Pay does not support your currency, please set it to "HRK".', 'kekspay' ), 'warning' );
       }
     }
 
@@ -242,7 +252,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
      */
     public static function deactivate_self() {
       remove_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( self::get_instance(), 'add_settings_link' ) );
-      remove_action( 'admin_init', array( self::get_instance(), 'check_is_test_mode' ) );
+      remove_action( 'admin_init', array( self::get_instance(), 'check_settings' ), 20 );
 
       deactivate_plugins( plugin_basename( __FILE__ ) );
       unset( $_GET['activate'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -281,7 +291,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
             'kekspayAdminScript',
             array(
               'url'               => admin_url( 'admin-ajax.php' ),
-              'test_mode'         => self::get_gateway_settings( 'in-test-mode' ),
+              'test_mode'         => Kekspay_Data::test_mode(),
               'msg_error_default' => __( 'Something went wrong, please refresh the page and try again.', 'kekspay' ),
             )
           );
@@ -335,7 +345,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
       }
 
       self::register_constants();
-      $this->data->delete_settings();
+      Kekspay_Data::delete_settings();
 
       wp_cache_flush();
     }

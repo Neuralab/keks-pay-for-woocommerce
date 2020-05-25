@@ -11,18 +11,11 @@ if ( ! class_exists( 'Kekspay_Logger' ) ) {
    */
   class Kekspay_Logger {
     /**
-     * Whether or not logging is enabled.
-     *
-     * @var bool
-     */
-    public $log_enabled = false;
-
-    /**
      * List of valid logger levels, from most to least urgent.
      *
      * @var array
      */
-    public $log_levels = array(
+    public static $log_levels = array(
       'emergency',
       'alert',
       'critical',
@@ -34,13 +27,6 @@ if ( ! class_exists( 'Kekspay_Logger' ) ) {
     );
 
     /**
-     * Init logger.
-     */
-    public function __construct( $use_logger ) {
-      $this->log_enabled = 'yes' === $use_logger;
-    }
-
-    /**
      * Logs given message for given level and return true if successful, false
      * otherwise.
      *
@@ -48,28 +34,27 @@ if ( ! class_exists( 'Kekspay_Logger' ) ) {
      * @param  string  $level    Check $log_levels for valid level values, defaults to 'info'.
      * @return bool
      */
-    public function log( $message, $level = 'info' ) {
-      if ( ! $this->log_enabled ) {
+    public static function log( $message, $level = 'info' ) {
+      if ( 'yes' !== Kekspay_Data::get_settings( 'use-logger' ) ) {
         return false;
       }
 
-      if ( empty( $this->logger ) ) {
-        if ( function_exists( 'wc_get_logger' ) ) {
-          $this->logger = wc_get_logger();
-        } else {
-          return false;
-        }
+      // Check if WooCommerce logger function exists.
+      if ( function_exists( 'wc_get_logger' ) ) {
+        $logger = wc_get_logger();
+      } else {
+        return false;
       }
 
       // Check if provided level is valid and fall back to 'notice' level if not.
-      if ( ! in_array( $level, $this->log_levels, true ) ) {
-        $this->log( 'Invalid log level provided: ' . $level, 'debug' );
+      if ( ! in_array( $level, self::$log_levels, true ) ) {
+        self::log( 'Invalid log level provided: ' . $level, 'debug' );
         $level = 'notice';
       }
 
-      $this->logger->log(
+      $logger->log(
         $level,
-        $message,
+        'Kekspay v' . KEKSPAY_PLUGIN_VERSION . ' - ' . $message,
         array(
           'source' => KEKSPAY_PLUGIN_ID,
         )

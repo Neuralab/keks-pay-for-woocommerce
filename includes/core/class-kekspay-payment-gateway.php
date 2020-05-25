@@ -29,9 +29,9 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
     /**
      * App data handler.
      *
-     * @var Kekspay_App_Handler
+     * @var Kekspay_Sell
      */
-    private $app_handler;
+    private $sell;
 
     /**
      * Class constructor with basic gateway's setup.
@@ -40,7 +40,8 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       require_once( KEKSPAY_DIR_PATH . '/includes/utilities/class-kekspay-data.php' );
       require_once( KEKSPAY_DIR_PATH . '/includes/utilities/class-kekspay-logger.php' );
 
-      require_once( KEKSPAY_DIR_PATH . '/includes/core/class-kekspay-app-handler.php' );
+      require_once( KEKSPAY_DIR_PATH . '/includes/core/class-kekspay-connector.php' );
+      require_once( KEKSPAY_DIR_PATH . '/includes/core/class-kekspay-sell.php' );
 
       $this->id                 = KEKSPAY_PLUGIN_ID;
       $this->method_title       = __( 'KEKS Pay', 'kekspay' );
@@ -52,12 +53,12 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 
       $this->supports = array( 'products' );
 
-      $this->data   = new Kekspay_Data();
-      $this->logger = new Kekspay_Logger( $this->data->get_settings( 'use-logger' ) );
+      $this->logger = new Kekspay_Logger( Kekspay_Data::get_settings( 'use-logger' ) );
 
-      $this->app_handler = new Kekspay_App_Handler( $this->data, $this->logger );
+      $this->connector = new Kekspay_Connector( $this->logger );
+      $this->sell      = new Kekspay_Sell( $this->logger );
 
-      $this->title = esc_attr( $this->data->get_settings( 'title' ) );
+      $this->title = esc_attr( Kekspay_Data::get_settings( 'title' ) );
 
       $this->add_hooks();
     }
@@ -73,12 +74,25 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       add_filter( 'woocommerce_gateway_icon', array( $this, 'do_gateway_checkout_icon' ), 10, 2 );
     }
 
+    /**
+     * Check if we need to make gateways available.
+     *
+     * @override
+     */
+    public function is_available() {
+      if ( ! Kekspay_Data::required_keys_set() || ! Kekspay_Data::currency_supported() ) {
+        return false;
+      }
+
+      return parent::is_available();
+    }
 
     /**
      * Trigger 'kekspay_gateway_checkout_icon' hook.
      *
      * @param  string $icon
      * @param  string $id
+     *
      * @return string
      */
     public function do_gateway_checkout_icon( $icon, $id ) {
@@ -124,13 +138,13 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      * @override
      */
     public function payment_fields() {
-      $gateway_desc = $this->data->get_settings( 'description-msg' );
+      $gateway_desc = Kekspay_Data::get_settings( 'description-msg' );
 
       if ( isset( $gateway_desc ) && ! empty( $gateway_desc ) ) {
         echo '<p>' . wptexturize( $gateway_desc ) . '</p>';
       }
 
-      if ( 'yes' === $this->data->get_settings( 'in-test-mode' ) ) {
+      if ( Kekspay_Data::test_mode() ) {
         $test_mode_notice = '<p><b>' . __( 'Kekspay is currently in sandbox/test mode, disable it for live web shops.', 'kekspay' ) . '</b></p>';
         $test_mode_notice = apply_filters( 'kekspay_payment_description_test_mode_notice', $test_mode_notice );
 
@@ -145,13 +159,13 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      */
     public function do_order_confirmation( $order_id ) {
       $order             = wc_get_order( $order_id );
-      $confirmation_desc = $this->data->get_settings( 'confirmation-msg' );
+      $confirmation_desc = Kekspay_Data::get_settings( 'confirmation-msg' );
 
       if ( $order ) {
         $order->update_meta_data( 'kekspay_status', 'pending_approval' );
         $order->save();
       } else {
-        $this->logger->log( 'Failed to find order with ID ' . $order_id . ' while displaying order confirmation.', 'warning' );
+        Kekspay_Logger::log( 'Failed to find order with ID ' . $order_id . ' while displaying order confirmation.', 'warning' );
       }
 
       if ( isset( $confirmation_desc ) && ! empty( $confirmation_desc ) ) {
@@ -163,7 +177,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      * Echo redirect message on the 'receipt' page.
      */
     private function show_receipt_message() {
-      $receipt_desc = $this->data->get_settings( 'receipt-msg' );
+      $receipt_desc = Kekspay_Data::get_settings( 'receipt-msg' );
 
       if ( isset( $receipt_desc ) && ! empty( $receipt_desc ) ) {
         echo '<p>' . wptexturize( $receipt_desc ) . '</p>';
@@ -179,15 +193,14 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       $order = wc_get_order( $order_id );
 
       if ( ! $order ) {
-        $this->logger->log( 'Failed to find order ' . $order_id . ' while trying to show receipt page.', 'warning' );
+        Kekspay_Logger::log( 'Failed to find order ' . $order_id . ' while trying to show receipt page.', 'warning' );
         return false;
       }
 
       $order->add_meta_data( 'kekspay_status', 'pending', true );
       $order->save();
 
-      $is_test_mode = 'yes' === $this->data->get_settings( 'in-test-mode' );
-      if ( $is_test_mode ) {
+      if ( Kekspay_Data::test_mode() ) {
         $order->add_order_note( __( 'Order was done in <b>test mode</b>.', 'kekspay' ) );
         $order->add_meta_data( 'in_test_mode', 'yes', true );
         $order->save();
@@ -195,21 +208,21 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 
       $this->show_receipt_message();
 
-      do_action( 'kekspay_receipt_before_payment_data', $order, $this->data->get_settings() );
+      do_action( 'kekspay_receipt_before_payment_data', $order, Kekspay_Data::get_settings() );
 
       ?>
         <div class="kekspay-url">
           <div class="div">
-            <?php echo $this->app_handler->display_kekspay_url( $order ); ?>
+            <?php echo $this->sell->display_sell_url( $order ); ?>
           </div>
           <small><a href="#" qr-code-trigger><?php esc_html_e( 'Having troubles with the link? Click here to show QR code.', 'kekspay' ); ?></a></small>
         </div>
         <div class="kekspay-qr">
-          <?php echo $this->app_handler->display_kekspay_qr( $order ); ?>
+          <?php echo $this->sell->display_sell_qr( $order ); ?>
         </div>
       <?php
 
-      do_action( 'kekspay_receipt_after_payment_data', $order, $this->data->get_settings() );
+      do_action( 'kekspay_receipt_after_payment_data', $order, Kekspay_Data::get_settings() );
     }
 
     /**
@@ -223,7 +236,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       $order = wc_get_order( $order_id );
 
       if ( ! $order ) {
-        $this->logger->log( 'Failed to find order ' . $order_id . ' while trying to process payment.', 'critical' );
+        Kekspay_Logger::log( 'Failed to find order ' . $order_id . ' while trying to process payment.', 'critical' );
         return;
       }
 

@@ -96,14 +96,14 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
       $params = $this->resolve_params();
       // Check if any parametars are received.
       if ( ! $params ) {
-        Kekspay_Logger::log( 'Missing params for status checkout API endpoint.', 'error' );
+        Kekspay_Logger::log( 'Missing parameters in the request from IPN.', 'error' );
         $this->respond_error( 'Missing parameters.' );
       }
 
       // Check if required params are recieved.
       foreach ( array( 'bill_id', 'status', 'signature' ) as $required_param ) {
         if ( ! isset( $params[ $required_param ] ) ) {
-          Kekspay_Logger::log( 'Missing ' . $required_param . ' param for status checkout API endpoint.', 'error' );
+          Kekspay_Logger::log( 'Missing ' . $required_param . ' parametar in the request from IPN.', 'error' );
           $this->respond_error( 'Missing or corrupt parametar ' . $required_param . '.' );
         }
       }

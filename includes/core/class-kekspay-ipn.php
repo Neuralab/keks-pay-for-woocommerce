@@ -95,7 +95,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
     public function do_checkout_status() {
       $params = $this->resolve_params();
       // Check if any parametars are received.
-      if ( $params ) {
+      if ( ! $params ) {
         Kekspay_Logger::log( 'Missing params for status checkout API endpoint.', 'error' );
         $this->respond_error( 'Missing parameters.' );
       }

@@ -137,8 +137,9 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      *
      * @return string
      */
-    public static function get_kekspay_endpoint() {
-      return self::$kekspay . ( self::test_mode() ? 'sokolpay' : 'pay' );
+    public static function get_kekspay_endpoint( $trailingslash = false ) {
+      $endpoint = self::$kekspay . ( self::test_mode() ? 'sokolpay' : 'pay' );
+      return $trailingslash ? trailingslashit( $endpoint ) : $endpoint;
     }
 
     /**
@@ -182,13 +183,12 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      */
     public static function get_sell_data( $order ) {
       return array(
-        'qr_type'  => 1,
-        'cid'      => self::get_settings( 'webshop-cid', true ),
-        'tid'      => self::get_settings( 'webshop-tid', true ),
-        'bill_id'  => self::get_bill_id_by_order_id( $order->get_id() ),
-        'currency' => 'HRK',
-        'amount'   => $order->get_total(),
-        'store'    => self::get_settings( 'store-msg' ),
+        'qr_type' => 1,
+        'cid'     => self::get_settings( 'webshop-cid', true ),
+        'tid'     => self::get_settings( 'webshop-tid', true ),
+        'bill_id' => self::get_bill_id_by_order_id( $order->get_id() ),
+        'amount'  => $order->get_total(),
+        'store'   => self::get_settings( 'store-msg' ),
       );
     }
 

@@ -12,19 +12,6 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
    * Kekspay_Payment_Gateway class
    */
   class Kekspay_Payment_Gateway extends WC_Payment_Gateway {
-    /**
-     * Gateway data.
-     *
-     * @var Kekspay_Data
-     */
-    protected $data;
-
-    /**
-     * Logger.
-     *
-     * @var Kekspay_Logger
-     */
-    private $logger;
 
     /**
      * App data handler.
@@ -37,9 +24,6 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      * Class constructor with basic gateway's setup.
      */
     public function __construct() {
-      require_once( KEKSPAY_DIR_PATH . '/includes/utilities/class-kekspay-data.php' );
-      require_once( KEKSPAY_DIR_PATH . '/includes/utilities/class-kekspay-logger.php' );
-
       require_once( KEKSPAY_DIR_PATH . '/includes/core/class-kekspay-connector.php' );
       require_once( KEKSPAY_DIR_PATH . '/includes/core/class-kekspay-sell.php' );
 
@@ -53,10 +37,8 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 
       $this->supports = array( 'products' );
 
-      $this->logger = new Kekspay_Logger( Kekspay_Data::get_settings( 'use-logger' ) );
-
-      $this->connector = new Kekspay_Connector( $this->logger );
-      $this->sell      = new Kekspay_Sell( $this->logger );
+      $this->connector = new Kekspay_Connector();
+      $this->sell      = new Kekspay_Sell();
 
       $this->title = esc_attr( Kekspay_Data::get_settings( 'title' ) );
 
@@ -230,6 +212,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      *
      * @override
      * @param string $order_id
+     *
      * @return array
      */
     public function process_payment( $order_id ) {

@@ -94,14 +94,19 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
     protected function __construct() {
       self::register_constants();
 
+      // Check requirements are met.
       add_action( 'plugins_loaded', array( $this, 'check_requirements' ) );
 
+      // Rquire all necessary files.
       require_once( 'includes/utilities/class-kekspay-data.php' );
       require_once( 'includes/utilities/class-kekspay-logger.php' );
 
+      require_once( 'includes/core/class-kekspay-connector.php' );
+      require_once( 'includes/core/class-kekspay-sell.php' );
       require_once( 'includes/core/class-kekspay-ipn.php' );
       require_once( 'includes/core/class-kekspay-payment-gateway.php' );
 
+      // Add hooks.
       add_filter( 'woocommerce_payment_gateways', array( $this, 'add_gateway' ) );
       add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'add_settings_link' ) );
 

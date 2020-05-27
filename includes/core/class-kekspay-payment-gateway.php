@@ -113,7 +113,6 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       $this->form_fields = include( KEKSPAY_DIR_PATH . '/includes/settings/kekspay-settings.php' );
     }
 
-
     /**
      * Display description of the gateway on the checkout page.
      *
@@ -127,8 +126,10 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       }
 
       if ( Kekspay_Data::test_mode() ) {
-        $test_mode_notice = '<p><b>' . __( 'Kekspay is currently in sandbox/test mode, disable it for live web shops.', 'kekspay' ) . '</b></p>';
-        $test_mode_notice = apply_filters( 'kekspay_payment_description_test_mode_notice', $test_mode_notice );
+        $test_mode_notice = apply_filters(
+          'kekspay_payment_description_test_mode_notice',
+          '<p><b>' . __( 'Kekspay is currently in sandbox/test mode, disable it for live web shops.', 'kekspay' ) . '</b></p>'
+        );
 
         if ( ! empty( $test_mode_notice ) ) {
           echo $test_mode_notice;
@@ -140,15 +141,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      * Echo confirmation message on the 'thank you' page.
      */
     public function do_order_confirmation( $order_id ) {
-      $order             = wc_get_order( $order_id );
       $confirmation_desc = Kekspay_Data::get_settings( 'confirmation-msg' );
-
-      if ( $order ) {
-        $order->update_meta_data( 'kekspay_status', 'pending_approval' );
-        $order->save();
-      } else {
-        Kekspay_Logger::log( 'Failed to find order with ID ' . $order_id . ' while displaying order confirmation.', 'warning' );
-      }
 
       if ( isset( $confirmation_desc ) && ! empty( $confirmation_desc ) ) {
         echo '<p>' . wptexturize( $confirmation_desc ) . '</p>';
@@ -182,9 +175,10 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       $order->add_meta_data( 'kekspay_status', 'pending', true );
       $order->save();
 
-      if ( Kekspay_Data::test_mode() ) {
+      // Add order meta and note to mark order as TEST if test mode is enabled or order already has not been maked as TEST.
+      if ( Kekspay_Data::test_mode() && ! Kekspay_Data::order_test_mode( $order ) ) {
         $order->add_order_note( __( 'Order was done in <b>test mode</b>.', 'kekspay' ) );
-        $order->add_meta_data( 'in_test_mode', 'yes', true );
+        $order->add_meta_data( 'kekspay_test_mode', 'yes', true );
         $order->save();
       }
 

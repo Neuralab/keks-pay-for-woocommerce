@@ -63,8 +63,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
     }
 
     /**
-     * Return assoc array of parameters from either 'php://input' (POST request
-     * body), or $_REQUEST.
+     * Return assoc array of parameters from either 'php://input' (POST request body), or $_REQUEST.
      *
      * @return array $params
      */
@@ -116,7 +115,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
         $this->respond_error( 'Couldn\'t find corresponding order ' . $params['bill_id'] . '.' );
       }
 
-      // Verify signature recieved.
+      // Verify recieved signature.
       if ( ! hash_equals( Kekspay_Data::get_signature( $order ), $params['signature'] ) ) {
         Kekspay_Logger::log( 'Failed to verify signature ' . $params['signature'], 'error' );
         $this->respond_error( 'Signature mismatch, failed to verify.' );

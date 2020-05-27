@@ -76,6 +76,15 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
     }
 
     /**
+     * Returns true if order was created in test mode, false otherwise.
+     *
+     * @return bool
+     */
+    public static function order_test_mode( $order ) {
+      return 'yes' === $order->get_meta( 'kekspay_test_mode' );
+    }
+
+    /**
      * Returns true if required keys in gateways settings are set, false otherwise.
      *
      * @return bool

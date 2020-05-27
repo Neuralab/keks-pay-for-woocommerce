@@ -104,6 +104,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
       require_once( 'includes/core/class-kekspay-connector.php' );
       require_once( 'includes/core/class-kekspay-sell.php' );
       require_once( 'includes/core/class-kekspay-ipn.php' );
+      require_once( 'includes/core/class-kekspay-order-admin.php' );
       require_once( 'includes/core/class-kekspay-payment-gateway.php' );
 
       // Add hooks.

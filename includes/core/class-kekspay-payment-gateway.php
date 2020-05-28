@@ -172,11 +172,13 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
         return false;
       }
 
+      Kekspay_Logger::log( 'Seting kekspay status for order ' . $order_id . ' to pending.', 'info' );
       $order->add_meta_data( 'kekspay_status', 'pending', true );
       $order->save();
 
       // Add order meta and note to mark order as TEST if test mode is enabled or order already has not been maked as TEST.
       if ( Kekspay_Data::test_mode() && ! Kekspay_Data::order_test_mode( $order ) ) {
+        Kekspay_Logger::log( 'Seting meta kekspay test mode for order ' . $order_id, 'info' );
         $order->add_order_note( __( 'Order was done in <b>test mode</b>.', 'kekspay' ) );
         $order->add_meta_data( 'kekspay_test_mode', 'yes', true );
         $order->save();

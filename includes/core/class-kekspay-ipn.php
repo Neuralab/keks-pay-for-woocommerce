@@ -76,33 +76,35 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
         // phpcs:enable
       }
 
-      if ( $params ) {
-        return array_map(
-          function( $item ) {
-            return filter_var( $item, FILTER_SANITIZE_STRING );
-          },
-          $params
-        );
+      if ( ! $params ) {
+        return false;
       }
 
-      return false;
+      return array_map(
+        function( $item ) {
+          return filter_var( $item, FILTER_SANITIZE_STRING );
+        },
+        $params
+      );
     }
 
     /**
      * Should be used as a callback URL for KEKS Pay API checkout request.
      */
     public function do_checkout_status() {
+      Kekspay_Logger::log( 'Recieved request for IPN', 'info' );
+
       $params = $this->resolve_params();
       // Check if any parametars are received.
       if ( ! $params ) {
-        Kekspay_Logger::log( 'Missing parameters in the request from IPN.', 'error' );
+        Kekspay_Logger::log( 'Missing parameters in the request for IPN.', 'error' );
         $this->respond_error( 'Missing parameters.' );
       }
 
       // Check if required params are recieved.
       foreach ( array( 'bill_id', 'status', 'signature' ) as $required_param ) {
         if ( ! isset( $params[ $required_param ] ) ) {
-          Kekspay_Logger::log( 'Missing ' . $required_param . ' parametar in the request from IPN.', 'error' );
+          Kekspay_Logger::log( 'Missing ' . $required_param . ' parametar in the request for IPN.', 'error' );
           $this->respond_error( 'Missing or corrupt parametar ' . $required_param . '.' );
         }
       }
@@ -127,7 +129,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
         $order->add_order_note( __( 'Payment failed via KEKS Pay.', 'kekspay' ) );
         $order->save();
       } else {
-        Kekspay_Logger::log( 'Successfully completed payment for order ' . $order_id, 'notice' );
+        Kekspay_Logger::log( 'Successfully completed payment for order ' . $order_id, 'info' );
         $order->set_status( 'processing', __( 'Payment completed via KEKS Pay.', 'kekspay' ) );
         $order->add_meta_data( 'kekspay_status', strtolower( $params['message'] ), true );
         $order->save();

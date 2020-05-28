@@ -28,7 +28,13 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
      * @return string        Url for mobile app.
      */
     public function get_sell_url( $order ) {
-      return add_query_arg( Kekspay_Data::get_sell_data( $order ), Kekspay_Data::get_kekspay_endpoint() );
+      $sell = Kekspay_Data::get_sell_data( $order );
+
+      if ( ! $sell ) {
+        return false;
+      }
+
+      return add_query_arg( $sell, Kekspay_Data::get_kekspay_endpoint() );
     }
 
     /**
@@ -41,17 +47,23 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
     public function get_sell_qr( $order ) {
       $data = Kekspay_Data::get_sell_data( $order );
 
-      $options = new QROptions(
-        array(
-          'version'       => 15,
-          'quietzoneSize' => 4,
-          'eccLevel'      => QRCode::ECC_L,
-        )
-      );
+      try {
+        $options = new QROptions(
+          array(
+            'version'       => 15,
+            'quietzoneSize' => 4,
+            'eccLevel'      => QRCode::ECC_L,
+          )
+        );
 
-      $qrcode = new QRCode( $options );
+        $qrcode = new QRCode( $options );
 
-      return $qrcode->render( wp_json_encode( $data ) );
+        return $qrcode->render( wp_json_encode( $data ) );
+      } catch ( \Exception $e ) {
+        Kekspay_Logger::log( 'Failed to create QR Code. Exception message: ' . $e->getMessage(), 'error' );
+      }
+
+      return false;
     }
 
     /**
@@ -62,7 +74,13 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
      * @return string        Path to or base64 encoded QR code for mobile app wrapped in img tags.
      */
     public function display_sell_qr( $order ) {
-      return apply_filters( 'kekspay_sell_qr_code', '<img id="kekspay-qr-code" src="' . $this->get_sell_qr( $order ) . '">' );
+      $qrcode = $this->get_sell_qr( $order );
+
+      if ( ! $qrcode ) {
+        return esc_html_e( 'There was a problem with creating QR code for this order. Please try to recreate your order or contact site administrator.', 'kekspay' );
+      }
+
+      return apply_filters( 'kekspay_sell_qr_code', '<img id="kekspay-qr-code" src="' . $qrcode . '">' );
     }
 
     /**
@@ -73,6 +91,12 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
      * @return string        Link for payment.
      */
     public function display_sell_url( $order ) {
+      $sell_url = $this->get_sell_url( $order );
+
+      if ( ! $sell_url ) {
+        return esc_html_e( 'There was a problem with creating KEKS Pay app url for this order. Please try to recreate your order or contact site administrator.', 'kekspay' );
+      }
+
       $attrs = apply_filters(
         'kekspay_sell_link_attributes',
         array(
@@ -83,7 +107,7 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
         )
       );
 
-      return apply_filters( 'kekspay_sell_link', '<a id="' . esc_attr( $attrs['id'] ) . '" href="' . $this->get_sell_url( $order ) . '" class="' . esc_attr( $attrs['class'] ) . '" target="' . esc_attr( $attrs['target'] ) . '">' . esc_html( $attrs['label'] ) . '</a>' );
+      return apply_filters( 'kekspay_sell_link', '<a id="' . esc_attr( $attrs['id'] ) . '" href="' . $sell_url . '" class="' . esc_attr( $attrs['class'] ) . '" target="' . esc_attr( $attrs['target'] ) . '">' . esc_html( $attrs['label'] ) . '</a>' );
     }
 
   }

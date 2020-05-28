@@ -188,9 +188,14 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      *
      * @param  object $order Order from which to extract data.
      *
-     * @return array         Extracted data as array.
+     * @return array/bool    Extracted data as array, false on failure.
      */
     public static function get_sell_data( $order ) {
+      if ( ! self::required_keys_set() ) {
+        Kekspay_Logger::log( 'Payment gateway setup incomplete, please enter all requested data to gateway settings.', 'error' );
+        return false;
+      }
+
       return array(
         'qr_type' => 1,
         'cid'     => self::get_settings( 'webshop-cid', true ),

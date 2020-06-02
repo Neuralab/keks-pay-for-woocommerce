@@ -113,7 +113,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
       $order_id = Kekspay_Data::get_order_id_by_bill_id( $params['bill_id'] );
       $order    = wc_get_order( $order_id );
       if ( ! $order ) {
-        Kekspay_Logger::log( 'Failed to find order ' . $order_id . ' for status checkout API endpoint.', 'error' );
+        Kekspay_Logger::log( 'Failed to find order ' . $order_id . ' from the request for IPN.', 'error' );
         $this->respond_error( 'Couldn\'t find corresponding order ' . $params['bill_id'] . '.' );
       }
 

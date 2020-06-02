@@ -171,7 +171,13 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      * @return string
      */
     public static function get_bill_id_by_order_id( $order_id ) {
-      return self::get_settings( 'webshop-cid', true ) . $order_id;
+      $order = wc_get_order( $order_id );
+      if ( ! $order ) {
+        Kekspay_Logger::log( 'Could not fetch key for order ' . $order_id . ' while generating bill_id.', 'error' );
+        return false;
+      }
+
+      return str_replace( 'wc_order_', self::get_settings( 'webshop-cid', true ), $order->get_order_key() );
     }
 
     /**
@@ -180,7 +186,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      * @return string
      */
     public static function get_order_id_by_bill_id( $bill_id ) {
-      return str_replace( self::get_settings( 'webshop-cid', true ), '', $bill_id );
+      return wc_get_order_id_by_order_key( str_replace( self::get_settings( 'webshop-cid', true ), 'wc_order_', $bill_id ) );
     }
 
     /**
@@ -196,7 +202,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
         return false;
       }
 
-      return array(
+      $sell = array(
         'qr_type' => 1,
         'cid'     => self::get_settings( 'webshop-cid', true ),
         'tid'     => self::get_settings( 'webshop-tid', true ),
@@ -204,6 +210,8 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
         'amount'  => $order->get_total(),
         'store'   => self::get_settings( 'store-msg' ),
       );
+
+      return $sell;
     }
 
     /**

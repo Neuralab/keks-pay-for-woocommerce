@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: KEKS Pay for WooCommerce\n"
-"POT-Creation-Date: 2020-06-03 14:20+0200\n"
+"POT-Creation-Date: 2020-06-03 15:30+0200\n"
 "PO-Revision-Date: 2020-06-03 11:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -37,7 +37,6 @@ msgstr ""
 
 #: includes/core/class-kekspay-payment-gateway.php:31
 #: includes/core/class-kekspay-payment-gateway.php:98
-#: includes/settings/kekspay-settings.php:20
 msgid "KEKS Pay"
 msgstr ""
 
@@ -52,11 +51,11 @@ msgid ""
 "finished."
 msgstr ""
 
-#: includes/core/class-kekspay-payment-gateway.php:182
+#: includes/core/class-kekspay-payment-gateway.php:171
 msgid "Order was done in <b>test mode</b>."
 msgstr ""
 
-#: includes/core/class-kekspay-payment-gateway.php:196
+#: includes/core/class-kekspay-payment-gateway.php:185
 msgid "Having troubles with the link? Click here to show QR code."
 msgstr ""
 
@@ -92,6 +91,11 @@ msgstr ""
 msgid "This controls the title which the user sees during the checkout."
 msgstr ""
 
+#: includes/settings/kekspay-settings.php:20
+msgctxt "Title default value"
+msgid "KEKS Pay"
+msgstr ""
+
 #: includes/settings/kekspay-settings.php:24
 msgid "Store description"
 msgstr ""
@@ -110,6 +114,7 @@ msgid ""
 msgstr ""
 
 #: includes/settings/kekspay-settings.php:34
+msgctxt "Checkout description default value"
 msgid ""
 "Launch the app directly if using mobile device or simply scan the QR code to "
 "pay."
@@ -124,6 +129,7 @@ msgid "Payment method description showed to the customer with the QR code."
 msgstr ""
 
 #: includes/settings/kekspay-settings.php:41
+msgctxt "Payment description default value"
 msgid ""
 "Use your KEKS Pay mobile app to complete the payment. After completing "
 "payment you will recieve an email about your order status or if you are a "
@@ -131,93 +137,81 @@ msgid ""
 msgstr ""
 
 #: includes/settings/kekspay-settings.php:45
-msgid "Confirmation"
-msgstr ""
-
-#: includes/settings/kekspay-settings.php:47
-msgid "Confirmation message that will be added to the \"thank you\" page."
-msgstr ""
-
-#: includes/settings/kekspay-settings.php:48
-msgid "Your account has been charged and your transaction is successful."
-msgstr ""
-
-#: includes/settings/kekspay-settings.php:52
 msgid "Payment Notifications"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:57
+#: includes/settings/kekspay-settings.php:50
 msgid "Webshop data"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:62
+#: includes/settings/kekspay-settings.php:55
 msgid "Webshop CID"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:64
-#: includes/settings/kekspay-settings.php:86
+#: includes/settings/kekspay-settings.php:57
+#: includes/settings/kekspay-settings.php:79
 msgid ""
 "Unique id for Webshop within KEKS system. Will be given in advance by KEKS"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:70
+#: includes/settings/kekspay-settings.php:63
 msgid "Webshop TID"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:72
-#: includes/settings/kekspay-settings.php:93
+#: includes/settings/kekspay-settings.php:65
+#: includes/settings/kekspay-settings.php:86
 msgid ""
 "Unique id for point of service within Webshop system. Will be given in "
 "advance by KEKS"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:77
+#: includes/settings/kekspay-settings.php:70
 msgid "Webshop Secret Key"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:79
-#: includes/settings/kekspay-settings.php:100
+#: includes/settings/kekspay-settings.php:72
+#: includes/settings/kekspay-settings.php:93
 msgid ""
 "Unique key used for Webshop authentication. Will be given in advance by KEKS"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:84
+#: includes/settings/kekspay-settings.php:77
 msgid "TEST Webshop CID"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:91
+#: includes/settings/kekspay-settings.php:84
 msgid "TEST Webshop TID"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:98
+#: includes/settings/kekspay-settings.php:91
 msgid "TEST Webshop Secret Key"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:105
+#: includes/settings/kekspay-settings.php:98
 msgid "Advanced options"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:110
+#: includes/settings/kekspay-settings.php:103
 msgid "Test Mode"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:112
+#: includes/settings/kekspay-settings.php:105
 msgid "Enable Test Mode"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:113
+#: includes/settings/kekspay-settings.php:106
 msgid "Mode used for testing purposes, disable after testing is finished."
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:118
+#: includes/settings/kekspay-settings.php:111
 msgid "Debug log"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:120
+#: includes/settings/kekspay-settings.php:113
 msgid "Enable logging"
 msgstr ""
 
-#: includes/settings/kekspay-settings.php:121
+#: includes/settings/kekspay-settings.php:114
 #, php-format
 msgid ""
 "Log gateway events, stored in %s. Note: this may log personal information. "

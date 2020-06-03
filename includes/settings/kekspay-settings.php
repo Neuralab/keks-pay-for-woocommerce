@@ -17,7 +17,7 @@ return apply_filters(
       'title'       => __( 'Title', 'kekspay' ),
       'type'        => 'text',
       'description' => __( 'This controls the title which the user sees during the checkout.', 'kekspay' ),
-      'default'     => __( 'KEKS Pay', 'kekspay' ),
+      'default'     => _x( 'KEKS Pay', 'Title default value', 'kekspay' ),
       'desc_tip'    => true,
     ),
     'store-msg'               => array(
@@ -31,21 +31,14 @@ return apply_filters(
       'title'       => __( 'Checkout description', 'kekspay' ),
       'type'        => 'textarea',
       'description' => __( 'Payment method description that the customer will see on the checkout page.', 'kekspay' ),
-      'default'     => __( 'Launch the app directly if using mobile device or simply scan the QR code to pay.', 'kekspay' ),
+      'default'     => _x( 'Launch the app directly if using mobile device or simply scan the QR code to pay.', 'Checkout description default value', 'kekspay' ),
       'desc_tip'    => true,
     ),
     'receipt-msg'             => array(
       'title'       => __( 'Payment description', 'kekspay' ),
       'type'        => 'textarea',
       'description' => __( 'Payment method description showed to the customer with the QR code.', 'kekspay' ),
-      'default'     => __( 'Use your KEKS Pay mobile app to complete the payment. After completing payment you will recieve an email about your order status or if you are a logged in user you can always check order status in your account settings.', 'kekspay' ),
-      'desc_tip'    => true,
-    ),
-    'confirmation-msg'        => array(
-      'title'       => __( 'Confirmation', 'kekspay' ),
-      'type'        => 'textarea',
-      'description' => __( 'Confirmation message that will be added to the "thank you" page.', 'kekspay' ),
-      'default'     => __( 'Your account has been charged and your transaction is successful.', 'kekspay' ),
+      'default'     => _x( 'Use your KEKS Pay mobile app to complete the payment. After completing payment you will recieve an email about your order status or if you are a logged in user you can always check order status in your account settings.', 'Payment description default value', 'kekspay' ),
       'desc_tip'    => true,
     ),
     'webhook'                 => array(

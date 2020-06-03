@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: KEKS Pay for WooCommerce\n"
-"POT-Creation-Date: 2020-06-03 14:20+0200\n"
-"PO-Revision-Date: 2020-06-03 14:20+0200\n"
+"POT-Creation-Date: 2020-06-03 15:30+0200\n"
+"PO-Revision-Date: 2020-06-03 15:30+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -40,7 +40,6 @@ msgstr ""
 
 #: includes/core/class-kekspay-payment-gateway.php:31
 #: includes/core/class-kekspay-payment-gateway.php:98
-#: includes/settings/kekspay-settings.php:20
 msgid "KEKS Pay"
 msgstr "KEKS Pay"
 
@@ -59,11 +58,11 @@ msgstr ""
 "KEKS Pay je trenutno u testom modu rada, molimo da ga ugasite po završetku "
 "testiranja."
 
-#: includes/core/class-kekspay-payment-gateway.php:182
+#: includes/core/class-kekspay-payment-gateway.php:171
 msgid "Order was done in <b>test mode</b>."
 msgstr "Narudžba je napravljena u <b>testnom modu</b>."
 
-#: includes/core/class-kekspay-payment-gateway.php:196
+#: includes/core/class-kekspay-payment-gateway.php:185
 msgid "Having troubles with the link? Click here to show QR code."
 msgstr "Imate problema sa poveznicom? Kliknite ovdje kako bi prikazali QR kod."
 
@@ -106,6 +105,11 @@ msgstr ""
 "Ovo kontrolira naslov kojeg će korisnik vidjeti pri završavanju narudžbe na "
 "stranici za naplatu."
 
+#: includes/settings/kekspay-settings.php:20
+msgctxt "Title default value"
+msgid "KEKS Pay"
+msgstr "KEKS Pay"
+
 #: includes/settings/kekspay-settings.php:24
 msgid "Store description"
 msgstr "Opis web trgovine"
@@ -125,6 +129,7 @@ msgid ""
 msgstr "Opis metode plaćanja koju korisnik vidi na stranici za naplatu."
 
 #: includes/settings/kekspay-settings.php:34
+msgctxt "Checkout description default value"
 msgid ""
 "Launch the app directly if using mobile device or simply scan the QR code to "
 "pay."
@@ -141,6 +146,7 @@ msgid "Payment method description showed to the customer with the QR code."
 msgstr "Opis plaćanja prikazan korisniku uz QR kod."
 
 #: includes/settings/kekspay-settings.php:41
+msgctxt "Payment description default value"
 msgid ""
 "Use your KEKS Pay mobile app to complete the payment. After completing "
 "payment you will recieve an email about your order status or if you are a "
@@ -151,44 +157,31 @@ msgstr ""
 "korisnik možete provjeriti stanje narudžbi u postavkama vašeg računa."
 
 #: includes/settings/kekspay-settings.php:45
-msgid "Confirmation"
-msgstr "Opis na stranici potvrde"
-
-#: includes/settings/kekspay-settings.php:47
-msgid "Confirmation message that will be added to the \"thank you\" page."
-msgstr ""
-"Poruka potvrde plaćanja koja će biti prikazana na stranici potvrde naplate."
-
-#: includes/settings/kekspay-settings.php:48
-msgid "Your account has been charged and your transaction is successful."
-msgstr "Vaš račun je terećen za iznos te je transakcija uspješno naplaćena."
-
-#: includes/settings/kekspay-settings.php:52
 msgid "Payment Notifications"
 msgstr "Obavijesti o plaćanju"
 
-#: includes/settings/kekspay-settings.php:57
+#: includes/settings/kekspay-settings.php:50
 msgid "Webshop data"
 msgstr "Podaci o web trgovini"
 
-#: includes/settings/kekspay-settings.php:62
+#: includes/settings/kekspay-settings.php:55
 msgid "Webshop CID"
 msgstr "TID web trgovine"
 
-#: includes/settings/kekspay-settings.php:64
-#: includes/settings/kekspay-settings.php:86
+#: includes/settings/kekspay-settings.php:57
+#: includes/settings/kekspay-settings.php:79
 msgid ""
 "Unique id for Webshop within KEKS system. Will be given in advance by KEKS"
 msgstr ""
 "Unikatni identitet web trgovine unutar KEKS sustava. Bit će dodijeljen web "
 "trgovini od strane KEKS sustava"
 
-#: includes/settings/kekspay-settings.php:70
+#: includes/settings/kekspay-settings.php:63
 msgid "Webshop TID"
 msgstr "CID web trgovine"
 
-#: includes/settings/kekspay-settings.php:72
-#: includes/settings/kekspay-settings.php:93
+#: includes/settings/kekspay-settings.php:65
+#: includes/settings/kekspay-settings.php:86
 msgid ""
 "Unique id for point of service within Webshop system. Will be given in "
 "advance by KEKS"
@@ -196,55 +189,55 @@ msgstr ""
 "Unikatni identitet za vrstu usluge unutar web trgovine. Bit će dodijeljen "
 "web trgovini od strane KEKS sustava"
 
-#: includes/settings/kekspay-settings.php:77
+#: includes/settings/kekspay-settings.php:70
 msgid "Webshop Secret Key"
 msgstr "Tajni ključ web trgovine"
 
-#: includes/settings/kekspay-settings.php:79
-#: includes/settings/kekspay-settings.php:100
+#: includes/settings/kekspay-settings.php:72
+#: includes/settings/kekspay-settings.php:93
 msgid ""
 "Unique key used for Webshop authentication. Will be given in advance by KEKS"
 msgstr ""
 "Unikatni ključ koji se koristi za autentikaciju. Bit će dodijeljen web "
 "trgovini od strane KEKS sustava"
 
-#: includes/settings/kekspay-settings.php:84
+#: includes/settings/kekspay-settings.php:77
 msgid "TEST Webshop CID"
 msgstr "TEST CID web trgovine"
 
-#: includes/settings/kekspay-settings.php:91
+#: includes/settings/kekspay-settings.php:84
 msgid "TEST Webshop TID"
 msgstr "TEST TID web trgovine"
 
-#: includes/settings/kekspay-settings.php:98
+#: includes/settings/kekspay-settings.php:91
 msgid "TEST Webshop Secret Key"
 msgstr "TEST Tajni ključ web trgovine"
 
-#: includes/settings/kekspay-settings.php:105
+#: includes/settings/kekspay-settings.php:98
 msgid "Advanced options"
 msgstr "Napredne postavke"
 
-#: includes/settings/kekspay-settings.php:110
+#: includes/settings/kekspay-settings.php:103
 msgid "Test Mode"
 msgstr "Testni način rada"
 
-#: includes/settings/kekspay-settings.php:112
+#: includes/settings/kekspay-settings.php:105
 msgid "Enable Test Mode"
 msgstr "Uključi testni način rada"
 
-#: includes/settings/kekspay-settings.php:113
+#: includes/settings/kekspay-settings.php:106
 msgid "Mode used for testing purposes, disable after testing is finished."
 msgstr "Mod rada korišten za testiranje, ugasite po završetku testiranja."
 
-#: includes/settings/kekspay-settings.php:118
+#: includes/settings/kekspay-settings.php:111
 msgid "Debug log"
 msgstr "Zapisnik grešaka"
 
-#: includes/settings/kekspay-settings.php:120
+#: includes/settings/kekspay-settings.php:113
 msgid "Enable logging"
 msgstr "Uključi zapisnik grešaka"
 
-#: includes/settings/kekspay-settings.php:121
+#: includes/settings/kekspay-settings.php:114
 #, php-format
 msgid ""
 "Log gateway events, stored in %s. Note: this may log personal information. "
@@ -331,6 +324,21 @@ msgstr "KEKS Pay način plaćanja za WooCommerce."
 #. Author of the plugin/theme
 msgid "Neuralab"
 msgstr "Neuralab"
+
+#~ msgctxt "Title default"
+#~ msgid "KEKS Pay"
+#~ msgstr "KEKS Pay"
+
+#~ msgid "Confirmation"
+#~ msgstr "Opis na stranici potvrde"
+
+#~ msgid "Confirmation message that will be added to the \"thank you\" page."
+#~ msgstr ""
+#~ "Poruka potvrde plaćanja koja će biti prikazana na stranici potvrde "
+#~ "naplate."
+
+#~ msgid "Your account has been charged and your transaction is successful."
+#~ msgstr "Vaš račun je terećen za iznos te je transakcija uspješno naplaćena."
 
 #~ msgid ""
 #~ "KEKS Pay is currently in sandbox/test mode, disable it for live web shops."

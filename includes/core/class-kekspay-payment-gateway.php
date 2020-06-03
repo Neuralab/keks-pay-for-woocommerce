@@ -138,17 +138,6 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
     }
 
     /**
-     * Echo confirmation message on the 'thank you' page.
-     */
-    public function do_order_confirmation( $order_id ) {
-      $confirmation_desc = Kekspay_Data::get_settings( 'confirmation-msg' );
-
-      if ( isset( $confirmation_desc ) && ! empty( $confirmation_desc ) ) {
-        echo '<p>' . wptexturize( $confirmation_desc ) . '</p>';
-      }
-    }
-
-    /**
      * Echo redirect message on the 'receipt' page.
      */
     private function show_receipt_message() {

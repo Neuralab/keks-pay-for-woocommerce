@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: KEKS Pay for WooCommerce\n"
-"POT-Creation-Date: 2020-06-03 12:50+0200\n"
+"POT-Creation-Date: 2020-06-03 14:20+0200\n"
 "PO-Revision-Date: 2020-06-03 11:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -46,6 +46,7 @@ msgid "Allow customers to complete payments using KEKS Pay mobile app."
 msgstr ""
 
 #: includes/core/class-kekspay-payment-gateway.php:131
+#: woocommerce-gateway-kekspay.php:215
 msgid ""
 "KEKS Pay is currently in sandbox/test mode, disable it after testing is "
 "finished."
@@ -123,7 +124,10 @@ msgid "Payment method description showed to the customer with the QR code."
 msgstr ""
 
 #: includes/settings/kekspay-settings.php:41
-msgid "Use your KEKS Pay mobile app to complete the payment."
+msgid ""
+"Use your KEKS Pay mobile app to complete the payment. After completing "
+"payment you will recieve an email about your order status or if you are a "
+"logged in user you can always check order status in your account settings."
 msgstr ""
 
 #: includes/settings/kekspay-settings.php:45
@@ -242,11 +246,6 @@ msgstr ""
 msgid ""
 "The minimum required version of %1$s is %2$s. The version you are running is "
 "%3$s. Please update %1$s in order to use KEKS Pay."
-msgstr ""
-
-#: woocommerce-gateway-kekspay.php:215
-msgid ""
-"KEKS Pay is currently in sandbox/test mode, disable it for live web shops."
 msgstr ""
 
 #: woocommerce-gateway-kekspay.php:220

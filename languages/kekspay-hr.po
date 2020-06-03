@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: KEKS Pay for WooCommerce\n"
-"POT-Creation-Date: 2020-06-03 12:50+0200\n"
-"PO-Revision-Date: 2020-06-03 12:54+0200\n"
+"POT-Creation-Date: 2020-06-03 14:20+0200\n"
+"PO-Revision-Date: 2020-06-03 14:20+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -51,12 +51,13 @@ msgstr ""
 "aplikaciju."
 
 #: includes/core/class-kekspay-payment-gateway.php:131
+#: woocommerce-gateway-kekspay.php:215
 msgid ""
 "KEKS Pay is currently in sandbox/test mode, disable it after testing is "
 "finished."
 msgstr ""
-"KEKS Pay je trenutno u testom modu rada, molimo da ga ugasite za po "
-"završetku testiranja."
+"KEKS Pay je trenutno u testom modu rada, molimo da ga ugasite po završetku "
+"testiranja."
 
 #: includes/core/class-kekspay-payment-gateway.php:182
 msgid "Order was done in <b>test mode</b>."
@@ -140,8 +141,14 @@ msgid "Payment method description showed to the customer with the QR code."
 msgstr "Opis plaćanja prikazan korisniku uz QR kod."
 
 #: includes/settings/kekspay-settings.php:41
-msgid "Use your KEKS Pay mobile app to complete the payment."
-msgstr "Završite naplatu koristeći svoju KEKS Pay mobilnu aplikaciju."
+msgid ""
+"Use your KEKS Pay mobile app to complete the payment. After completing "
+"payment you will recieve an email about your order status or if you are a "
+"logged in user you can always check order status in your account settings."
+msgstr ""
+"Završite plaćanje koristeći KEKS Pay mobilnu aplikaciju. Nakon što završite "
+"plaćanje dobit ćete email o stanju vaše narudžbe ili ako ste logiran "
+"korisnik možete provjeriti stanje narudžbi u postavkama vašeg računa."
 
 #: includes/settings/kekspay-settings.php:45
 msgid "Confirmation"
@@ -279,13 +286,6 @@ msgstr ""
 "Minimalna verzija %1$s je %2$s. Verzija koju trenutno imate je %3$s. Molimo "
 "skinite minimalnu verziju %1$s ako želite koristiti KEKS Pay."
 
-#: woocommerce-gateway-kekspay.php:215
-msgid ""
-"KEKS Pay is currently in sandbox/test mode, disable it for live web shops."
-msgstr ""
-"KEKS Pay je trenutno u testom modu rada, molimo da ga ugasite za po "
-"završetku testiranja."
-
 #: woocommerce-gateway-kekspay.php:220
 msgid ""
 "KEKS Pay is almost ready for use, Webshop data needs to be set up before "
@@ -331,6 +331,15 @@ msgstr "KEKS Pay način plaćanja za WooCommerce."
 #. Author of the plugin/theme
 msgid "Neuralab"
 msgstr "Neuralab"
+
+#~ msgid ""
+#~ "KEKS Pay is currently in sandbox/test mode, disable it for live web shops."
+#~ msgstr ""
+#~ "KEKS Pay je trenutno u testom modu rada, molimo da ga ugasite po "
+#~ "završetku testiranja."
+
+#~ msgid "Use your KEKS Pay mobile app to complete the payment."
+#~ msgstr "Završite naplatu koristeći svoju KEKS Pay mobilnu aplikaciju."
 
 #~ msgid "KEKS Pay Payment Gateway"
 #~ msgstr "KEKS Pay način plaćanja"

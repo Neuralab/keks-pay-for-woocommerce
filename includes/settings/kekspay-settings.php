@@ -38,7 +38,7 @@ return apply_filters(
       'title'       => __( 'Payment description', 'kekspay' ),
       'type'        => 'textarea',
       'description' => __( 'Payment method description showed to the customer with the QR code.', 'kekspay' ),
-      'default'     => __( 'Use your KEKS Pay mobile app to complete the payment.', 'kekspay' ),
+      'default'     => __( 'Use your KEKS Pay mobile app to complete the payment. After completing payment you will recieve an email about your order status or if you are a logged in user you can always check order status in your account settings.', 'kekspay' ),
       'desc_tip'    => true,
     ),
     'confirmation-msg'        => array(

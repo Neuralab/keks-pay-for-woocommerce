@@ -212,7 +212,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
 
       // Check if gateway is currently in test mode.
       if ( Kekspay_Data::test_mode() ) {
-        $this->admin_notice( __( 'KEKS Pay is currently in sandbox/test mode, disable it for live web shops.', 'kekspay' ), 'warning' );
+        $this->admin_notice( __( 'KEKS Pay is currently in sandbox/test mode, disable it after testing is finished.', 'kekspay' ), 'warning' );
       }
 
       // Check if all setting keys required for gateway to work are set.

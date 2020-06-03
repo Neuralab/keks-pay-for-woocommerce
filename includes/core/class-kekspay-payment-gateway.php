@@ -95,7 +95,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      */
     public function admin_options() {
       ?>
-      <h2><?php esc_html_e( 'KEKSPay Payment Gateway', 'kekspay' ); ?></h2>
+      <h2><?php esc_html_e( 'KEKS Pay', 'kekspay' ); ?></h2>
 
       <table class="form-table">
         <?php $this->generate_settings_html(); ?>
@@ -128,7 +128,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       if ( Kekspay_Data::test_mode() ) {
         $test_mode_notice = apply_filters(
           'kekspay_payment_description_test_mode_notice',
-          '<p><b>' . __( 'Kekspay is currently in sandbox/test mode, disable it for live web shops.', 'kekspay' ) . '</b></p>'
+          '<p><b>' . __( 'KEKS Pay is currently in sandbox/test mode, disable it after testing is finished.', 'kekspay' ) . '</b></p>'
         );
 
         if ( ! empty( $test_mode_notice ) ) {

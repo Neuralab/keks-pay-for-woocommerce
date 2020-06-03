@@ -9,7 +9,7 @@ return apply_filters(
     'enabled'                 => array(
       'title'    => __( 'Enable', 'kekspay' ),
       'type'     => 'checkbox',
-      'label'    => __( 'Enable KEKS Pay Payment Gateway', 'kekspay' ),
+      'label'    => __( 'Enable KEKS Pay payment method', 'kekspay' ),
       'default'  => 'no',
       'desc_tip' => false,
     ),
@@ -49,7 +49,7 @@ return apply_filters(
       'desc_tip'    => true,
     ),
     'webhook'                 => array(
-      'title'       => __( 'Webhook Endpoint', 'kekspay' ),
+      'title'       => __( 'Payment Notifications', 'kekspay' ),
       'type'        => 'title',
       'description' => Kekspay_Data::get_settings_endpoint_field(),
     ),
@@ -107,10 +107,10 @@ return apply_filters(
       'description' => '',
     ),
     'in-test-mode'            => array(
-      'title'       => __( 'KEKS Pay Test Mode', 'kekspay' ),
+      'title'       => __( 'Test Mode', 'kekspay' ),
       'type'        => 'checkbox',
-      'label'       => __( 'Enable KEKS Pay Test Mode', 'kekspay' ),
-      'description' => __( 'Mode used for testing purposes, disable this for live web shops.', 'kekspay' ),
+      'label'       => __( 'Enable Test Mode', 'kekspay' ),
+      'description' => __( 'Mode used for testing purposes, disable after testing is finished.', 'kekspay' ),
       'default'     => 'no',
       'desc_tip'    => true,
     ),

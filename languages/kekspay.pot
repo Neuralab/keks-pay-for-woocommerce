@@ -1,0 +1,290 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: KEKS Pay for WooCommerce\n"
+"POT-Creation-Date: 2020-06-03 12:50+0200\n"
+"PO-Revision-Date: 2020-06-03 11:14+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3.1\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: woocommerce-gateway-kekspay.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+"X-Poedit-SearchPathExcluded-1: vendor\n"
+
+#: includes/core/class-kekspay-ipn.php:129
+msgid "Payment failed via KEKS Pay."
+msgstr ""
+
+#: includes/core/class-kekspay-ipn.php:133
+msgid "Payment completed via KEKS Pay."
+msgstr ""
+
+#: includes/core/class-kekspay-order-admin.php:40
+msgid ""
+"This order was processed by KEKS Pay payment gateway in sandbox/test mode."
+msgstr ""
+
+#: includes/core/class-kekspay-payment-gateway.php:31
+#: includes/core/class-kekspay-payment-gateway.php:98
+#: includes/settings/kekspay-settings.php:20
+msgid "KEKS Pay"
+msgstr ""
+
+#: includes/core/class-kekspay-payment-gateway.php:32
+msgid "Allow customers to complete payments using KEKS Pay mobile app."
+msgstr ""
+
+#: includes/core/class-kekspay-payment-gateway.php:131
+msgid ""
+"KEKS Pay is currently in sandbox/test mode, disable it after testing is "
+"finished."
+msgstr ""
+
+#: includes/core/class-kekspay-payment-gateway.php:182
+msgid "Order was done in <b>test mode</b>."
+msgstr ""
+
+#: includes/core/class-kekspay-payment-gateway.php:196
+msgid "Having troubles with the link? Click here to show QR code."
+msgstr ""
+
+#: includes/core/class-kekspay-sell.php:80
+msgid ""
+"There was a problem with creating QR code for this order. Please try to "
+"recreate your order or contact site administrator."
+msgstr ""
+
+#: includes/core/class-kekspay-sell.php:97
+msgid ""
+"There was a problem with creating KEKS Pay app url for this order. Please "
+"try to recreate your order or contact site administrator."
+msgstr ""
+
+#: includes/core/class-kekspay-sell.php:106
+msgid "Pay via app"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:10
+msgid "Enable"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:12
+msgid "Enable KEKS Pay payment method"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:17
+msgid "Title"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:19
+msgid "This controls the title which the user sees during the checkout."
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:24
+msgid "Store description"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:26
+msgid "Description of the store (will be displayed to customer on wallet)."
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:31
+msgid "Checkout description"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:33
+msgid ""
+"Payment method description that the customer will see on the checkout page."
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:34
+msgid ""
+"Launch the app directly if using mobile device or simply scan the QR code to "
+"pay."
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:38
+msgid "Payment description"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:40
+msgid "Payment method description showed to the customer with the QR code."
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:41
+msgid "Use your KEKS Pay mobile app to complete the payment."
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:45
+msgid "Confirmation"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:47
+msgid "Confirmation message that will be added to the \"thank you\" page."
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:48
+msgid "Your account has been charged and your transaction is successful."
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:52
+msgid "Payment Notifications"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:57
+msgid "Webshop data"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:62
+msgid "Webshop CID"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:64
+#: includes/settings/kekspay-settings.php:86
+msgid ""
+"Unique id for Webshop within KEKS system. Will be given in advance by KEKS"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:70
+msgid "Webshop TID"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:72
+#: includes/settings/kekspay-settings.php:93
+msgid ""
+"Unique id for point of service within Webshop system. Will be given in "
+"advance by KEKS"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:77
+msgid "Webshop Secret Key"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:79
+#: includes/settings/kekspay-settings.php:100
+msgid ""
+"Unique key used for Webshop authentication. Will be given in advance by KEKS"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:84
+msgid "TEST Webshop CID"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:91
+msgid "TEST Webshop TID"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:98
+msgid "TEST Webshop Secret Key"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:105
+msgid "Advanced options"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:110
+msgid "Test Mode"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:112
+msgid "Enable Test Mode"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:113
+msgid "Mode used for testing purposes, disable after testing is finished."
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:118
+msgid "Debug log"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:120
+msgid "Enable logging"
+msgstr ""
+
+#: includes/settings/kekspay-settings.php:121
+#, php-format
+msgid ""
+"Log gateway events, stored in %s. Note: this may log personal information. "
+"We recommend using this for debugging purposes only and deleting the logs "
+"when finished."
+msgstr ""
+
+#: includes/utilities/class-kekspay-data.php:161
+#, php-format
+msgid ""
+"Please add this webhook endpoint %1$s to your %2$s KEKS Pay account settings "
+"%3$s, which will enable your webshop to recieve payment notifications from "
+"KEKS Pay."
+msgstr ""
+
+#. translators: 1. URL link.
+#: woocommerce-gateway-kekspay.php:46
+#, php-format
+msgid ""
+"KEKS Pay requires WooCommerce to be installed and active. You can download "
+"%s here."
+msgstr ""
+
+#: woocommerce-gateway-kekspay.php:179
+#, php-format
+msgid ""
+"The minimum required version of %1$s is %2$s. The version you are running is "
+"%3$s. Please update %1$s in order to use KEKS Pay."
+msgstr ""
+
+#: woocommerce-gateway-kekspay.php:215
+msgid ""
+"KEKS Pay is currently in sandbox/test mode, disable it for live web shops."
+msgstr ""
+
+#: woocommerce-gateway-kekspay.php:220
+msgid ""
+"KEKS Pay is almost ready for use, Webshop data needs to be set up before "
+"using the gateway."
+msgstr ""
+
+#: woocommerce-gateway-kekspay.php:225
+msgid "KEKS Pay does not support your currency, please set it to \"HRK\"."
+msgstr ""
+
+#: woocommerce-gateway-kekspay.php:243
+msgid ""
+"You can only have one KEKS Pay Payment Gateway active at the same time. KEKS "
+"Pay for WooCommerce plugin has been deactivated."
+msgstr ""
+
+#: woocommerce-gateway-kekspay.php:301
+msgid "Something went wrong, please refresh the page and try again."
+msgstr ""
+
+#: woocommerce-gateway-kekspay.php:323
+msgid "Settings"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "KEKS Pay for WooCommerce"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://www.kekspay.hr/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "KEKS Pay payment gateway for WooCommerce."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Neuralab"
+msgstr ""

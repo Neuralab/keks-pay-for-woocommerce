@@ -203,12 +203,14 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
       }
 
       $sell = array(
-        'qr_type' => 1,
-        'cid'     => self::get_settings( 'webshop-cid', true ),
-        'tid'     => self::get_settings( 'webshop-tid', true ),
-        'bill_id' => self::get_bill_id_by_order_id( $order->get_id() ),
-        'amount'  => $order->get_total(),
-        'store'   => self::get_settings( 'store-msg' ),
+        'qr_type'          => 1,
+        'cid'              => self::get_settings( 'webshop-cid', true ),
+        'tid'              => self::get_settings( 'webshop-tid', true ),
+        'bill_id'          => self::get_bill_id_by_order_id( $order->get_id() ),
+        'amount'           => $order->get_total(),
+        'store'            => self::get_settings( 'store-msg' ),
+        'success_callback' => $order->get_checkout_order_received_url(),
+        'failed_callback'  => $order->get_cancel_order_url_raw(),
       );
 
       return $sell;

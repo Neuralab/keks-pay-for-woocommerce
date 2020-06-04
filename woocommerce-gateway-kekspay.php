@@ -5,7 +5,7 @@
  * Description: KEKS Pay payment gateway for WooCommerce.
  * Version: 1.0
  * Requires at least: 5.0
- * Requires PHP: 5.6
+ * Requires PHP: 7.2
  * Author: Neuralab
  * License: GPL v3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html

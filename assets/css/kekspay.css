@@ -1,4 +1,4 @@
-.kekspay-url {
+.kekspay-url__wrap {
   display: none;
 }
 
@@ -16,7 +16,7 @@
     display: none;
   }
 
-  .kekspay-url {
+  .kekspay-url__wrap {
     display: block;
     margin-bottom: 14px;
   }

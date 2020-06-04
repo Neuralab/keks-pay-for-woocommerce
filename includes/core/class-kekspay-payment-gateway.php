@@ -178,11 +178,11 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       do_action( 'kekspay_receipt_before_payment_data', $order, Kekspay_Data::get_settings() );
 
       ?>
-        <div class="kekspay-url">
-          <div class="div">
+        <div class="kekspay-url__wrap">
+          <div class="kekspay-url">
             <?php echo $this->sell->display_sell_url( $order ); ?>
           </div>
-          <small><a href="#" qr-code-trigger><?php esc_html_e( 'Having troubles with the link? Click here to show QR code.', 'kekspay' ); ?></a></small>
+          <small><a href="#" data-show=".kekspay-qr"><?php esc_html_e( 'Having troubles with the link? Click here to show QR code.', 'kekspay' ); ?></a></small>
         </div>
         <div class="kekspay-qr">
           <?php echo $this->sell->display_sell_qr( $order ); ?>

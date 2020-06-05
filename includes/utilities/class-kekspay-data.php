@@ -247,26 +247,30 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
     /**
      * Gathers all data needed for payment and formats it as array.
      *
-     * @param  object $order Order from which to extract data.
+     * @param  object $order     Order from which to extract data.
+     * @param  bool   $callbacks Whether to include callback urls or not.
      *
      * @return array/bool    Extracted data as array, false on failure.
      */
-    public static function get_sell_data( $order ) {
+    public static function get_sell_data( $order, $callbacks = false ) {
       if ( ! self::required_keys_set() ) {
         Kekspay_Logger::log( 'Payment gateway setup incomplete, please enter all requested data to gateway settings.', 'error' );
         return false;
       }
 
       $sell = array(
-        'qr_type'          => 1,
-        'cid'              => self::get_settings( 'webshop-cid', true ),
-        'tid'              => self::get_settings( 'webshop-tid', true ),
-        'bill_id'          => self::get_bill_id_by_order_id( $order->get_id() ),
-        'amount'           => $order->get_total(),
-        'store'            => self::get_settings( 'store-msg' ),
-        'success_callback' => $order->get_checkout_order_received_url(),
-        'failed_callback'  => $order->get_cancel_order_url_raw(),
+        'qr_type' => 1,
+        'cid'     => self::get_settings( 'webshop-cid', true ),
+        'tid'     => self::get_settings( 'webshop-tid', true ),
+        'bill_id' => self::get_bill_id_by_order_id( $order->get_id() ),
+        'amount'  => $order->get_total(),
+        'store'   => self::get_settings( 'store-msg' ),
       );
+
+      if ( $callbacks ) {
+        $sell['success_callback'] = $order->get_checkout_order_received_url();
+        $sell['failed_callback']  = $order->get_cancel_order_url_raw();
+      }
 
       return $sell;
     }
@@ -279,23 +283,6 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      */
     public static function delete_settings() {
       return delete_option( 'woocommerce_' . KEKSPAY_PLUGIN_ID . '_settings' ) && delete_option( 'kekspay_plugins_check_required' );
-    }
-
-    /**
-     * Return signature created from the provided data and secret.
-     *
-     * @param  string $order Order from which to extract data for signature.
-     *
-     * @return string
-     */
-    public static function get_signature( $order ) {
-      $secret = self::get_settings( 'webshop-secret-key', true );
-
-      $payload = wp_json_encode( self::get_sell_data( $order ) );
-
-      $expected_signature = hash_hmac( 'sha256', $payload, $secret );
-
-      return $expected_signature;
     }
 
   }

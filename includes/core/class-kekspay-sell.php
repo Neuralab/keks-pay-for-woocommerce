@@ -28,7 +28,7 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
      * @return string        Url for mobile app.
      */
     public function get_sell_url( $order ) {
-      $sell = Kekspay_Data::get_sell_data( $order );
+      $sell = Kekspay_Data::get_sell_data( $order, true );
 
       if ( ! $sell ) {
         return false;

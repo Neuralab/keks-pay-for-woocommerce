@@ -149,11 +149,11 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
         Kekspay_Logger::log( 'Failed to complete payment for order ' . $order_id . ', message: ' . $params['message'], 'error' );
         $order->add_meta_data( 'kekspay_status', strtolower( $params['message'] ), true );
         $order->add_meta_data( 'kekspay_id', $params['keks_id'], true );
-        $order->add_order_note( __( 'Payment failed via KEKS Pay.', 'kekspay' ) );
+        $order->add_order_note( __( 'Dogodila se greška pri naplati putem KEKS Pay aplikacije.', 'kekspay' ) );
         $order->save();
       } else {
         Kekspay_Logger::log( 'Successfully completed payment for order ' . $order_id, 'info' );
-        $order->set_status( 'processing', __( 'Payment completed via KEKS Pay.', 'kekspay' ) );
+        $order->set_status( 'processing', __( 'Narudžba uspješno plaćena putem KEKS Pay aplikacije.', 'kekspay' ) );
         $order->add_meta_data( 'kekspay_status', strtolower( $params['message'] ), true );
         $order->save();
       }

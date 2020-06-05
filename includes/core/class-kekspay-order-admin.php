@@ -37,7 +37,7 @@ if ( ! class_exists( 'Kekspay_Order_Admin' ) ) {
 
         if ( Kekspay_Data::order_test_mode( $order ) ) {
           $class   = 'notice notice-warning';
-          $message = __( 'This order was processed by KEKS Pay payment gateway in sandbox/test mode.', 'kekspay' );
+          $message = __( 'Narudžba kreirana koristeći KEKS Pay u testnom načinu rada.', 'kekspay' );
 
           printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
         }

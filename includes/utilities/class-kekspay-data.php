@@ -198,10 +198,8 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      */
     public static function get_settings_endpoint_field() {
       return sprintf(
-        __( 'Please add this webhook endpoint %1$s to your %2$s KEKS Pay account settings %3$s, which will enable your webshop to recieve payment notifications from KEKS Pay.', 'kekspay' ),
-        '<strong><code class="kekspay-webhook">' . self::get_wc_endpoint( true ) . '</code></strong>',
-        '<a href="https://kekspay.hr" target="_blank">',
-        '</a>'
+        __( 'Adresa za primanje obavijesti o stanju naplate: %s. Nakon pohrane unutar KEKS Pay sustava omogućava ovoj trgovini primanje obavijesti o stanju naplate.', 'kekspay' ),
+        '<strong><code class="kekspay-webhook">' . self::get_wc_endpoint( true ) . '</code></strong>'
       );
     }
 
@@ -213,10 +211,8 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      */
     public static function get_settings_token_field() {
       return sprintf(
-        __( 'Save this security token %1$s to your %2$s KEKS Pay account settings %3$s. Security token is used by KEKS Pay to verify your webshop.', 'kekspay' ),
-        '<strong><code>' . self::get_auth_token() . '</code></strong>',
-        '<a href="https://kekspay.hr" target="_blank">',
-        '</a>'
+        __( 'Sigurnosni ključ Web trgovine: %s. Nakon pohrane unutar KEKS Pay sustava korišten je za autentikaciju Web trgovine unutar KEKS Pay sustava.', 'kekspay' ),
+        '<strong><code>' . self::get_auth_token() . '</code></strong>'
       );
     }
 

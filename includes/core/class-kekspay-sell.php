@@ -77,7 +77,7 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
       $qrcode = $this->get_sell_qr( $order );
 
       if ( ! $qrcode ) {
-        return esc_html_e( 'There was a problem with creating QR code for this order. Please try to recreate your order or contact site administrator.', 'kekspay' );
+        return esc_html_e( 'Dogodila se greška prilikom kreiranja QR kȏda za ovu narudžbu. Molimo rekreirajte narudžbu ili kontaktirajte vlasnika web stranice.', 'kekspay' );
       }
 
       return apply_filters( 'kekspay_sell_qr_code', '<img id="kekspay-qr-code" src="' . $qrcode . '">' );
@@ -94,7 +94,7 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
       $sell_url = $this->get_sell_url( $order );
 
       if ( ! $sell_url ) {
-        return esc_html_e( 'There was a problem with creating KEKS Pay app url for this order. Please try to recreate your order or contact site administrator.', 'kekspay' );
+        return esc_html_e( 'Dogodila se greška prilikom kreiranja poveznice za plaćanje putem KEKS Pay mobilne aplikacije za ovu narudžbu. Molimo rekreirajte narudžbu ili kontaktirajte vlasnika web stranice."', 'kekspay' );
       }
 
       $attrs = apply_filters(
@@ -103,7 +103,7 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
           'id'     => 'kekspay-pay-url',
           'class'  => 'button kekspay-sell-button',
           'target' => '_blank',
-          'label'  => __( 'Pay via app', 'kekspay' ),
+          'label'  => __( 'Plati kroz KEKS Pay', 'kekspay' ),
         )
       );
 

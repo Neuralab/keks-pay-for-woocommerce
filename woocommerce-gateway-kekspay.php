@@ -1,16 +1,17 @@
 <?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 /**
- * Plugin Name: KEKS Pay for WooCommerce
- * Plugin URI: https://www.kekspay.hr/
- * Description: KEKS Pay payment gateway for WooCommerce.
- * Version: 1.0
+ * Plugin Name:       KEKS Pay for WooCommerce
+ * Plugin URI:        https://www.kekspay.hr/
+ * Description:       KEKS Pay za WooCommerce.
+ * Version:           1.0
  * Requires at least: 5.0
- * Requires PHP: 7.2
- * Author: Neuralab
- * License: GPL v3 or later
- * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain: kekspay
- * Domain Path: /languages
+ * Requires PHP:      7.2
+ * Author:            Neuralab
+ * Author URI:        https://www.neuralab.net
+ * License:           GPL v3 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
+ * Text Domain:       kekspay
+ * Domain Path:       /languages
  *
  * WC requires at least: 3.3
  * WC tested up to: 4.0
@@ -43,7 +44,7 @@ if ( ! function_exists( 'kekspay_admin_notice_missing_woocommerce' ) ) {
    */
   function kekspay_admin_notice_missing_woocommerce() {
     /** translators: 1. URL link. */
-    echo '<div class="error"><p><strong>' . sprintf( esc_html__( 'KEKS Pay requires WooCommerce to be installed and active. You can download %s here.', 'kekspay' ), '<a href="https://woocommerce.com/" target="_blank">WooCommerce</a>' ) . '</strong></p></div>';
+    echo '<div class="error"><p><strong>' . sprintf( esc_html__( 'KEKS Pay zahtijeva WooCommerce dodatak instaliran i aktivan. Možete ga skinuti ovdje %s.', 'kekspay' ), '<a href="https://woocommerce.com/" target="_blank">WooCommerce</a>' ) . '</strong></p></div>';
   }
 }
 if ( ! kekspay_wc_active() ) {
@@ -176,7 +177,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
       foreach ( $requirements as $requirement ) {
         if ( version_compare( $requirement['current_version'], $requirement['requred_version'], '<' ) ) {
           $error_notices[] = sprintf(
-            __( 'The minimum required version of %1$s is %2$s. The version you are running is %3$s. Please update %1$s in order to use KEKS Pay.', 'kekspay' ),
+            __( 'Minimalna verzija %1$s je %2$s. Verzija koju trenutno koristite je %3$s. Molimo skinite minimalnu verziju %1$s ako želite koristiti KEKS Pay.', 'kekspay' ),
             $requirement['name'],
             $requirement['requred_version'],
             $requirement['current_version']
@@ -212,17 +213,17 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
 
       // Check if gateway is currently in test mode.
       if ( Kekspay_Data::test_mode() ) {
-        $this->admin_notice( __( 'KEKS Pay is currently in sandbox/test mode, disable it after testing is finished.', 'kekspay' ), 'warning' );
+        $this->admin_notice( __( 'KEKS Pay je trenutno u testom načinu rada, ne zaboravite ga ugasiti po završetku testiranja.', 'kekspay' ), 'warning' );
       }
 
       // Check if all setting keys required for gateway to work are set.
       if ( ! Kekspay_Data::required_keys_set() ) {
-        $this->admin_notice( __( 'KEKS Pay is almost ready for use, Webshop data needs to be set up before using the gateway.', 'kekspay' ), 'info' );
+        $this->admin_notice( __( 'KEKS Pay je trenutno onemogućen, molimo postavite TID i CID unutar postavki plugina.', 'kekspay' ), 'warning' );
       }
 
       // Check if correct currency is set in webshop.
       if ( ! Kekspay_Data::currency_supported() ) {
-        $this->admin_notice( __( 'KEKS Pay does not support your currency, please set it to "HRK".', 'kekspay' ), 'warning' );
+        $this->admin_notice( __( 'KEKS Pay je trenutno onemogućen, valuta Web trgovine nije podržana. Podržane value: "HRK"', 'kekspay' ), 'warning' );
       }
     }
 
@@ -240,7 +241,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
       $payment_gateways = WC_Payment_Gateways::instance()->payment_gateways();
 
       if ( isset( $payment_gateways[ KEKSPAY_PLUGIN_ID ] ) && ! $payment_gateways[ KEKSPAY_PLUGIN_ID ] instanceof Kekspay_Payment_Gateway ) {
-        self::admin_notice( __( 'You can only have one KEKS Pay Payment Gateway active at the same time. KEKS Pay for WooCommerce plugin has been deactivated.', 'kekspay' ) );
+        self::admin_notice( __( 'Možete imati samo jedan KEKS Pay način plaćanja aktivan u isto vrijeme. Dodatak "KEKS Pay for WooCommerce" je deaktiviran.', 'kekspay' ) );
 
         self::deactivate_self();
       }
@@ -331,7 +332,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
      * @return array
      */
     public function add_settings_link( $links ) {
-      $settings_link = '<a href="' . KEKSPAY_ADMIN_SETTINGS_URL . '">' . __( 'Settings', 'kekspay' ) . '</a>';
+      $settings_link = '<a href="' . KEKSPAY_ADMIN_SETTINGS_URL . '">' . __( 'Postavke', 'kekspay' ) . '</a>';
       array_unshift( $links, $settings_link );
 
       return $links;

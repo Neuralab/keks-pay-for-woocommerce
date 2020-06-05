@@ -29,7 +29,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 
       $this->id                 = KEKSPAY_PLUGIN_ID;
       $this->method_title       = __( 'KEKS Pay', 'kekspay' );
-      $this->method_description = __( 'Allow customers to complete payments using KEKS Pay mobile app.', 'kekspay' );
+      $this->method_description = __( 'Najbrže i bez naknada putem KEKS Pay aplikacije!', 'kekspay' );
       $this->has_fields         = true;
 
       $this->init_form_fields();
@@ -124,7 +124,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       if ( Kekspay_Data::test_mode() ) {
         $test_mode_notice = apply_filters(
           'kekspay_payment_description_test_mode_notice',
-          '<p><b>' . __( 'KEKS Pay is currently in sandbox/test mode, disable it after testing is finished.', 'kekspay' ) . '</b></p>'
+          '<p><b>' . __( 'KEKS Pay je trenutno u testom načinu rada, ne zaboravite ga ugasiti po završetku testiranja.', 'kekspay' ) . '</b></p>'
         );
 
         if ( ! empty( $test_mode_notice ) ) {
@@ -153,7 +153,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       // Add order meta and note to mark order as TEST if test mode is enabled or order already has not been maked as TEST.
       if ( Kekspay_Data::test_mode() && ! Kekspay_Data::order_test_mode( $order ) ) {
         Kekspay_Logger::log( 'Seting meta kekspay test mode for order ' . $order_id, 'info' );
-        $order->add_order_note( __( 'Order was done in <b>test mode</b>.', 'kekspay' ) );
+        $order->add_order_note( __( 'Narudžba napravljena u testnom načinu rada!', 'kekspay' ) );
         $order->add_meta_data( 'kekspay_test_mode', 'yes', true );
         $order->save();
       }
@@ -165,15 +165,15 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
           <div class="kekspay-url">
             <?php echo $this->sell->display_sell_url( $order ); ?>
           </div>
-          <small><a href="#" data-show=".kekspay-qr"><?php esc_html_e( 'Having troubles with the link? Click here to show QR code.', 'kekspay' ); ?></a></small>
+          <small class="kekspay-url__help"><?php printf( __( 'Imate problema sa pokretanjem aplikacije putem poveznice? Kliknite %1$s ovdje %2$s kako bi prikazali QR kȏd.', 'kekspay' ), '<a href="#" data-show=".kekspay-qr">', '</a>' ); ?></a></small>
         </div>
         <div class="kekspay-qr">
           <div class="kekspay-qr__instructions">
             <ol>
-              <li><?php esc_html_e( 'Open KEKS Pay app.', 'kekspay' ); ?></li>
-              <li><?php printf( __( 'Click on the %s icon.', 'kekspay' ), Kekspay_Data::get_svg( 'icon-plus', [ 'class="kekspay-icon-plus"' ] ) ?: __( 'plus', 'kekspay' ) ); ?></li>
-              <li><?php esc_html_e( 'Select "Scan QR Code".', 'kekspay' ); ?></li>
-              <li><?php esc_html_e( 'Scan the QR Code.', 'kekspay' ); ?></li>
+              <li><?php esc_html_e( 'Otvori KEKS Pay.', 'kekspay' ); ?></li>
+              <li><?php printf( __( 'Pritisni %s ikonicu.', 'kekspay' ), Kekspay_Data::get_svg( 'icon-plus', [ 'class="kekspay-icon-plus"' ] ) ?: __( 'plus', 'kekspay' ) ); ?></li>
+              <li><?php esc_html_e( 'Odaberi "Skeniraj QR kȏd".', 'kekspay' ); ?></li>
+              <li><?php esc_html_e( 'Skeniraj QR kȏd.', 'kekspay' ); ?></li>
             </ol>
           </div>
           <?php echo $this->sell->display_sell_qr( $order ); ?>

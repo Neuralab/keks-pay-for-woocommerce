@@ -51,7 +51,6 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
     private function add_hooks() {
       add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
       add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'do_receipt_page' ) );
-      add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'do_order_confirmation' ) );
 
       add_filter( 'woocommerce_gateway_icon', array( $this, 'do_gateway_checkout_icon' ), 10, 2 );
     }
@@ -82,10 +81,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
         return;
       }
 
-      $icon = (string) apply_filters( 'kekspay_gateway_checkout_icon', 0 );
-      if ( ! empty( $icon ) ) {
-        return $icon;
-      }
+      return Kekspay_Data::get_svg( 'keks-logo', [ 'class="kekspay-logo"' ] );
     }
 
     /**
@@ -173,8 +169,6 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
         $order->save();
       }
 
-      $this->show_receipt_message();
-
       do_action( 'kekspay_receipt_before_payment_data', $order, Kekspay_Data::get_settings() );
 
       ?>
@@ -185,8 +179,18 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
           <small><a href="#" data-show=".kekspay-qr"><?php esc_html_e( 'Having troubles with the link? Click here to show QR code.', 'kekspay' ); ?></a></small>
         </div>
         <div class="kekspay-qr">
+          <div class="kekspay-qr__instructions">
+            <ol>
+              <li><?php esc_html_e( 'Open KEKS Pay app.', 'kekspay' ); ?></li>
+              <li><?php printf( __( 'Click on the %s icon.', 'kekspay' ), Kekspay_Data::get_svg( 'icon-plus', [ 'class="kekspay-icon-plus"' ] ) ?: __( 'plus', 'kekspay' ) ); ?></li>
+              <li><?php esc_html_e( 'Select "Scan QR Code".', 'kekspay' ); ?></li>
+              <li><?php esc_html_e( 'Scan the QR Code.', 'kekspay' ); ?></li>
+            </ol>
+          </div>
           <?php echo $this->sell->display_sell_qr( $order ); ?>
         </div>
+
+        <a class="kekspay-cancel" href="<?php echo esc_attr( $order->get_cancel_order_url_raw() ); ?>"><?php esc_html_e( 'Cancel', 'kekspay' ); ?></a>
       <?php
 
       do_action( 'kekspay_receipt_after_payment_data', $order, Kekspay_Data::get_settings() );

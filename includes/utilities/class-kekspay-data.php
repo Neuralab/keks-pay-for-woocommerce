@@ -37,7 +37,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      * Init data class.
      */
     public function __construct() {
-      self::set_settings();
+      self::load_settings();
     }
 
     /**
@@ -45,8 +45,17 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      *
      * @return void
      */
-    public static function set_settings() {
+    public static function load_settings() {
       self::$settings = get_option( 'woocommerce_' . KEKSPAY_PLUGIN_ID . '_settings', array() );
+    }
+
+    /**
+     * Save gateway settings to the database.
+     *
+     * @return void
+     */
+    public static function set_settings( $settings ) {
+      update_option( 'woocommerce_' . KEKSPAY_PLUGIN_ID . '_settings', array_merge( self::get_settings(), $settings ) );
     }
 
     /**
@@ -56,7 +65,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      */
     public static function enabled() {
       if ( empty( self::$settings ) ) {
-        self::set_settings();
+        self::load_settings();
       }
 
       return 'yes' === self::$settings['enabled'];
@@ -69,7 +78,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      */
     public static function test_mode() {
       if ( empty( self::$settings ) ) {
-        self::set_settings();
+        self::load_settings();
       }
 
       return 'yes' === self::$settings['in-test-mode'];
@@ -116,7 +125,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      */
     public static function get_settings( $name = false, $test_check = false ) {
       if ( empty( self::$settings ) ) {
-        self::set_settings();
+        self::load_settings();
       }
 
       if ( $name ) {
@@ -128,6 +137,37 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
       }
 
       return self::$settings;
+    }
+
+    /**
+     * Return auth token or generate if there is none.
+     *
+     * @return string
+     */
+    public static function get_auth_token() {
+      $token = self::get_settings( 'auth-token' );
+      if ( ! $token ) {
+        $token = hash_hmac( 'sha256', bin2hex( openssl_random_pseudo_bytes( 64 ) ), site_url() );
+
+        self::set_settings( [ 'auth-token' => $token ] );
+      }
+
+      return $token;
+    }
+
+    /**
+     * Return auth token or generate if there is none.
+     *
+     * @param bool $absolute Wheter to fetch full url with endpoint or only the endpoint.
+     *
+     * @return string
+     */
+    public static function get_svg( $svg, $attrs = [] ) {
+      if ( ! $svg || ! file_exists( KEKSPAY_DIR_PATH . '/assets/img/' . $svg . '.svg' ) ) {
+        return false;
+      }
+
+      return '<img ' . implode( ' ', $attrs ) . ' src="' . KEKSPAY_DIR_URL . '/assets/img/' . $svg . '.svg">';
     }
 
     /**
@@ -160,6 +200,21 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
       return sprintf(
         __( 'Please add this webhook endpoint %1$s to your %2$s KEKS Pay account settings %3$s, which will enable your webshop to recieve payment notifications from KEKS Pay.', 'kekspay' ),
         '<strong><code class="kekspay-webhook">' . self::get_wc_endpoint( true ) . '</code></strong>',
+        '<a href="https://kekspay.hr" target="_blank">',
+        '</a>'
+      );
+    }
+
+
+    /**
+     * Creates endpoint message for settings.
+     *
+     * @return string
+     */
+    public static function get_settings_token_field() {
+      return sprintf(
+        __( 'Save this security token %1$s to your %2$s KEKS Pay account settings %3$s. Security token is used by KEKS Pay to verify your webshop.', 'kekspay' ),
+        '<strong><code>' . self::get_auth_token() . '</code></strong>',
         '<a href="https://kekspay.hr" target="_blank">',
         '</a>'
       );

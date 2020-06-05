@@ -101,7 +101,7 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
         'kekspay_sell_link_attributes',
         array(
           'id'     => 'kekspay-pay-url',
-          'class'  => 'button',
+          'class'  => 'button kekspay-sell-button',
           'target' => '_blank',
           'label'  => __( 'Pay via app', 'kekspay' ),
         )

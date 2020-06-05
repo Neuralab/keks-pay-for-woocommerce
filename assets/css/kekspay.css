@@ -3,7 +3,16 @@
 }
 
 .kekspay-qr {
-  margin-bottom: 14px;
+  margin-bottom: 24px;
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 782px) {
+  .kekspay-qr {
+    display: block;
+  }
 }
 
 /**
@@ -18,6 +27,35 @@
 
   .kekspay-url__wrap {
     display: block;
-    margin-bottom: 14px;
   }
+}
+
+.wc_payment_method>label:first-of-type img {
+  max-height: none;
+}
+
+.kekspay-logo {
+  float: right;
+}
+
+.kekspay-plus-icon {
+  display: inline;
+  vertical-align: bottom;
+}
+
+a.kekspay-sell-button {
+  background: #21A3E9;
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  padding: 16px 24px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+}
+
+a.kekspay-cancel {
+  display: inline-block;
+  margin-top: 24px;
 }

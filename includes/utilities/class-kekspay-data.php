@@ -27,11 +27,25 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
     private static $endpoint = 'wc-kekspay';
 
     /**
-     * Set url of kekspay system.
+     * Set base url of kekspay pay.
      *
      * @var string
      */
-    private static $kekspay = 'https://kekspay.hr/';
+    private static $kekspay_pay = 'https://kekspay.hr/';
+
+    /**
+     * Set base url of kekspay API.
+     *
+     * @var string
+     */
+    private static $kekspay_api = 'https://ewa.erstebank.hr/';
+
+    /**
+     * Set base test url of kekspay API.
+     *
+     * @var string
+     */
+    private static $test_kekspay_api = 'https://dttlinuxdev.erste.hr/tps/';
 
     /**
      * Init data class.
@@ -186,9 +200,18 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      *
      * @return string
      */
-    public static function get_kekspay_endpoint( $trailingslash = false ) {
-      $endpoint = self::$kekspay . ( self::test_mode() ? 'sokolpay' : 'pay' );
+    public static function get_kekspay_pay_base( $trailingslash = false ) {
+      $endpoint = self::$kekspay_pay . ( self::test_mode() ? 'sokolpay' : 'pay' );
       return $trailingslash ? trailingslashit( $endpoint ) : $endpoint;
+    }
+
+    /**
+     * Return gateway url for KEKS Pay servers.
+     *
+     * @return string
+     */
+    public static function get_kekspay_api_base() {
+      return self::test_mode() ? self::$test_kekspay_api : self::$kekspay_api;
     }
 
     /**

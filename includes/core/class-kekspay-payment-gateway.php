@@ -35,7 +35,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       $this->init_form_fields();
       $this->init_settings();
 
-      $this->supports = array( 'products' );
+      $this->supports = array( 'products', 'refunds' );
 
       $this->connector = new Kekspay_Connector();
       $this->sell      = new Kekspay_Sell();
@@ -206,6 +206,26 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
         'result'   => 'success',
         'redirect' => $order->get_checkout_payment_url( true ),
       );
+    }
+
+    /**
+     * Process refund via KEKS Pay.
+     *
+     * @override
+     * @param  int    $order_id
+     * @param  float  $amount   Defaults to null.
+     * @param  string $reason   Defaults to empty string.
+     *
+     * @return bool             True or false based on success, or a WP_Error object.
+     */
+    public function process_refund( $order_id, $amount = null, $reason = '' ) {
+      $order = wc_get_order( $order_id );
+      if ( ! $order ) {
+        Kekspay_Logger::log( 'Failed to find order ' . $order_id . ' while processing refund.', 'warning' );
+        return false;
+      }
+
+      return $this->connector->refund( $order, $amount );
     }
 
   }

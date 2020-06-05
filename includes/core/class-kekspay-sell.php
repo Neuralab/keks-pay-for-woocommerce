@@ -34,7 +34,7 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
         return false;
       }
 
-      return add_query_arg( $sell, Kekspay_Data::get_kekspay_endpoint() );
+      return add_query_arg( $sell, Kekspay_Data::get_kekspay_pay_base() );
     }
 
     /**

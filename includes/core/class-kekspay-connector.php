@@ -31,8 +31,8 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
 
       return array(
         'headers' => array(
-          'Content-Type'  => 'application/json',
-          'Authorization' => Kekspay_Data::get_auth_token(),
+          'Content-Type' => 'application/json',
+          'Keks-Token'   => Kekspay_Data::get_auth_token(),
         ),
         'method'  => 'POST',
         'body'    => $encoded_body,

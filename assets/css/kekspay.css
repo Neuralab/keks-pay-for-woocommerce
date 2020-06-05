@@ -30,15 +30,11 @@
   }
 }
 
-.wc_payment_method>label:first-of-type img {
-  max-height: none;
-}
-
 .kekspay-logo {
   float: right;
 }
 
-.kekspay-plus-icon {
+.kekspay-icon-plus {
   display: inline;
   vertical-align: bottom;
 }

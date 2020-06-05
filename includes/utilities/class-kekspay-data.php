@@ -198,8 +198,10 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      */
     public static function get_settings_endpoint_field() {
       return sprintf(
-        __( 'Adresa za primanje obavijesti o stanju naplate: %s. Nakon pohrane unutar KEKS Pay sustava omogućava ovoj trgovini primanje obavijesti o stanju naplate.', 'kekspay' ),
-        '<strong><code class="kekspay-webhook">' . self::get_wc_endpoint( true ) . '</code></strong>'
+        __( 'Adresa za primanje obavijesti o stanju naplate: %1$s. Nakon pohrane unutar KEKS Pay sustava omogućava ovoj trgovini primanje obavijesti o stanju naplate. %2$s Kontakt %3$s', 'kekspay' ),
+        '<b><code class="kekspay-webhook">' . self::get_wc_endpoint( true ) . '</code></b>',
+        '<a href="mailto:kekspay@erstebank.hr">',
+        '</a>'
       );
     }
 
@@ -211,8 +213,10 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      */
     public static function get_settings_token_field() {
       return sprintf(
-        __( 'Sigurnosni ključ Web trgovine: %s. Nakon pohrane unutar KEKS Pay sustava korišten je za autentikaciju Web trgovine unutar KEKS Pay sustava.', 'kekspay' ),
-        '<strong><code>' . self::get_auth_token() . '</code></strong>'
+        __( 'Sigurnosni ključ Web trgovine: %1$s. Nakon pohrane unutar KEKS Pay sustava korišten je za autentikaciju Web trgovine unutar KEKS Pay sustava. %2$s Kontakt %3$s', 'kekspay' ),
+        '<b><code>' . self::get_auth_token() . '</code></b>',
+        '<a href="mailto:kekspay@erstebank.hr">',
+        '</a>'
       );
     }
 

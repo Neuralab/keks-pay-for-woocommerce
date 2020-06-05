@@ -165,7 +165,6 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
           <div class="kekspay-url">
             <?php echo $this->sell->display_sell_url( $order ); ?>
           </div>
-          <small class="kekspay-url__help"><?php printf( __( 'Imate problema sa pokretanjem aplikacije putem poveznice? Kliknite %1$s ovdje %2$s kako bi prikazali QR kȏd.', 'kekspay' ), '<a href="#" data-show=".kekspay-qr">', '</a>' ); ?></a></small>
         </div>
         <div class="kekspay-qr">
           <div class="kekspay-qr__instructions">

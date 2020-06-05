@@ -1,12 +1,6 @@
 jQuery( function( $ ) {
   'use strict';
 
-  /** On click show QR code if its hidden. */
-  $( '[data-show]' ).on( 'click', function(e) {
-    e.preventDefault();
-    $( e.target.dataset.show ).slideDown();
-  } );
-
   // Check kekspay status periodically and redirect to confirmation page when payment completes.
   function statusCheck() {
     if ( ! kekspayClientScript.order_id ) {

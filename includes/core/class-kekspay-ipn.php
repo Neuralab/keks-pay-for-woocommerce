@@ -111,10 +111,10 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
      * Should be used as a callback URL for KEKS Pay API checkout request.
      */
     public function do_checkout_status() {
-      // if ( ! $this->verify_kekspay_token() ) {
-      //   Kekspay_Logger::log( 'Failed to verify token.', 'error' );
-      //   $this->respond_error( 'Webshop autentication failed, token mismatch.' );
-      // }
+      if ( ! $this->verify_kekspay_token() ) {
+        Kekspay_Logger::log( 'Failed to verify token.', 'error' );
+        $this->respond_error( 'Webshop autentication failed, token mismatch.' );
+      }
 
       $params = $this->resolve_params();
       // Check if any parametars are received.

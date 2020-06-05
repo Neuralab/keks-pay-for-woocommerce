@@ -6,50 +6,43 @@ if ( ! defined( 'ABSPATH' ) ) {
 return apply_filters(
   'wc_kekspay_settings',
   array(
-    'enabled'                 => array(
+    'enabled'          => array(
       'title'    => __( 'Enable', 'kekspay' ),
       'type'     => 'checkbox',
       'label'    => __( 'Enable KEKS Pay payment method', 'kekspay' ),
       'default'  => 'no',
       'desc_tip' => false,
     ),
-    'title'                   => array(
+    'title'            => array(
       'title'       => __( 'Title', 'kekspay' ),
       'type'        => 'text',
       'description' => __( 'This controls the title which the user sees during the checkout.', 'kekspay' ),
       'default'     => _x( 'KEKS Pay', 'Title default value', 'kekspay' ),
       'desc_tip'    => true,
     ),
-    'store-msg'               => array(
+    'store-msg'        => array(
       'title'       => __( 'Store description', 'kekspay' ),
       'type'        => 'text',
-      'description' => __( 'Description of the store (will be displayed to customer on wallet).', 'kekspay' ),
+      'description' => __( 'Description of the store (will be displayed to customer on the mobile app).', 'kekspay' ),
       'default'     => get_bloginfo( 'name' ),
       'desc_tip'    => true,
     ),
-    'description-msg'         => array(
-      'title'       => __( 'Checkout description', 'kekspay' ),
-      'type'        => 'textarea',
-      'description' => __( 'Payment method description that the customer will see on the checkout page.', 'kekspay' ),
-      'default'     => _x( 'Pay for your order using KEKS Pay mobile app.', 'Checkout description default value', 'kekspay' ),
-      'desc_tip'    => true,
-    ),
-    'webhook'                 => array(
+    'webhook'          => array(
       'title'       => __( 'Payment Notifications', 'kekspay' ),
       'type'        => 'title',
       'description' => Kekspay_Data::get_settings_endpoint_field(),
     ),
-    'auth-token'              => array(
+    'auth-token'       => array(
       'title'       => __( 'Security token', 'kekspay' ),
       'type'        => 'title',
       'description' => Kekspay_Data::get_settings_token_field(),
     ),
-    'webshop-options'         => array(
+    'webshop-options'  => array(
       'title'       => __( 'Webshop data', 'kekspay' ),
       'type'        => 'title',
       'description' => '',
     ),
-    'webshop-cid'             => array(
+    'webshop-cid'      => array(
       'title'       => __( 'Webshop CID', 'kekspay' ),
       'type'        => 'text',
       'description' => __( 'Unique id for Webshop within KEKS system. Will be given in advance by KEKS', 'kekspay' ),
@@ -57,33 +50,33 @@ return apply_filters(
       'desc_tip'    => true,
       'required'    => true,
     ),
-    'webshop-tid'             => array(
+    'webshop-tid'      => array(
       'title'       => __( 'Webshop TID', 'kekspay' ),
       'type'        => 'text',
       'description' => __( 'Unique id for point of service within Webshop system. Will be given in advance by KEKS', 'kekspay' ),
       'default'     => '',
       'desc_tip'    => true,
     ),
-    'test-webshop-cid'        => array(
+    'test-webshop-cid' => array(
       'title'       => __( 'TEST Webshop CID', 'kekspay' ),
       'type'        => 'text',
       'description' => __( 'Unique id for Webshop within KEKS system. Will be given in advance by KEKS', 'kekspay' ),
       'default'     => '',
       'desc_tip'    => true,
     ),
-    'test-webshop-tid'        => array(
+    'test-webshop-tid' => array(
       'title'       => __( 'TEST Webshop TID', 'kekspay' ),
       'type'        => 'text',
       'description' => __( 'Unique id for point of service within Webshop system. Will be given in advance by KEKS', 'kekspay' ),
       'default'     => '',
       'desc_tip'    => true,
     ),
-    'advanced-options'        => array(
+    'advanced-options' => array(
       'title'       => __( 'Advanced options', 'kekspay' ),
       'type'        => 'title',
       'description' => '',
     ),
-    'in-test-mode'            => array(
+    'in-test-mode'     => array(
       'title'       => __( 'Test Mode', 'kekspay' ),
       'type'        => 'checkbox',
       'label'       => __( 'Enable Test Mode', 'kekspay' ),
@@ -91,7 +84,7 @@ return apply_filters(
       'default'     => 'no',
       'desc_tip'    => true,
     ),
-    'use-logger'              => array(
+    'use-logger'       => array(
       'title'       => __( 'Debug log', 'kekspay' ),
       'type'        => 'checkbox',
       'label'       => __( 'Enable logging', 'kekspay' ),

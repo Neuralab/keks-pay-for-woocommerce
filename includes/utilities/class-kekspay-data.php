@@ -99,7 +99,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      * @return bool
      */
     public static function required_keys_set() {
-      if ( ! self::get_settings( 'webshop-cid', true ) || ! self::get_settings( 'webshop-tid', true ) || ! self::get_settings( 'webshop-secret-key', true ) ) {
+      if ( ! self::get_settings( 'webshop-cid', true ) || ! self::get_settings( 'webshop-tid', true ) ) {
         return false;
       }
 

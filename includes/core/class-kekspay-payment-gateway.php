@@ -134,17 +134,6 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
     }
 
     /**
-     * Echo redirect message on the 'receipt' page.
-     */
-    private function show_receipt_message() {
-      $receipt_desc = Kekspay_Data::get_settings( 'receipt-msg' );
-
-      if ( isset( $receipt_desc ) && ! empty( $receipt_desc ) ) {
-        echo '<p>' . wptexturize( $receipt_desc ) . '</p>';
-      }
-    }
-
-    /**
      * Trigger actions for 'receipt' page.
      *
      * @param int $order_id

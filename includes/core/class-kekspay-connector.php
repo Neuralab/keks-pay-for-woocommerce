@@ -64,7 +64,7 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
       $wc_price = wc_price( $amount, array( 'currency' => $order->get_currency() ) );
 
       $response = wp_safe_remote_post( Kekspay_Data::get_kekspay_api_base() . '/keksrefund', $this->get_default_args( $body ) );
-      Kekspay_Logger::log( 'Request to refund order ' . $order->get_id() . ' (' . $amount . $order->get_currency() . ') via KEKS Pay sent.', 'info' );
+      Kekspay_Logger::log( 'Request sent to refund order ' . $order->get_id() . ' (' . $amount . $order->get_currency() . ') via KEKS Pay.', 'info' );
 
       $status_code = wp_remote_retrieve_response_code( $response );
       if ( $status_code < 200 || $status_code > 299 ) {
@@ -82,7 +82,7 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
 
       if ( isset( $response_data->status ) && 0 === $response_data->status ) {
         $note = sprintf( __( 'Uspješno izvršen povrat %s via KEKS Pay.', 'kekspay' ), $wc_price );
-        Kekspay_Logger::log( 'Successfully refunded order ' . $order->get_id() . ' (' . $amount . $order->get_currency() . ') via KEKS Pay.', 'info' );
+        Kekspay_Logger::log( 'Successfully refunded order ' . $order->get_id() . ' (' . $amount . $order->get_currency() . ') via KEKS Pay. Setting status refunded.', 'info' );
         $order->add_order_note( $note );
         $order->update_meta_data( 'kekspay_status', (int) $order->get_remaining_refund_amount() ? 'refunded_partially' : 'refunded' );
         $order->save();

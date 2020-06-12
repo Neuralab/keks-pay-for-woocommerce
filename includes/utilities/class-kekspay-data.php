@@ -291,8 +291,8 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
       );
 
       if ( $callbacks ) {
-        $sell['success_callback'] = $order->get_checkout_order_received_url();
-        $sell['failed_callback']  = $order->get_cancel_order_url_raw();
+        $sell['success_url'] = $order->get_checkout_order_received_url();
+        $sell['fail_url']    = $order->get_cancel_order_url_raw();
       }
 
       return $sell;

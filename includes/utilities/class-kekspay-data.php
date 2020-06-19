@@ -38,7 +38,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      *
      * @var string
      */
-    private static $kekspay_api = 'https://ewa.erstebank.hr/';
+    private static $kekspay_api = 'https://ewa.erstebank.hr/tps/';
 
     /**
      * Set base test url of kekspay API.
@@ -236,7 +236,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      */
     public static function get_settings_token_field() {
       return sprintf(
-        __( 'Sigurnosni ključ Web trgovine: %1$s. Nakon pohrane unutar KEKS Pay sustava korišten je za autentikaciju Web trgovine unutar KEKS Pay sustava. %2$s Kontakt %3$s', 'kekspay' ),
+        __( 'Sigurnosni token Web trgovine: %1$s. Nakon pohrane unutar KEKS Pay sustava korišten je za autentikaciju Web trgovine unutar KEKS Pay sustava. %2$s Kontakt %3$s', 'kekspay' ),
         '<b><code>' . self::get_auth_token() . '</code></b>',
         '<a href="mailto:kekspay@erstebank.hr">',
         '</a>'
@@ -306,6 +306,24 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      */
     public static function delete_settings() {
       return delete_option( 'woocommerce_' . KEKSPAY_PLUGIN_ID . '_settings' ) && delete_option( 'kekspay_plugins_check_required' );
+    }
+
+    /**
+     * Return hash created from the provided data and secret.
+     *
+     * @param  string $order     Order from which to extract data for hash.
+     * @param  string $timestamp Timestamp for creating hash.
+     *
+     * @return string
+     */
+    public static function get_hash( $order, $timestamp ) {
+      $secret = self::get_settings( 'webshop-secret-key', true );
+
+      $payload = $timestamp . self::get_settings( 'webshop-tid', true ) . $order->get_total() . self::get_bill_id_by_order_id( $order->get_id() );
+
+      $hash = openssl_encrypt( $payload, 'DES-EDE3', $secret, OPENSSL_RAW_DATA );
+
+      return $hash;
     }
 
   }

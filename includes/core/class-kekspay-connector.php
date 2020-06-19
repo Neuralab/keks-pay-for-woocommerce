@@ -55,16 +55,21 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
         return;
       }
 
+      $timestamp = time();
+
       $body = array(
-        'bill_id' => Kekspay_Data::get_bill_id_by_order_id( $order->get_id() ),
-        'keks_id' => $order->get_meta( 'kekspay_id' ),
-        'tid'     => Kekspay_Data::get_settings( 'webshop-tid', true ),
-        'amount'  => $amount,
+        'bill_id'   => Kekspay_Data::get_bill_id_by_order_id( $order->get_id() ),
+        'tid'       => Kekspay_Data::get_settings( 'webshop-tid', true ),
+        'cid'       => Kekspay_Data::get_settings( 'webshop-cid', true ),
+        'amount'    => $amount,
+        'epochtime' => $timestamp,
+        'hash'      => Kekspay_Data::get_hash( $order, $timestamp ),
+        'currency'  => 'HRK',
       );
 
       $wc_price = wc_price( $amount, array( 'currency' => $order->get_currency() ) );
 
-      $response = wp_safe_remote_post( Kekspay_Data::get_kekspay_api_base() . '/keksrefund', $this->get_default_args( $body ) );
+      $response = wp_safe_remote_post( Kekspay_Data::get_kekspay_api_base() . 'keksrefund', $this->get_default_args( $body ) );
       Kekspay_Logger::log( 'Request sent to refund order ' . $order->get_id() . ' (' . $amount . $order->get_currency() . ') via KEKS Pay.', 'info' );
 
       $status_code = wp_remote_retrieve_response_code( $response );
@@ -81,7 +86,7 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
 
       $response_data = json_decode( $body );
 
-      if ( isset( $response_data->status ) && 0 === $response_data->status ) {
+      if ( isset( $response_data->status_code ) && 0 === $response_data->status_code ) {
         $note = sprintf( __( 'Uspješno izvršen povrat %s via KEKS Pay.', 'kekspay' ), $wc_price );
         Kekspay_Logger::log( 'Successfully refunded order ' . $order->get_id() . ' (' . $amount . $order->get_currency() . ') via KEKS Pay. Setting status refunded.', 'info' );
         $order->add_order_note( $note );
@@ -90,7 +95,7 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
 
         return true;
       } else {
-        $note = sprintf( __( 'Dogodila se greška pri povratu %s via KEKS Pay.', 'kekspay' ), $wc_price );
+        $note    = sprintf( __( 'Dogodila se greška pri povratu %s via KEKS Pay.', 'kekspay' ), $wc_price );
         $message = isset( $response_data->message ) ? $response_data->message : '';
         Kekspay_Logger::log( 'Failed to refund order ' . $order->get_id() . ' (' . $amount . $order->get_currency() . ') via KEKS Pay. Message: ' . $message, 'error' );
         $order->add_order_note( $note );

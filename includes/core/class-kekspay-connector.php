@@ -32,7 +32,6 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
       return array(
         'headers' => array(
           'Content-Type' => 'application/json',
-          'Keks-Token'   => Kekspay_Data::get_auth_token(),
         ),
         'method'  => 'POST',
         'body'    => $encoded_body,
@@ -78,15 +77,15 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
         return false;
       }
 
-      $body = wp_remote_retrieve_body( $response );
-      if ( ! $body ) {
+      $refund = wp_remote_retrieve_body( $response );
+      if ( ! $refund ) {
         Kekspay_Logger::log( 'Refund for order ' . $order->get_id() . ' (' . $amount . $order->get_currency() . ') via KEKS Pay failed, body corrupted or missing.', 'error' );
         return false;
       }
 
-      $response_data = json_decode( $body );
+      $response_data = json_decode( $refund );
 
-      if ( isset( $response_data->status_code ) && 0 === $response_data->status_code ) {
+      if ( isset( $response_data->status ) && 0 === $response_data->status ) {
         $note = sprintf( __( 'Uspješno izvršen povrat %s via KEKS Pay.', 'kekspay' ), $wc_price );
         Kekspay_Logger::log( 'Successfully refunded order ' . $order->get_id() . ' (' . $amount . $order->get_currency() . ') via KEKS Pay. Setting status refunded.', 'info' );
         $order->add_order_note( $note );

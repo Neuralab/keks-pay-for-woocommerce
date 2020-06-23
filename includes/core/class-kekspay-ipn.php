@@ -111,6 +111,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
      * Should be used as a callback URL for KEKS Pay API checkout request.
      */
     public function do_checkout_status() {
+      // Verify token authorization.
       if ( ! $this->verify_kekspay_token() ) {
         Kekspay_Logger::log( 'Failed to verify token.', 'error' );
         $this->respond_error( 'Webshop autentication failed, token mismatch.' );
@@ -179,7 +180,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
         $this->respond_error( 'Authentication token missing, failed to verify.' );
       }
 
-      return hash_equals( Kekspay_Data::get_settings( 'auth-token' ), $token );
+      return hash_equals( Kekspay_Data::get_settings( 'auth-token' ), str_replace( 'Token ', '', $token ) );
     }
   }
 }

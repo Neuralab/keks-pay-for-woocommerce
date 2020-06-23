@@ -93,7 +93,7 @@ return apply_filters(
     'in-test-mode'     => array(
       'title'       => __( 'Testni način rada', 'kekspay' ),
       'type'        => 'checkbox',
-      'label'       => __( 'Ukjuči testni način rada.', 'kekspay' ),
+      'label'       => __( 'Uključi testni način rada.', 'kekspay' ),
       'description' => __( 'Način rada koji omogućava testiranje, ne zaboravite ga ugasiti po završetku testiranja.', 'kekspay' ),
       'default'     => 'no',
       'desc_tip'    => true,

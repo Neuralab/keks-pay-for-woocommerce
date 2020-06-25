@@ -25,9 +25,13 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
      */
     private function get_default_args( $body ) {
       $encoded_body = wp_json_encode( $body );
+
       if ( ! $encoded_body ) {
         return false;
       }
+
+      // Log body data for refund request.
+      Kekspay_Logger::log( $encoded_body, 'info' );
 
       return array(
         'headers' => array(
@@ -82,6 +86,9 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
         Kekspay_Logger::log( 'Refund for order ' . $order->get_id() . ' (' . $amount . $order->get_currency() . ') via KEKS Pay failed, body corrupted or missing.', 'error' );
         return false;
       }
+
+      // Log response from refund request.
+      Kekspay_Logger::log( $refund, 'info' );
 
       $response_data = json_decode( $refund );
 

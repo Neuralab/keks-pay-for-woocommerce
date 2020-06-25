@@ -317,13 +317,18 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      * @return string
      */
     public static function get_hash( $order, $timestamp ) {
-      $secret = self::get_settings( 'webshop-secret-key', true );
-
+      // Get hashing key from the plugins settings.
+      $key = self::get_settings( 'webshop-secret-key', true );
+      // Concat epochtime + webshop tid + order amount + bill_id for payload.
       $payload = $timestamp . self::get_settings( 'webshop-tid', true ) . $order->get_total() . self::get_bill_id_by_order_id( $order->get_id() );
+      // Extract bytes from md5 hex hash.
+      $payload_checsum = pack( 'H*', md5( $payload ) );
+      // Create simple 8 byte string.
+      $iv = str_repeat( pack( 'c', 0 ), 8 );
+      // Encrypt data using 3DES CBC algorithm and convert it to hex.
+      $hash = bin2hex( openssl_encrypt( $payload_checsum, 'des-ede3-cbc', $key, OPENSSL_RAW_DATA, $iv ) );
 
-      $hash = openssl_encrypt( $payload, 'DES-EDE3', $secret, OPENSSL_RAW_DATA );
-
-      return $hash;
+      return strtoupper( $hash );
     }
 
   }

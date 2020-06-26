@@ -118,6 +118,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
       }
 
       $params = $this->resolve_params();
+      Kekspay_Logger::log( wp_json_encode( $params ), 'info' );
       // Check if any parametars are received.
       if ( ! $params ) {
         Kekspay_Logger::log( 'Missing parameters in the request for IPN.', 'error' );

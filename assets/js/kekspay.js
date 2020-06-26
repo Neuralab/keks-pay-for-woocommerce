@@ -17,8 +17,8 @@ jQuery( function( $ ) {
         'order_id': kekspayClientScript.order_id
       },
       success: function(response) {
-        if ( 'processing' === response.status ) {
-          window.location.href = kekspayClientScript.redirectSuccess;
+        if ( 'pending' !== response.status ) {
+          window.location.href = response.redirect;
         }
       },
       error: function(response) { // error logging
@@ -34,5 +34,11 @@ jQuery( function( $ ) {
   let statusCheckInterval = setInterval(function() {
     statusCheck();
   }, 15000);
+
+  // Stop checking after 30min to prevent infinite requests.
+  setTimeout( function() {
+    console.log('Live status check terminated after 30min.')
+    clearInterval( statusCheckInterval );
+  }, 1800000);
 
 } );

@@ -98,13 +98,22 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
     public function kekspay_status_check() {
       check_ajax_referer( 'kekspay_advice_status' );
 
-      $order = new WC_Order( filter_input( INPUT_POST, 'order_id', FILTER_SANITIZE_NUMBER_INT ) );
+      $order  = new WC_Order( filter_input( INPUT_POST, 'order_id', FILTER_SANITIZE_NUMBER_INT ) );
+      $status = $order->get_meta( 'kekspay_status' );
 
-      $this->respond(
-        array(
-          'status' => $order->get_meta( 'kekspay_status' ),
-        )
+      $response = array(
+        'status'   => $status,
+        'redirect' => null,
       );
+
+      if ( 'failed' === $status ) {
+        wc_add_notice( sprintf( __( 'Nešto je pošlo po zlu pri pokušaju naplate vaše narudžbe (#%d) putem KEKS Pay servisa, molimo pokušajte ponoviti narudžbu ili kontaktirajte administratora web trgovine za više informacija.' ), $order->get_id() ), 'error' );
+        $response['redirect'] = $order->get_cancel_order_url_raw();
+      } elseif ( 'success' === $status ) {
+        $response['redirect'] = $order->get_checkout_order_received_url();
+      }
+
+      $this->respond( $response );
     }
 
     /**
@@ -143,19 +152,19 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
       $order_id = Kekspay_Data::get_order_id_by_bill_id( $params['bill_id'] );
       $order    = wc_get_order( $order_id );
       if ( ! $order ) {
-        Kekspay_Logger::log( 'Failed to find order ' . $order_id . ' from the request for IPN.', 'error' );
+        Kekspay_Logger::log( 'Failed to find order ' . $params['bill_id'] . ' from the request for IPN.', 'error' );
         $this->respond_error( 'Couldn\'t find corresponding order ' . $params['bill_id'] . '.' );
       }
 
       if ( (int) $params['status'] === 0 ) {
         Kekspay_Logger::log( 'KEKS Pay successfully completed payment for order ' . $order_id . ', setting status to ' . $params['message'], 'info' );
         $order->set_status( 'processing', __( 'Narudžba uspješno plaćena putem KEKS Pay aplikacije.', 'kekspay' ) );
-        $order->add_meta_data( 'kekspay_status', strtolower( $params['message'] ), true );
+        $order->add_meta_data( 'kekspay_status', 'success', true );
         $order->add_meta_data( 'kekspay_id', $params['keks_id'], true );
         $order->save();
       } else {
         Kekspay_Logger::log( 'KEKS Pay failed to complete payment for order ' . $order_id . ', message: ' . $params['message'], 'error' );
-        $order->add_meta_data( 'kekspay_status', strtolower( $params['message'] ), true );
+        $order->add_meta_data( 'kekspay_status', 'failed', true );
         $order->add_order_note( __( 'Dogodila se greška pri naplati putem KEKS Pay aplikacije.', 'kekspay' ) );
         $order->save();
       }

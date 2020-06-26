@@ -146,7 +146,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
         return false;
       }
 
-      Kekspay_Logger::log( 'Order ' . $order_id . ' created and requested payment via KEKS Pay, status set to pending.', 'info' );
+      Kekspay_Logger::log( 'Order ' . $order_id . ' created for payment via KEKS Pay, status set to pending.', 'info' );
       $order->add_meta_data( 'kekspay_status', 'pending', true );
       $order->save();
 

@@ -160,6 +160,9 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
       do_action( 'kekspay_receipt_before_payment_data', $order, Kekspay_Data::get_settings() );
 
       ?>
+      <?php echo Kekspay_Data::get_svg( 'keks-logo' ); ?>
+
+      <div class="kekspay">
         <div class="kekspay-url__wrap">
           <div class="kekspay-url">
             <?php echo $this->sell->display_sell_url( $order ); ?>
@@ -168,16 +171,17 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
         <div class="kekspay-qr">
           <div class="kekspay-qr__instructions">
             <ol>
-              <li><?php esc_html_e( 'Otvori KEKS Pay.', 'kekspay' ); ?></li>
-              <li><?php printf( __( 'Pritisni %s ikonicu.', 'kekspay' ), Kekspay_Data::get_svg( 'icon-plus', [ 'class="kekspay-icon-plus"' ] ) ?: __( 'plus', 'kekspay' ) ); ?></li>
-              <li><?php esc_html_e( 'Odaberi "Skeniraj QR kȏd".', 'kekspay' ); ?></li>
-              <li><?php esc_html_e( 'Skeniraj QR kȏd.', 'kekspay' ); ?></li>
+              <li><?php esc_html_e( 'Otvori KEKS Pay', 'kekspay' ); ?></li>
+              <li><?php printf( __( 'Pritisni %s ikonicu', 'kekspay' ), Kekspay_Data::get_svg( 'icon-plus', [ 'class="kekspay-icon-plus"' ] ) ?: __( 'plus', 'kekspay' ) ); ?></li>
+              <li><?php esc_html_e( 'Odaberi "Skeniraj QR kȏd"', 'kekspay' ); ?></li>
+              <li><?php esc_html_e( 'Skeniraj QR kȏd', 'kekspay' ); ?></li>
             </ol>
           </div>
           <?php echo $this->sell->display_sell_qr( $order ); ?>
         </div>
 
-        <a class="kekspay-cancel" href="<?php echo esc_attr( $order->get_cancel_order_url_raw() ); ?>"><?php esc_html_e( 'Cancel', 'kekspay' ); ?></a>
+      </div>
+      <a class="kekspay-cancel" href="<?php echo esc_attr( $order->get_cancel_order_url_raw() ); ?>"><?php esc_html_e( 'Cancel', 'kekspay' ); ?></a>
       <?php
 
       do_action( 'kekspay_receipt_after_payment_data', $order, Kekspay_Data::get_settings() );

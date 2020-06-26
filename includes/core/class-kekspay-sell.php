@@ -103,7 +103,7 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
           'id'     => 'kekspay-pay-url',
           'class'  => 'button kekspay-sell-button',
           'target' => '_blank',
-          'label'  => __( 'Plati kroz KEKS Pay', 'kekspay' ),
+          'label'  => __( 'Otvori KEKS Pay', 'kekspay' ),
         )
       );
 

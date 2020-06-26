@@ -16,14 +16,14 @@ return apply_filters(
     'title'            => array(
       'title'       => __( 'Naslov', 'kekspay' ),
       'type'        => 'text',
-      'description' => __( 'Naslov KEKS Pay metode plaćanja koji korisnik vidi na stranici za naplatu.', 'kekspay' ),
+      'description' => __( 'Naslov KEKS Pay metode plaćanja koji korisnik vidi na stranici za naplatu. Upišite: KEKS Pay.', 'kekspay' ),
       'default'     => _x( 'KEKS Pay', 'Title default value', 'kekspay' ),
       'desc_tip'    => true,
     ),
     'store-msg'        => array(
-      'title'       => __( 'Opis Web trgovine', 'kekspay' ),
+      'title'       => __( 'Naziv Web trgovine', 'kekspay' ),
       'type'        => 'text',
-      'description' => __( 'Opis web trgovine koji će biti prikazan korisniku unutar KEKS Pay aplikacije.', 'kekspay' ),
+      'description' => __( 'Naziv web trgovine koji se korisniku prikazuje na ekranu za plaćanje u KEKS Pay aplikaciji.', 'kekspay' ),
       'default'     => get_bloginfo( 'name' ),
       'desc_tip'    => true,
     ),

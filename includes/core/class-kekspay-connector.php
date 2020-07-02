@@ -66,7 +66,7 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
         'cid'       => Kekspay_Data::get_settings( 'webshop-cid', true ),
         'amount'    => $amount,
         'epochtime' => $timestamp,
-        'hash'      => Kekspay_Data::get_hash( $order, $timestamp ),
+        'hash'      => Kekspay_Data::get_hash( $order, $amount, $timestamp ),
         'currency'  => 'HRK',
       );
 

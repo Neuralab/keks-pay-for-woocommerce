@@ -316,11 +316,11 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      *
      * @return string
      */
-    public static function get_hash( $order, $timestamp ) {
+    public static function get_hash( $order, $amount, $timestamp ) {
       // Get hashing key from the plugins settings.
       $key = self::get_settings( 'webshop-secret-key', true );
       // Concat epochtime + webshop tid + order amount + bill_id for payload.
-      $payload = $timestamp . self::get_settings( 'webshop-tid', true ) . $order->get_total() . self::get_bill_id_by_order_id( $order->get_id() );
+      $payload = $timestamp . self::get_settings( 'webshop-tid', true ) . $amount . self::get_bill_id_by_order_id( $order->get_id() );
       // Extract bytes from md5 hex hash.
       $payload_checsum = pack( 'H*', md5( $payload ) );
       // Create 8 byte binary initialization vector.

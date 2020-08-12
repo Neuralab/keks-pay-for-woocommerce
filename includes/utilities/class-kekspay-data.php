@@ -322,11 +322,11 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
       // Concat epochtime + webshop tid + order amount + bill_id for payload.
       $payload = $timestamp . self::get_settings( 'webshop-tid', true ) . $amount . self::get_bill_id_by_order_id( $order->get_id() );
       // Extract bytes from md5 hex hash.
-      $payload_checsum = pack( 'H*', md5( $payload ) );
+      $payload_checksum = pack( 'H*', md5( $payload ) );
       // Create 8 byte binary initialization vector.
       $iv = str_repeat( pack( 'c', 0 ), 8 );
       // Encrypt data using 3DES CBC algorithm and convert it to hex.
-      $hash = bin2hex( openssl_encrypt( $payload_checsum, 'des-ede3-cbc', $key, OPENSSL_RAW_DATA, $iv ) );
+      $hash = bin2hex( openssl_encrypt( $payload_checksum, 'des-ede3-cbc', $key, OPENSSL_RAW_DATA, $iv ) );
 
       return strtoupper( $hash );
     }

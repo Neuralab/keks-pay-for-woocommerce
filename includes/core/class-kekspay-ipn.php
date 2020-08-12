@@ -195,7 +195,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
         $this->respond_error( 'Authentication token missing, failed to verify.' );
       }
 
-      return hash_equals( Kekspay_Data::get_settings( 'auth-token' ), str_replace( 'Token ', '', $token ) );
+      return hash_equals( Kekspay_Data::get_settings( 'auth-token' ), str_replace( 'Token:', '', base64_decode( str_replace( 'Basic ', '', $token ) ) ) );
     }
   }
 }

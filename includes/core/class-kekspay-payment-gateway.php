@@ -51,8 +51,6 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
     private function add_hooks() {
       add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
       add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'do_receipt_page' ) );
-
-      add_filter( 'woocommerce_gateway_icon', array( $this, 'do_gateway_checkout_icon' ), 10, 2 );
     }
 
     /**
@@ -69,19 +67,12 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
     }
 
     /**
-     * Trigger 'kekspay_gateway_checkout_icon' hook.
+     * Add kekspay payment method icon.
      *
-     * @param  string $icon
-     * @param  string $id
-     *
-     * @return string
+     * @override
      */
-    public function do_gateway_checkout_icon( $icon, $id ) {
-      if ( $this->id !== $id ) {
-        return;
-      }
-
-      return Kekspay_Data::get_svg( 'keks-logo', [ 'class="kekspay-logo"' ] );
+    public function get_icon() {
+      return apply_filters( 'woocommerce_gateway_icon', Kekspay_Data::get_svg( 'keks-logo', [ 'class="kekspay-logo"' ] ), $this->id );
     }
 
     /**
@@ -146,9 +137,11 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
         return false;
       }
 
-      Kekspay_Logger::log( 'Order ' . $order_id . ' created for payment via KEKS Pay, status set to pending.', 'info' );
-      $order->add_meta_data( 'kekspay_status', 'pending', true );
-      $order->save();
+      if ( ! $order->get_meta( 'kekspay_status' ) ) {
+        Kekspay_Logger::log( 'Order ' . $order_id . ' created for payment via KEKS Pay, status set to pending.', 'info' );
+        $order->add_meta_data( 'kekspay_status', 'pending', true );
+        $order->save();
+      }
 
       // Add order meta and note to mark order as TEST if test mode is enabled or order already has not been maked as TEST.
       if ( Kekspay_Data::test_mode() && ! Kekspay_Data::order_test_mode( $order ) ) {

@@ -149,6 +149,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
       if ( $params['tid'] !== Kekspay_Data::get_settings( 'webshop-tid', true ) ) {
         Kekspay_Logger::log( 'Recieved TID ' . $params['tid'] . ' does not match webshop TID in the request for IPN.', 'error' );
         $order->add_meta_data( 'kekspay_status', 'failed', true );
+        $order->save();
         $this->respond_error( 'Webshop verification failed, mismatch for TID ' . $params['tid'] . '.' );
       }
 
@@ -156,6 +157,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
       if ( ! $this->verify_kekspay_token() ) {
         Kekspay_Logger::log( 'Failed to verify token.', 'error' );
         $order->add_meta_data( 'kekspay_status', 'failed', true );
+        $order->save();
         $this->respond_error( 'Webshop autentication failed, token mismatch.' );
       }
 

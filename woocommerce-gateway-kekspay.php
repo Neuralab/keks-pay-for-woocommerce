@@ -3,7 +3,7 @@
  * Plugin Name:       KEKS Pay for WooCommerce
  * Plugin URI:        https://www.kekspay.hr/
  * Description:       KEKS Pay za WooCommerce.
- * Version:           1.0
+ * Version:           0.9
  * Requires at least: 5.0
  * Requires PHP:      7.2
  * Author:            Neuralab
@@ -129,7 +129,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
         define( 'KEKSPAY_PLUGIN_ID', 'erste-kekspay-woocommerce' );
       }
       if ( ! defined( 'KEKSPAY_PLUGIN_VERSION' ) ) {
-        define( 'KEKSPAY_PLUGIN_VERSION', '1.0' );
+        define( 'KEKSPAY_PLUGIN_VERSION', '0.9' );
       }
       if ( ! defined( 'KEKSPAY_DIR_PATH' ) ) {
         define( 'KEKSPAY_DIR_PATH', plugin_dir_path( __FILE__ ) );

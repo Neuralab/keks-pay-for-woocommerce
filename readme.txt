@@ -32,9 +32,8 @@ For more installation options check the [official WordPress documentation](https
 
 == Changelog ==
 
-= 1.0.0 =
-Initial stable release.
-
+= 0.9 =
+* Beta release.
 
 = Support =
 

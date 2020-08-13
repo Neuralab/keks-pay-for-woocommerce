@@ -120,7 +120,12 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
      * Should be used as a callback URL for KEKS Pay API checkout request.
      */
     public function do_checkout_status() {
-      // Check received parametars.
+      // Verify token authorization.
+      if ( ! $this->verify_kekspay_token() ) {
+        Kekspay_Logger::log( 'Failed to verify token.', 'error' );
+        $this->respond_error( 'Webshop autentication failed, token mismatch.' );
+      }
+
       $params = $this->resolve_params();
       Kekspay_Logger::log( wp_json_encode( $params ), 'info' );
       // Check if any parametars are received.
@@ -133,8 +138,14 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
       foreach ( array( 'bill_id', 'status', 'keks_id', 'tid' ) as $required_param ) {
         if ( ! isset( $params[ $required_param ] ) ) {
           Kekspay_Logger::log( 'Missing ' . $required_param . ' parametar in the request for IPN.', 'error' );
-          $this->respond_error( 'Missing or corrupt parametars.' );
+          $this->respond_error( 'Missing or corrupt required parametars.' );
         }
+      }
+
+      // Check if recieved TID matches the webshop TID.
+      if ( $params['tid'] !== Kekspay_Data::get_settings( 'webshop-tid', true ) ) {
+        Kekspay_Logger::log( 'Recieved TID ' . $params['tid'] . ' does not match webshop TID in the request for IPN.', 'error' );
+        $this->respond_error( 'Webshop verification failed, mismatch for TID ' . $params['tid'] . '.' );
       }
 
       // Extract order id and check if order exists.
@@ -143,22 +154,6 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
       if ( ! $order ) {
         Kekspay_Logger::log( 'Failed to find order ' . $params['bill_id'] . ' from the request for IPN.', 'error' );
         $this->respond_error( 'Couldn\'t find corresponding order ' . $params['bill_id'] . '.' );
-      }
-
-      // Check if recieved TID matches the webshop TID.
-      if ( $params['tid'] !== Kekspay_Data::get_settings( 'webshop-tid', true ) ) {
-        Kekspay_Logger::log( 'Recieved TID ' . $params['tid'] . ' does not match webshop TID in the request for IPN.', 'error' );
-        $order->add_meta_data( 'kekspay_status', 'failed', true );
-        $order->save();
-        $this->respond_error( 'Webshop verification failed, mismatch for TID ' . $params['tid'] . '.' );
-      }
-
-      // Verify token authorization.
-      if ( ! $this->verify_kekspay_token() ) {
-        Kekspay_Logger::log( 'Failed to verify token.', 'error' );
-        $order->add_meta_data( 'kekspay_status', 'failed', true );
-        $order->save();
-        $this->respond_error( 'Webshop autentication failed, token mismatch.' );
       }
 
       if ( (int) $params['status'] === 0 ) {

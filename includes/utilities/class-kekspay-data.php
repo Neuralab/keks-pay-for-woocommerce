@@ -299,16 +299,6 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
     }
 
     /**
-     * Delete gateway settings. Return true if option is successfully deleted or
-     * false on failure or if option does not exist.
-     *
-     * @return bool
-     */
-    public static function delete_settings() {
-      return delete_option( 'woocommerce_' . KEKSPAY_PLUGIN_ID . '_settings' ) && delete_option( 'kekspay_plugins_check_required' );
-    }
-
-    /**
      * Return hash created from the provided data and secret.
      *
      * @param  string $order     Order from which to extract data for hash.

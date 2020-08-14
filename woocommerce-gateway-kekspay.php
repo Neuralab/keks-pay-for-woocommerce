@@ -339,6 +339,16 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
     }
 
     /**
+     * Delete gateway settings. Return true if option is successfully deleted or
+     * false on failure or if option does not exist.
+     *
+     * @return bool
+     */
+    public static function delete_settings() {
+      return delete_option( 'woocommerce_' . KEKSPAY_PLUGIN_ID . '_settings' ) && delete_option( 'kekspay_plugins_check_required' );
+    }
+
+    /**
      * Installation procedure.
      *
      * @static
@@ -363,7 +373,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
       }
 
       self::register_constants();
-      Kekspay_Data::delete_settings();
+      self::delete_settings();
 
       wp_cache_flush();
     }

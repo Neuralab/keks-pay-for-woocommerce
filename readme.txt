@@ -24,9 +24,9 @@ KEKS Pay payment gateway for WooCommerce.
 
 = Install =
 
-1. Visit Plugins > Add New
+1. In your WordPress Dashboard visit Plugins > Add New
 2. Search for "KEKS Pay for WooCommerce"
-3. Activate KEKS Pay for WooCommerce plugin
+3. Install and activate KEKS Pay for WooCommerce plugin
 
 For more installation options check the [official WordPress documentation](https://wordpress.org/support/article/managing-plugins/#manual-plugin-installation) about installing plugins.
 
@@ -37,4 +37,4 @@ For more installation options check the [official WordPress documentation](https
 
 = Support =
 
-Need any help or want to learn more about KEKS Pay? Feel free to [contact us](kekspay@erstebank.hr) if you need help to start implementing KEKS Pay into your store or if you have any further questions.
+If your require any help or have any questions feel free to [contact us](mailto:kekspay@erstebank.hr).

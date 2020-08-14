@@ -106,11 +106,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
      * @override
      */
     public function payment_fields() {
-      $gateway_desc = Kekspay_Data::get_settings( 'description-msg' );
-
-      if ( isset( $gateway_desc ) && ! empty( $gateway_desc ) ) {
-        echo '<p>' . wptexturize( __( 'Najbrže i bez naknada putem KEKS Pay aplikacije!', 'kekspay' ) ) . '</p>';
-      }
+      echo '<p>' . wptexturize( __( 'Najbrže i bez naknada putem KEKS Pay aplikacije!', 'kekspay' ) ) . '</p>';
 
       if ( Kekspay_Data::test_mode() ) {
         $test_mode_notice = apply_filters(

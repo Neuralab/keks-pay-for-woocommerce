@@ -307,8 +307,9 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
           wp_enqueue_script( 'kekspay-client-script', KEKSPAY_DIR_URL . '/assets/js/kekspay.js', array( 'jquery' ), KEKSPAY_PLUGIN_VERSION, true );
 
           $localize_data = [
-            'ajaxurl' => admin_url( 'admin-ajax.php' ),
-            'nonce'   => wp_create_nonce( 'kekspay_advice_status' ),
+            'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+            'nonce'       => wp_create_nonce( 'kekspay_advice_status' ),
+            'ipn_refresh' => apply_filters( 'kekspay_ipn_refresh_rate', 5000 ),
           ];
 
           // Get data for status check redirect

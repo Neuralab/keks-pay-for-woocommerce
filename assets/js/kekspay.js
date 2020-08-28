@@ -30,15 +30,14 @@ jQuery( function( $ ) {
   // Check on page load.
   statusCheck();
 
-  // Check every 15s.
+  // Check every 5s.
   let statusCheckInterval = setInterval(function() {
     statusCheck();
-  }, 15000);
+  }, kekspayClientScript.ipn_refresh);
 
-  // Stop checking after 30min to prevent infinite requests.
+  // Stop checking after 1h to prevent infinite requests.
   setTimeout( function() {
-    console.log('Live status check terminated after 30min.')
     clearInterval( statusCheckInterval );
-  }, 1800000);
+  }, 3600000);
 
 } );

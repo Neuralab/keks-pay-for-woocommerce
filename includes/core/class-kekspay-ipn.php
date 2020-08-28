@@ -123,7 +123,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
       // Verify token authorization.
       if ( ! $this->verify_kekspay_token() ) {
         Kekspay_Logger::log( 'Failed to verify token.', 'error' );
-        $this->respond_error( 'Webshop autentication failed, token mismatch.' );
+        $this->respond_error( 'Webshop authentication failed, token mismatch.' );
       }
 
       $params = $this->resolve_params();

@@ -50,9 +50,10 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
       try {
         $options = new QROptions(
           array(
-            'version'       => 6,
-            'quietzoneSize' => 4,
-            'eccLevel'      => QRCode::ECC_L,
+            'version'          => 6,
+            'quietzoneSize'    => 4,
+            'eccLevel'         => QRCode::ECC_L,
+            'imageTransparent' => false,
           )
         );
 

@@ -21,6 +21,10 @@
   }
 }
 
+.kekspay-qr__instructions {
+  margin-right: 12px;
+}
+
 /**
  * Target smartphones and touch screen devices
  *

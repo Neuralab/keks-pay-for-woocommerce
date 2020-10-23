@@ -3,3 +3,5 @@
 .git
 .gitignore
 phpcs.xml
+composer.json
+composer.lock

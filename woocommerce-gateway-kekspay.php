@@ -2,12 +2,12 @@
 /**
  * Plugin Name:       KEKS Pay for WooCommerce
  * Plugin URI:        https://www.kekspay.hr/
- * Description:       KEKS Pay za WooCommerce.
- * Version:           1.0
+ * Description:       Incredible fast and user friendly payment method created by Erste Bank Croatia.
+ * Version:           1.0.1
  * Requires at least: 5.0
  * Requires PHP:      7.2
- * Author:            Neuralab
- * Author URI:        https://www.neuralab.net
+ * Author:            Erste bank Croatia
+ * Author URI:        https://www.erstebank.hr/hr/gradjanstvo
  * License:           GPL v3 or later
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain:       kekspay
@@ -129,7 +129,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
         define( 'KEKSPAY_PLUGIN_ID', 'erste-kekspay-woocommerce' );
       }
       if ( ! defined( 'KEKSPAY_PLUGIN_VERSION' ) ) {
-        define( 'KEKSPAY_PLUGIN_VERSION', '1.0' );
+        define( 'KEKSPAY_PLUGIN_VERSION', '1.0.1' );
       }
       if ( ! defined( 'KEKSPAY_DIR_PATH' ) ) {
         define( 'KEKSPAY_DIR_PATH', plugin_dir_path( __FILE__ ) );
@@ -312,7 +312,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
             'ipn_refresh' => apply_filters( 'kekspay_ipn_refresh_rate', 5000 ),
           ];
 
-          // Get data for status check redirect
+          // Get data for status check redirect.
           $order_id = get_query_var( 'order-pay' );
           $order    = new WC_Order( $order_id );
           if ( $order ) {

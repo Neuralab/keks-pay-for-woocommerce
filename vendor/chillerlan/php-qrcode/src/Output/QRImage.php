@@ -8,11 +8,15 @@
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2015 Smiley
  * @license      MIT
+ *
+ * @noinspection PhpComposerExtensionStubsInspection
  */
 
 namespace chillerlan\QRCode\Output;
 
-use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\Data\QRMatrix;
+use chillerlan\QRCode\{QRCode, QRCodeException};
+use chillerlan\Settings\SettingsContainerInterface;
 use Exception;
 
 use function array_values, base64_encode, call_user_func, count, imagecolorallocate, imagecolortransparent,
@@ -44,6 +48,20 @@ class QRImage extends QROutputAbstract{
 
 	/**
 	 * @inheritDoc
+	 *
+	 * @throws \chillerlan\QRCode\QRCodeException
+	 */
+	public function __construct(SettingsContainerInterface $options, QRMatrix $matrix){
+
+		if(!extension_loaded('gd')){
+			throw new QRCodeException('ext-gd not loaded'); // @codeCoverageIgnore
+		}
+
+		parent::__construct($options, $matrix);
+	}
+
+	/**
+	 * @inheritDoc
 	 */
 	protected function setModuleValues():void{
 
@@ -65,8 +83,10 @@ class QRImage extends QROutputAbstract{
 
 	/**
 	 * @inheritDoc
+	 *
+	 * @return string|resource
 	 */
-	public function dump(string $file = null):string{
+	public function dump(string $file = null){
 		$this->image = imagecreatetruecolor($this->length, $this->length);
 
 		// avoid: Indirect modification of overloaded property $imageTransparencyBG has no effect
@@ -86,9 +106,13 @@ class QRImage extends QROutputAbstract{
 			}
 		}
 
+		if($this->options->returnResource){
+			return $this->image;
+		}
+
 		$imageData = $this->dumpImage($file);
 
-		if((bool)$this->options->imageBase64){
+		if($this->options->imageBase64){
 			$imageData = sprintf('data:image/%s;base64,%s', $this->options->outputType, base64_encode($imageData));
 		}
 

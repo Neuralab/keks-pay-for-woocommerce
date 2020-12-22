@@ -42,6 +42,7 @@ use chillerlan\Settings\SettingsContainerAbstract;
  * @property string $markupDark
  * @property string $markupLight
  *
+ * @property bool   $returnResource
  * @property bool   $imageBase64
  * @property bool   $imageTransparent
  * @property array  $imageTransparencyBG
@@ -50,6 +51,8 @@ use chillerlan\Settings\SettingsContainerAbstract;
  *
  * @property string $imagickFormat
  * @property string $imagickBG
+ *
+ * @property string $fpdfMeasureUnit
  *
  * @property array  $moduleValues
  */

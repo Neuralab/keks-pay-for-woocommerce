@@ -12,7 +12,7 @@
 
 namespace chillerlan\QRCode;
 
-use function array_values, count, is_array, is_numeric, max, min, sprintf;
+use function array_values, count, in_array, is_array, is_numeric, max, min, sprintf, strtolower;
 
 trait QROptionsTrait{
 
@@ -189,6 +189,22 @@ trait QROptionsTrait{
 	protected $markupLight = '#fff';
 
 	/**
+	 * Return the image resource instead of a render if applicable.
+	 * This option overrides other output options, such as $cachefile and $imageBase64.
+	 *
+	 * Supported by the following modules:
+	 *
+	 * - QRImage:   resource
+	 * - QRImagick: Imagick
+	 * - QRFpdf:    FPDF
+	 *
+	 * @see \chillerlan\QRCode\Output\QROutputInterface::dump()
+	 *
+	 * @var bool
+	 */
+	protected $returnResource = false;
+
+	/**
 	 * toggle base64 or raw image data
 	 *
 	 * @var bool
@@ -240,6 +256,13 @@ trait QROptionsTrait{
 	 * @var string|null
 	 */
 	protected $imagickBG = null;
+
+	/**
+	 * Measurement unit for FPDF output: pt, mm, cm, in (defaults to "pt")
+	 *
+	 * @see \FPDF::__construct()
+	 */
+	protected $fpdfMeasureUnit = 'pt';
 
 	/**
 	 * Module values map
@@ -365,6 +388,21 @@ trait QROptionsTrait{
 			$this->version = max(1, min(40, $version));
 		}
 
+	}
+
+	/**
+	 * sets the FPDF measurement unit
+	 *
+	 * @codeCoverageIgnore
+	 */
+	protected function set_fpdfMeasureUnit(string $unit):void{
+		$unit = strtolower($unit);
+
+		if(in_array($unit, ['cm', 'in', 'mm', 'pt'], true)){
+			$this->fpdfMeasureUnit = $unit;
+		}
+
+		// @todo throw or ignore silently?
 	}
 
 }

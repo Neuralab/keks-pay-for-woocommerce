@@ -8,10 +8,15 @@
  * @author       smiley <smiley@chillerlan.net>
  * @copyright    2018 smiley
  * @license      MIT
+ *
+ * @noinspection PhpComposerExtensionStubsInspection
  */
 
 namespace chillerlan\QRCode\Output;
 
+use chillerlan\QRCode\Data\QRMatrix;
+use chillerlan\QRCode\QRCodeException;
+use chillerlan\Settings\SettingsContainerInterface;
 use Imagick, ImagickDraw, ImagickPixel;
 
 use function is_string;
@@ -23,6 +28,24 @@ use function is_string;
  * @link http://phpimagick.com
  */
 class QRImagick extends QROutputAbstract{
+
+	/**
+	 * @var \Imagick
+	 */
+	protected $imagick;
+
+	/**
+	 * @inheritDoc
+	 * @throws \chillerlan\QRCode\QRCodeException
+	 */
+	public function __construct(SettingsContainerInterface $options, QRMatrix $matrix){
+
+		if(!extension_loaded('imagick')){
+			throw new QRCodeException('ext-imagick not loaded'); // @codeCoverageIgnore
+		}
+
+		parent::__construct($options, $matrix);
+	}
 
 	/**
 	 * @inheritDoc
@@ -45,19 +68,27 @@ class QRImagick extends QROutputAbstract{
 
 	/**
 	 * @inheritDoc
+	 *
+	 * @return string|\Imagick
 	 */
-	public function dump(string $file = null):string{
-		$file    = $file ?? $this->options->cachefile;
-		$imagick = new Imagick;
+	public function dump(string $file = null){
+		$file          = $file ?? $this->options->cachefile;
+		$this->imagick = new Imagick;
 
-		$imagick->newImage(
+		$this->imagick->newImage(
 			$this->length,
 			$this->length,
 			new ImagickPixel($this->options->imagickBG ?? 'transparent'),
 			$this->options->imagickFormat
 		);
 
-		$imageData = $this->drawImage($imagick);
+		$this->drawImage();
+
+		if($this->options->returnResource){
+			return $this->imagick;
+		}
+
+		$imageData = $this->imagick->getImageBlob();
 
 		if($file !== null){
 			$this->saveToFile($imageData, $file);
@@ -67,11 +98,9 @@ class QRImagick extends QROutputAbstract{
 	}
 
 	/**
-	 * @param \Imagick $imagick
-	 *
-	 * @return string
+	 * @return void
 	 */
-	protected function drawImage(Imagick $imagick):string{
+	protected function drawImage():void{
 		$draw = new ImagickDraw;
 
 		foreach($this->matrix->matrix() as $y => $row){
@@ -88,9 +117,7 @@ class QRImagick extends QROutputAbstract{
 			}
 		}
 
-		$imagick->drawImage($draw);
-
-		return (string)$imagick;
+		$this->imagick->drawImage($draw);
 	}
 
 }

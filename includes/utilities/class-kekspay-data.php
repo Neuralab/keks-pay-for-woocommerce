@@ -176,7 +176,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      *
      * @return string
      */
-    public static function get_svg( $svg, $attrs = [] ) {
+    public static function get_svg( $svg ) {
       if ( ! $svg || ! file_exists( KEKSPAY_DIR_PATH . 'assets/img/' . $svg . '.svg' ) ) {
         return false;
       }

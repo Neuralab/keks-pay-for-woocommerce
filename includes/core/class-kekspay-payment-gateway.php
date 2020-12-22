@@ -161,7 +161,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
           <div class="kekspay-qr__instructions">
             <ol>
               <li><?php esc_html_e( 'Otvori KEKS Pay', 'kekspay' ); ?></li>
-              <li><?php printf( __( 'Pritisni %s ikonicu', 'kekspay' ), Kekspay_Data::get_svg( 'icon-plus', [ 'class="kekspay-icon-plus"' ] ) ?: __( 'plus', 'kekspay' ) ); ?></li>
+              <li><?php printf( __( 'Pritisni %s ikonicu', 'kekspay' ), Kekspay_Data::get_svg( 'icon-pay' ) ?: __( 'keks logo', 'kekspay' ) ); ?></li>
               <li><?php esc_html_e( 'Odaberi "Skeniraj QR kȏd"', 'kekspay' ); ?></li>
               <li><?php esc_html_e( 'Skeniraj QR kȏd', 'kekspay' ); ?></li>
             </ol>

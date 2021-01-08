@@ -81,7 +81,7 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
         return esc_html_e( 'Dogodila se greška prilikom kreiranja QR kȏda za ovu narudžbu. Molimo rekreirajte narudžbu ili kontaktirajte vlasnika web stranice.', 'kekspay' );
       }
 
-      return apply_filters( 'kekspay_sell_qr_code', '<img id="kekspay-qr-code" src="' . $qrcode . '">' );
+      return apply_filters( 'kekspay_sell_qr_code', '<div class="kekspay-qr-code" role="img" aria-label="' . __( 'QR kȏd', 'kekspay' ) . '" style="background-image: url(' . $qrcode . ');"></div>', $qrcode );
     }
 
     /**

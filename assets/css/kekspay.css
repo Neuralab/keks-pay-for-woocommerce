@@ -21,6 +21,12 @@
   }
 }
 
+.kekspay-qr-code {
+  background-repeat: no-repeat;
+  width: 245px;
+  height: 245px;
+}
+
 .kekspay-qr__instructions {
   margin-right: 12px;
 }

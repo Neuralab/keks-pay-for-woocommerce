@@ -18,6 +18,7 @@ jQuery( function( $ ) {
       },
       success: function(response) {
         if ( 'pending' !== response.status ) {
+          clearInterval( statusCheckInterval );
           window.location.href = response.redirect;
         }
       },

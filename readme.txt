@@ -51,6 +51,9 @@ For more installation options check the [official WordPress documentation](https
 
 = 1.0.4 =
 * Fixed lazy loading breaking QR Code.
+* Fixed recurring redirects.
+* Fixed QR Code description style.
+* Updated translations.
 
 = 1.0.3 =
 * Fixed QR Code use of GD library.

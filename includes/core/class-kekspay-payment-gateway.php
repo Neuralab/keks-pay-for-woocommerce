@@ -170,7 +170,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
         </div>
 
       </div>
-      <a class="kekspay-cancel" href="<?php echo esc_attr( $order->get_cancel_order_url_raw() ); ?>"><?php esc_html_e( 'Cancel', 'kekspay' ); ?></a>
+      <a class="kekspay-cancel" href="<?php echo esc_attr( $order->get_cancel_order_url_raw() ); ?>"><?php esc_html_e( 'Otkaži', 'kekspay' ); ?></a>
       <?php
 
       do_action( 'kekspay_receipt_after_payment_data', $order, Kekspay_Data::get_settings() );

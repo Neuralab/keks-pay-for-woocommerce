@@ -1,11 +1,12 @@
 .distignore
+.gitignore
 .editorconfig
 .git
-.gitignore
 .github
+.wordpress-org
+node_modules
 phpcs.xml
 composer.json
 composer.lock
 README.md
-/node_modules/
 license.txt

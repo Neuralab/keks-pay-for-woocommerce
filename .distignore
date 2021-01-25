@@ -2,6 +2,10 @@
 .editorconfig
 .git
 .gitignore
+.github
 phpcs.xml
 composer.json
 composer.lock
+README.md
+/node_modules/
+license.txt

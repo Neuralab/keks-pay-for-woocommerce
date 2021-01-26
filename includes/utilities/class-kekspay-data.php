@@ -82,7 +82,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
         self::load_settings();
       }
 
-      return 'yes' === self::$settings['enabled'];
+      return isset( $settings['enabled'] ) && 'yes' === self::$settings['enabled'];
     }
 
     /**

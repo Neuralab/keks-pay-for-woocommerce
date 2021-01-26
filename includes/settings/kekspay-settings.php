@@ -90,6 +90,13 @@ return apply_filters(
       'type'        => 'title',
       'description' => '',
     ),
+    'payed-order-status'              => array(
+      'title'       => __( 'Status plaćene narudžbe', 'kekspay' ),
+      'type'        => 'select',
+      'description' => sprintf( __( 'Status narudžbe koji će biti postavljen nakon što KEKS Pay uspješno izvrši naplatu same narudžbe. (Zadani status je "%s").', 'kekspay' ), _x( 'Processing', 'Order status', 'woocommerce' ) ),
+      'default'     => 'wc-processing',
+      'options'     => wc_get_order_statuses(),
+    ),
     'in-test-mode'            => array(
       'title'       => __( 'Testni način rada', 'kekspay' ),
       'type'        => 'checkbox',

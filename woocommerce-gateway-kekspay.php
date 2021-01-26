@@ -303,25 +303,25 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
       if ( is_checkout() ) {
         wp_enqueue_style( 'kekspay-client-style', KEKSPAY_DIR_URL . '/assets/css/kekspay.css', array(), KEKSPAY_PLUGIN_VERSION );
 
-        if ( is_wc_endpoint_url( 'order-pay' ) ) {
-          wp_enqueue_script( 'kekspay-client-script', KEKSPAY_DIR_URL . '/assets/js/kekspay.js', array( 'jquery' ), KEKSPAY_PLUGIN_VERSION, true );
-
-          $localize_data = [
-            'ajaxurl'     => admin_url( 'admin-ajax.php' ),
-            'nonce'       => wp_create_nonce( 'kekspay_advice_status' ),
-            'ipn_refresh' => apply_filters( 'kekspay_ipn_refresh_rate', 5000 ),
-          ];
-
-          // Get data for status check redirect.
+        // Add redirect js only on order-pay endpoint but not on wp-admin generated customer payment page.
+        if ( is_wc_endpoint_url( 'order-pay' ) && ! filter_input( INPUT_GET, 'pay_for_order', FILTER_VALIDATE_BOOLEAN ) ) {
           $order_id = get_query_var( 'order-pay' );
           $order    = new WC_Order( $order_id );
-          if ( $order ) {
-            $localize_data['order_id']        = $order_id;
-            $localize_data['redirectSuccess'] = $order->get_checkout_order_received_url();
-            $localize_data['redirectFailure'] = $order->get_cancel_order_url_raw();
-          }
 
-          wp_localize_script( 'kekspay-client-script', 'kekspayClientScript', $localize_data );
+          if ( 'erste-kekspay-woocommerce' === $order->get_payment_method() ) {
+            wp_enqueue_script( 'kekspay-client-script', KEKSPAY_DIR_URL . '/assets/js/kekspay.js', array( 'jquery' ), KEKSPAY_PLUGIN_VERSION, true );
+
+            $localize_data = [
+              'ajaxurl'         => admin_url( 'admin-ajax.php' ),
+              'nonce'           => wp_create_nonce( 'kekspay_advice_status' ),
+              'ipn_refresh'     => apply_filters( 'kekspay_ipn_refresh_rate', 5000 ),
+              'order_id'        => $order_id,
+              'redirectSuccess' => $order->get_checkout_order_received_url(),
+              'redirectFailure' => $order->get_cancel_order_url_raw(),
+            ];
+
+            wp_localize_script( 'kekspay-client-script', 'kekspayClientScript', $localize_data );
+          }
         }
       }
     }

@@ -4,7 +4,7 @@ Tags: kekspay, woocommerce, gateway, payment
 Requires at least: 5.0
 Tested up to: 5.6
 Requires PHP: 7.2
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -48,6 +48,11 @@ On a side note, this plugin is provided “as-is” and we don't currently provi
 For more installation options check the [official WordPress documentation](https://wordpress.org/support/article/managing-plugins/#manual-plugin-installation) about installing plugins.
 
 == Changelog ==
+
+= 1.0.5 =
+* Added setting for payment complete order status.
+* Fixed infinite redirect on checkout.
+* Fixed loading settings in check functions.
 
 = 1.0.4 =
 * Fixed lazy loading breaking QR Code.

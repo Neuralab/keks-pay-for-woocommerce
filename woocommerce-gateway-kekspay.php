@@ -94,11 +94,10 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
      */
     protected function __construct() {
       self::register_constants();
+      $this->load_textdomain();
+      $this->check_requirements();
 
-      // Check requirements are met.
-      add_action( 'plugins_loaded', array( $this, 'check_requirements' ) );
-
-      // Rquire all necessary files.
+      // Require all necessary files.
       require_once( 'includes/utilities/class-kekspay-data.php' );
       require_once( 'includes/utilities/class-kekspay-logger.php' );
 
@@ -114,7 +113,6 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
 
       add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_script' ) );
       add_action( 'wp_enqueue_scripts', array( $this, 'register_client_script' ) );
-      add_action( 'plugins_loaded', array( $this, 'load_textdomain' ), 5 );
       add_action( 'admin_init', array( $this, 'check_settings' ), 20 );
       add_action( 'admin_init', array( $this, 'check_for_other_kekspay_gateways' ), 1 );
       add_action( 'activated_plugin', array( $this, 'set_kekspay_plugins_check_required' ) );

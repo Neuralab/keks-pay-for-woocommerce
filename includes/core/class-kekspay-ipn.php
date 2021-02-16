@@ -158,7 +158,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
 
       if ( (int) $params['status'] === 0 ) {
         Kekspay_Logger::log( 'KEKS Pay successfully completed payment for order ' . $order_id . ', setting status to ' . $params['message'], 'info' );
-        $order->set_status( Kekspay_Data::get_settings( 'payed-order-status' ) ?: 'processing', __( 'Narudžba uspješno plaćena putem KEKS Pay aplikacije.', 'kekspay' ) );
+        $order->set_status( Kekspay_Data::get_settings( 'payed-order-status' ) ?: 'processing', __( 'Narudžba uspješno plaćena putem KEKS Pay aplikacije.', 'kekspay' ) ); //phpcs:ignore
         $order->add_meta_data( 'kekspay_status', 'success', true );
         $order->add_meta_data( 'kekspay_id', $params['keks_id'], true );
         $order->save();

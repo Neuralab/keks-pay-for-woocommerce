@@ -51,8 +51,8 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
 
       $encoded_message = wp_json_encode(
         array(
-          'status'  => -1,
-          'message' => $message,
+            'status'  => -1,
+            'message' => $message,
         )
       );
 
@@ -102,8 +102,8 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
       $status = $order->get_meta( 'kekspay_status' );
 
       $response = array(
-        'status'   => $status,
-        'redirect' => null,
+          'status'   => $status,
+          'redirect' => null,
       );
 
       if ( 'failed' === $status ) {
@@ -171,8 +171,8 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
 
       $this->respond(
         array(
-          'status'  => 0,
-          'message' => 'Accepted',
+            'status'  => 0,
+            'message' => 'Accepted',
         )
       );
     }
@@ -183,11 +183,17 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
      * @return bool
      */
     private function verify_kekspay_token() {
-      $token = isset( $_REQUEST['token'] ) ? filter_var( wp_unslash( $_REQUEST['token'] ), FILTER_SANITIZE_STRING ) : false;
-
+      $token_src = 'REQUEST';
+      $token     = isset( $_REQUEST['token'] ) ? filter_var( wp_unslash( $_REQUEST['token'] ), FILTER_SANITIZE_STRING ) : false;
+      if ( ! $token ) { // Legacy check.
+        $token_src = 'REQUEST';
+        $token     = isset( $_SERVER['HTTP_AUTHORIZATION'] ) ? filter_var( $_SERVER['HTTP_AUTHORIZATION'], FILTER_SANITIZE_STRING ) : false;
+      }
       if ( ! $token ) {
         Kekspay_Logger::log( 'Failed to recieve authentication token.', 'error' );
         $this->respond_error( 'Authentication token missing, failed to verify.' );
+      } else {
+        Kekspay_Logger::log( 'Token src: ' . $token_src, 'info' );
       }
 
       return hash_equals( Kekspay_Data::get_settings( 'auth-token' ), str_replace( 'Token ', '', $token ) );

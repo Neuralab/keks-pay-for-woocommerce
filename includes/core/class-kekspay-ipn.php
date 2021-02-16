@@ -183,7 +183,7 @@ if ( ! class_exists( 'Kekspay_IPN' ) ) {
      * @return bool
      */
     private function verify_kekspay_token() {
-      $token = isset( $_SERVER['HTTP_AUTHORIZATION'] ) ? filter_var( $_SERVER['HTTP_AUTHORIZATION'], FILTER_SANITIZE_STRING ) : false;
+      $token = isset( $_REQUEST['token'] ) ? filter_var( wp_unslash( $_REQUEST['token'] ), FILTER_SANITIZE_STRING ) : false;
 
       if ( ! $token ) {
         Kekspay_Logger::log( 'Failed to recieve authentication token.', 'error' );

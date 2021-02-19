@@ -26,12 +26,7 @@ return apply_filters(
       'description' => __( 'Naziv web trgovine koji se korisniku prikazuje na ekranu za plaćanje u KEKS Pay aplikaciji.', 'kekspay' ),
       'default'     => get_bloginfo( 'name' ),
       'desc_tip'    => true,
-    ),
-    'webhook'                 => array(
-      'title'       => __( 'Obavijesti o plaćanju', 'kekspay' ),
-      'type'        => 'title',
-      'description' => Kekspay_Data::get_settings_endpoint_field(),
-    ),
+		),
     'auth-token'              => array(
       'title'       => __( 'Sigurnosni token', 'kekspay' ),
       'type'        => 'title',

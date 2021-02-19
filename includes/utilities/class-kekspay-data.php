@@ -60,6 +60,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      * @return void
      */
     public static function load_settings() {
+            pgdc( get_option( 'woocommerce_' . KEKSPAY_PLUGIN_ID . '_settings', array() ) );
       self::$settings = get_option( 'woocommerce_' . KEKSPAY_PLUGIN_ID . '_settings', array() );
     }
 
@@ -163,7 +164,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
       if ( ! $token ) {
         $token = hash_hmac( 'sha256', bin2hex( openssl_random_pseudo_bytes( 64 ) ), site_url() );
 
-        self::set_settings( [ 'auth-token' => $token ] );
+        self::set_settings( array( 'auth-token' => $token ) );
       }
 
       return $token;
@@ -219,25 +220,10 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      *
      * @return string
      */
-    public static function get_settings_endpoint_field() {
-      return sprintf(
-        __( 'Adresa za primanje obavijesti o stanju naplate: %1$s. Nakon pohrane unutar KEKS Pay sustava omogućava ovoj trgovini primanje obavijesti o stanju naplate. %2$s Kontakt %3$s', 'kekspay' ),
-        '<b><code class="kekspay-webhook">' . self::get_wc_endpoint( true ) . '</code></b>',
-        '<a href="mailto:kekspay@erstebank.hr">',
-        '</a>'
-      );
-    }
-
-
-    /**
-     * Creates endpoint message for settings.
-     *
-     * @return string
-     */
     public static function get_settings_token_field() {
       return sprintf(
-        __( 'Sigurnosni token Web trgovine: %1$s. Nakon pohrane unutar KEKS Pay sustava korišten je za autentikaciju Web trgovine unutar KEKS Pay sustava. %2$s Kontakt %3$s', 'kekspay' ),
-        '<b><code>' . self::get_auth_token() . '</code></b>',
+        __( '%1$s <br><br>Nakon pohrane unutar KEKS Pay sustava omogućava ovoj trgovini primanje obavijesti o stanju naplate. %2$s Kontakt %3$s', 'kekspay' ),
+        '<b><code class="kekspay-webhook">' . add_query_arg( 'token', self::get_auth_token(), self::get_wc_endpoint( true ) ) . '</code></b>',
         '<a href="mailto:kekspay@erstebank.hr">',
         '</a>'
       );
@@ -281,12 +267,12 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
       }
 
       $sell = array(
-        'qr_type' => 1,
-        'cid'     => self::get_settings( 'webshop-cid', true ),
-        'tid'     => self::get_settings( 'webshop-tid', true ),
-        'bill_id' => self::get_bill_id_by_order_id( $order->get_id() ),
-        'amount'  => $order->get_total(),
-        'store'   => self::get_settings( 'store-msg' ),
+          'qr_type' => 1,
+          'cid'     => self::get_settings( 'webshop-cid', true ),
+          'tid'     => self::get_settings( 'webshop-tid', true ),
+          'bill_id' => self::get_bill_id_by_order_id( $order->get_id() ),
+          'amount'  => $order->get_total(),
+          'store'   => self::get_settings( 'store-msg' ),
       );
 
       if ( $callbacks ) {

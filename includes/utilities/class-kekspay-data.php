@@ -60,7 +60,6 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      * @return void
      */
     public static function load_settings() {
-            pgdc( get_option( 'woocommerce_' . KEKSPAY_PLUGIN_ID . '_settings', array() ) );
       self::$settings = get_option( 'woocommerce_' . KEKSPAY_PLUGIN_ID . '_settings', array() );
     }
 

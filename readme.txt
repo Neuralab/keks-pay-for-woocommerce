@@ -2,9 +2,9 @@
 Contributors: erstebank
 Tags: kekspay, woocommerce, gateway, payment
 Requires at least: 5.0
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 7.2
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -48,6 +48,9 @@ On a side note, this plugin is provided “as-is” and we don't currently provi
 For more installation options check the [official WordPress documentation](https://wordpress.org/support/article/managing-plugins/#manual-plugin-installation) about installing plugins.
 
 == Changelog ==
+
+= 1.0.7 =
+* Changes to plugin support info.
 
 = 1.0.6 =
 * Token verification updates.

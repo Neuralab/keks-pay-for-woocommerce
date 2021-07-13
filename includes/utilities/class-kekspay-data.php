@@ -45,7 +45,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      *
      * @var string
      */
-    private static $test_kekspay_api = 'https://dttlinuxdev.erste.hr/tps/';
+    private static $test_kekspay_api = 'https://kekspayuat.erstebank.hr/eretailer/';
 
     /**
      * Init data class.
@@ -201,7 +201,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      * @return string
      */
     public static function get_kekspay_pay_base( $trailingslash = false ) {
-      $endpoint = self::$kekspay_pay . ( self::test_mode() ? 'sokolpay' : 'pay' );
+      $endpoint = self::$kekspay_pay . ( self::test_mode() ? 'galebpay' : 'pay' );
       return $trailingslash ? trailingslashit( $endpoint ) : $endpoint;
     }
 

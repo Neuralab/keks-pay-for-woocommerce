@@ -3,7 +3,7 @@
  * Plugin Name:       KEKS Pay for WooCommerce
  * Plugin URI:        https://www.kekspay.hr/
  * Description:       Incredible fast and user friendly payment method created by Erste Bank Croatia.
- * Version:           1.0.7
+ * Version:           1.0.8
  * Requires at least: 5.0
  * Requires PHP:      7.2
  * Author:            Erste bank Croatia
@@ -14,7 +14,7 @@
  * Domain Path:       /languages
  *
  * WC requires at least: 3.3
- * WC tested up to: 5.0.0
+ * WC tested up to: 5.4.1
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -29,10 +29,12 @@ if ( ! function_exists( 'kekspay_wc_active' ) ) {
    * @return boolean
    */
   function kekspay_wc_active() {
-    if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
+    include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+    if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
       return true;
+    } else {
+      return false;
     }
-    return false;
   }
 }
 
@@ -109,8 +111,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
 
       // Add hooks.
       add_filter( 'woocommerce_payment_gateways', array( $this, 'add_gateway' ) );
-      add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'add_settings_link' ) );
-
+      add_filter( 'plugin_action_links', array( $this, 'add_settings_link' ), 10, 2 );
       add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_script' ) );
       add_action( 'wp_enqueue_scripts', array( $this, 'register_client_script' ) );
       add_action( 'admin_init', array( $this, 'check_settings' ), 20 );
@@ -127,7 +128,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
         define( 'KEKSPAY_PLUGIN_ID', 'erste-kekspay-woocommerce' );
       }
       if ( ! defined( 'KEKSPAY_PLUGIN_VERSION' ) ) {
-        define( 'KEKSPAY_PLUGIN_VERSION', '1.0.7' );
+        define( 'KEKSPAY_PLUGIN_VERSION', '1.0.8' );
       }
       if ( ! defined( 'KEKSPAY_DIR_PATH' ) ) {
         define( 'KEKSPAY_DIR_PATH', plugin_dir_path( __FILE__ ) );
@@ -139,7 +140,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
         define( 'KEKSPAY_ADMIN_SETTINGS_URL', get_admin_url( null, 'admin.php?page=wc-settings&tab=checkout&section=' . KEKSPAY_PLUGIN_ID ) );
       }
       if ( ! defined( 'KEKSPAY_REQUIRED_PHP_VERSION' ) ) {
-        define( 'KEKSPAY_REQUIRED_PHP_VERSION', '5.6' );
+        define( 'KEKSPAY_REQUIRED_PHP_VERSION', '7.2' );
       }
       if ( ! defined( 'KEKSPAY_REQUIRED_WC_VERSION' ) ) {
         define( 'KEKSPAY_REQUIRED_WC_VERSION', '3.3' );
@@ -158,16 +159,16 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
      */
     public function check_requirements() {
       $requirements = array(
-        'php' => array(
-          'current_version' => phpversion(),
-          'requred_version' => KEKSPAY_REQUIRED_PHP_VERSION,
-          'name'            => 'PHP',
-        ),
-        'wc'  => array(
-          'current_version' => WC_VERSION,
-          'requred_version' => KEKSPAY_REQUIRED_WC_VERSION,
-          'name'            => 'WooCommerce',
-        ),
+          'php' => array(
+              'current_version' => phpversion(),
+              'requred_version' => KEKSPAY_REQUIRED_PHP_VERSION,
+              'name'            => 'PHP',
+          ),
+          'wc'  => array(
+              'current_version' => WC_VERSION,
+              'requred_version' => KEKSPAY_REQUIRED_WC_VERSION,
+              'name'            => 'WooCommerce',
+          ),
       );
 
       $error_notices = array();
@@ -309,12 +310,12 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
           if ( 'erste-kekspay-woocommerce' === $order->get_payment_method() ) {
             wp_enqueue_script( 'kekspay-client-script', KEKSPAY_DIR_URL . '/assets/js/kekspay.js', array( 'jquery' ), KEKSPAY_PLUGIN_VERSION, true );
 
-            $localize_data = [
-              'ajaxurl'     => admin_url( 'admin-ajax.php' ),
-              'nonce'       => wp_create_nonce( 'kekspay_advice_status' ),
-              'ipn_refresh' => apply_filters( 'kekspay_ipn_refresh_rate', 5000 ),
-              'order_id'    => $order_id,
-            ];
+            $localize_data = array(
+                'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                'nonce'       => wp_create_nonce( 'kekspay_advice_status' ),
+                'ipn_refresh' => apply_filters( 'kekspay_ipn_refresh_rate', 5000 ),
+                'order_id'    => $order_id,
+            );
 
             wp_localize_script( 'kekspay-client-script', 'kekspayClientScript', $localize_data );
           }
@@ -328,10 +329,10 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
      * @param array   $links
      * @return array
      */
-    public function add_settings_link( $links ) {
-      $settings_link = '<a href="' . KEKSPAY_ADMIN_SETTINGS_URL . '">' . __( 'Postavke', 'kekspay' ) . '</a>';
-      array_unshift( $links, $settings_link );
-
+    public function add_settings_link( $links, $file ) {
+      if ( $file === plugin_basename( __FILE__ ) ) {
+          $links[] = '<a href="' . KEKSPAY_ADMIN_SETTINGS_URL . '">' . __( 'Postavke', 'kekspay' ) . '</a>';
+      }
       return $links;
     }
 

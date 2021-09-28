@@ -271,7 +271,6 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
           'tid'     => self::get_settings( 'webshop-tid', true ),
           'bill_id' => self::get_bill_id_by_order_id( $order->get_id() ),
           'amount'  => $order->get_total(),
-          'store'   => self::get_settings( 'store-msg' ),
       );
 
       if ( $callbacks ) {

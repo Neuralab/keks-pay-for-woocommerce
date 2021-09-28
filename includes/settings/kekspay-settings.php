@@ -20,13 +20,6 @@ return apply_filters(
       'default'     => _x( 'KEKS Pay', 'Title default value', 'kekspay' ),
       'desc_tip'    => true,
     ),
-    'store-msg'               => array(
-      'title'       => __( 'Naziv Web trgovine', 'kekspay' ),
-      'type'        => 'text',
-      'description' => __( 'Naziv web trgovine koji se korisniku prikazuje na ekranu za plaćanje u KEKS Pay aplikaciji.', 'kekspay' ),
-      'default'     => get_bloginfo( 'name' ),
-      'desc_tip'    => true,
-		),
     'auth-token'              => array(
       'title'       => __( 'Sigurnosni token', 'kekspay' ),
       'type'        => 'title',

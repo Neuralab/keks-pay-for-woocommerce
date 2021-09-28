@@ -46,14 +46,13 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
      */
     public function get_sell_qr( $order ) {
       $data = Kekspay_Data::get_sell_data( $order );
-
       try {
         $options = new QROptions(
           array(
-            'version'          => 6,
-            'quietzoneSize'    => 4,
-            'eccLevel'         => QRCode::ECC_L,
-            'imageTransparent' => false,
+              'version'          => 5,
+              'quietzoneSize'    => 4,
+              'eccLevel'         => QRCode::ECC_L,
+              'imageTransparent' => false,
           )
         );
 
@@ -101,10 +100,10 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
       $attrs = apply_filters(
         'kekspay_sell_link_attributes',
         array(
-          'id'     => 'kekspay-pay-url',
-          'class'  => 'button kekspay-sell-button',
-          'target' => '_blank',
-          'label'  => __( 'Otvori KEKS Pay', 'kekspay' ),
+            'id'     => 'kekspay-pay-url',
+            'class'  => 'button kekspay-sell-button',
+            'target' => '_blank',
+            'label'  => __( 'Otvori KEKS Pay', 'kekspay' ),
         )
       );
 

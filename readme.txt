@@ -2,7 +2,7 @@
 Contributors: erstebank
 Tags: kekspay, woocommerce, gateway, payment
 Requires at least: 5.0
-Tested up to: 5.8
+Tested up to: 5.8.1
 Requires PHP: 7.2
 Stable tag: 1.0.8
 License: GPL v3 or later
@@ -50,6 +50,8 @@ For more installation options check the [official WordPress documentation](https
 == Changelog ==
 
 = 1.0.8 =
+* Remove store-msg field from the setting and from the QR code
+* Lower QR Code Level 6 => 5
 * Fixed network activation check.
 * Changes to plugin support info.
 

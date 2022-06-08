@@ -38,6 +38,7 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
           'Content-Type' => 'application/json',
         ),
         'method'  => 'POST',
+        'timeout' => 30,
         'body'    => $encoded_body,
         'cookies' => [],
       );

@@ -331,7 +331,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
      */
     public function add_settings_link( $links, $file ) {
       if ( $file === plugin_basename( __FILE__ ) ) {
-          $links[] = '<a href="' . KEKSPAY_ADMIN_SETTINGS_URL . '">' . __( 'Postavke', 'kekspay' ) . '</a>';
+        array_unshift( $links, '<a href="' . KEKSPAY_ADMIN_SETTINGS_URL . '">' . __( 'Postavke', 'kekspay' ) . '</a>' );
       }
       return $links;
     }

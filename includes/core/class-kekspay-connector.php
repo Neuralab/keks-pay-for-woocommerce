@@ -68,7 +68,7 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
         'amount'    => $amount,
         'epochtime' => $timestamp,
         'hash'      => Kekspay_Data::get_hash( $order, $amount, $timestamp ),
-        'currency'  => 'HRK',
+        'currency'  => $order->get_currency(),
       );
 
       $wc_price = wc_price( $amount, array( 'currency' => $order->get_currency() ) );

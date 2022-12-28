@@ -121,12 +121,12 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
     }
 
     /**
-     * Returns true if currency is HRK.
+     * Returns true if currency is EUR.
      *
      * @return bool
      */
     public static function currency_supported() {
-      return 'HRK' === get_woocommerce_currency();
+      return 'EUR' === get_woocommerce_currency();
     }
 
     /**

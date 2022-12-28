@@ -222,7 +222,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
 
       // Check if correct currency is set in webshop.
       if ( ! Kekspay_Data::currency_supported() ) {
-        $this->admin_notice( __( 'KEKS Pay je trenutno onemogućen, valuta web trgovine nije podržana. Podržane valute: "HRK". Podrška za "EUR" bit će omogućena 02.01.2023. u sklopu unaprijeđenja KEKS Pay sustava.', 'kekspay' ), 'warning' );
+        $this->admin_notice( __( 'KEKS Pay je trenutno onemogućen, valuta web trgovine nije podržana. Podržane valute: "EUR".', 'kekspay' ), 'warning' );
       }
     }
 

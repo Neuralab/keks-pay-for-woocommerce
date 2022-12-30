@@ -41,6 +41,13 @@ if ( ! class_exists( 'Kekspay_Order_Admin' ) ) {
 
           printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
         }
+
+        if ( 'HRK' === $order->get_currency() ) {
+          $class   = 'notice notice-warning';
+          $message = __( 'KEKS Pay - Narudžba naplaćena u valuti HRK koja više nije podržana od strane KEKS Pay sustava. Ako želite napraviti povrat novca kroz KEKS Pay sustav, iznos za povrat prije povrata preračunati će se u EUR prema tečaju 7.5345 te biti vraćen u valuti EUR.', 'kekspay' );
+
+          printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+        }
       }
 
     }

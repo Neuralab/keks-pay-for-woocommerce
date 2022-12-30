@@ -61,10 +61,12 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
 
       $currency = $order->get_currency();
 
-      $refund_amount = $amount;
+      $refund_amount   = $amount;
+      $refund_currency = $currency;
 
       if ( 'HRK' === $currency ) {
-        $refund_amount = round( $amount / 7.5345, 2 );
+        $refund_amount   = round( $amount / 7.5345, 2 );
+        $refund_currency = 'EUR';
       }
 
       $timestamp = time();
@@ -76,7 +78,7 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
         'amount'    => $refund_amount,
         'epochtime' => $timestamp,
         'hash'      => Kekspay_Data::get_hash( $order, $refund_amount, $timestamp ),
-        'currency'  => $currency,
+        'currency'  => $refund_currency,
       );
 
       $wc_price = wc_price( $amount, array( 'currency' => $currency ) );

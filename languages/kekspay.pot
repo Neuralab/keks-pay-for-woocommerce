@@ -1,17 +1,17 @@
-# Copyright (C) 2022 Erste bank Croatia
-# This file is distributed under the same license as the KEKS Pay for WooCommerce plugin.
+# Copyright (C) 2023 Erste bank Croatia
+# This file is distributed under the GPL v3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: KEKS Pay for WooCommerce 1.0.10\n"
+"Project-Id-Version: KEKS Pay for WooCommerce 1.0.12\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/keks-pay-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-12-27T22:26:07+00:00\n"
+"POT-Creation-Date: 2023-01-03T08:29:14+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.4.0\n"
+"X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: kekspay\n"
 
 #. Plugin Name of the plugin
@@ -34,11 +34,11 @@ msgstr ""
 msgid "https://www.erstebank.hr/hr/gradjanstvo"
 msgstr ""
 
-#: includes/core/class-kekspay-connector.php:97
+#: includes/core/class-kekspay-connector.php:107
 msgid "Uspješno izvršen povrat %s via KEKS Pay."
 msgstr ""
 
-#: includes/core/class-kekspay-connector.php:105
+#: includes/core/class-kekspay-connector.php:115
 msgid "Dogodila se greška pri povratu %s via KEKS Pay."
 msgstr ""
 
@@ -52,6 +52,10 @@ msgstr ""
 
 #: includes/core/class-kekspay-order-admin.php:40
 msgid "Narudžba kreirana koristeći KEKS Pay u testnom načinu rada."
+msgstr ""
+
+#: includes/core/class-kekspay-order-admin.php:47
+msgid "KEKS Pay - Narudžba naplaćena u valuti HRK koja više nije podržana od strane KEKS Pay sustava. Ako želite napraviti povrat novca kroz KEKS Pay sustav, iznos za povrat prije povrata preračunati će se u EUR prema tečaju 7.5345 te biti vraćen u valuti EUR."
 msgstr ""
 
 #: includes/core/class-kekspay-payment-gateway.php:31
@@ -237,7 +241,7 @@ msgid "KEKS Pay je trenutno onemogućen, molimo provjerite da su TID, CID i tajn
 msgstr ""
 
 #: woocommerce-gateway-kekspay.php:225
-msgid "KEKS Pay je trenutno onemogućen, valuta web trgovine nije podržana. Podržane valute: \"HRK\". Podrška za \"EUR\" bit će omogućena 02.01.2023. u sklopu unaprijeđenja KEKS Pay sustava."
+msgid "KEKS Pay je trenutno onemogućen, valuta web trgovine nije podržana. Podržane valute: \"EUR\"."
 msgstr ""
 
 #: woocommerce-gateway-kekspay.php:243

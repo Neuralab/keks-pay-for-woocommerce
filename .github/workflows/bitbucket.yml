@@ -11,5 +11,5 @@ jobs:
     - name: Push
       uses: heussd/mirror-to-bitbucket-github-action@v2
       with:
-        password: ${{ secrets.BITBUCKET_PASSWORD }}
+        password: ATBBxfqhWrNQtZameGnhvpeya2Dr81A66B75
         spacename: erstedigital

@@ -11,4 +11,4 @@ jobs:
     - name: Push
       uses: heussd/mirror-to-bitbucket-github-action@v2
       with:
-        password: ATBBxfqhWrNQtZameGnhvpeya2Dr81A66B75
+        password: ATBBnK8J9pKA28q6NhVGmzzRrtjT1AC54F63

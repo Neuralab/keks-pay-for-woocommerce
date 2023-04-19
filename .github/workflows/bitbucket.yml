@@ -1,5 +1,5 @@
 name: Mirror to Bitbucket
-on: [push]
+on: [push, workflow_dispatch]
 jobs:
   mirror-job:
     runs-on: ubuntu-latest
@@ -13,3 +13,4 @@ jobs:
       with:
         password: ATBBnK8J9pKA28q6NhVGmzzRrtjT1AC54F63
         spacename: erstedigital
+        repository: keks_woocommerce

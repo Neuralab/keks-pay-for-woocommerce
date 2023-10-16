@@ -1,0 +1,16 @@
+name: Mirror to Bitbucket
+on: [push, workflow_dispatch]
+jobs:
+  mirror-job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # <-- clone with complete history
+    - name: Push
+      uses: heussd/mirror-to-bitbucket-github-action@v2
+      with:
+        password: ${{ secrets.BITBUCKET_PASSWORD }}
+        spacename: erstedigital
+        repository: keks_woocommerce

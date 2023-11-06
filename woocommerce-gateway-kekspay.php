@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       KEKS Pay for WooCommerce
  * Plugin URI:        https://www.kekspay.hr/
- * Description:       Incredible fast and user friendly payment method created by Erste Bank Croatia.
+ * Description:       Incredibly fast and user friendly payment method created by Erste Bank Croatia.
  * Version:           1.0.14
  * Requires at least: 5.0
  * Requires PHP:      7.2
@@ -14,7 +14,7 @@
  * Domain Path:       /languages
  *
  * WC requires at least: 3.3
- * WC tested up to: 8.2.1
+ * WC tested up to: 8.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

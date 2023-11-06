@@ -51,6 +51,7 @@ For more installation options check the [official WordPress documentation](https
 
 = 1.0.14 =
 * Changes to plugin support info.
+* Fix typo in plugin description.
 
 = 1.0.13 =
 * Declare compatibility with HPOS.

@@ -86,6 +86,11 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
       $response = wp_safe_remote_post( Kekspay_Data::get_kekspay_api_base() . 'keksrefund', $this->get_default_args( $body ) );
       Kekspay_Logger::log( 'Request sent to refund order ' . $order->get_id() . ' (' . $amount . $order->get_currency() . ') via KEKS Pay.', 'info' );
 
+      if ( is_wp_error( $response ) ) {
+        Kekspay_Logger::log( $response->get_error_message(), 'error' );
+        return false;
+      }
+
       $status_code = wp_remote_retrieve_response_code( $response );
       if ( $status_code < 200 || $status_code > 299 ) {
         Kekspay_Logger::log( 'Refund for order ' . $order->get_id() . ' (' . $amount . $order->get_currency() . ') via KEKS Pay failed, does not have a success status code.', 'error' );

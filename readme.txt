@@ -4,7 +4,7 @@ Tags: kekspay, woocommerce, gateway, payment
 Requires at least: 5.0
 Tested up to: 6.4
 Requires PHP: 7.2
-Stable tag: 1.0.14
+Stable tag: 1.0.15
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -18,7 +18,7 @@ Currently KEKS Pay for WooCommerce is available for merchants only in CROATIA.
 
 == Why choose KEKS Pay? ==
 
-KEKS Pay has no setup fees, no monthly fees, no hidden costs - you only get charged when you take payments through KEKS Pay. Earnings are transferred to your bank account on a 1-day rolling basis. 
+KEKS Pay has no setup fees, no monthly fees, no hidden costs - you only get charged when you take payments through KEKS Pay. Earnings are transferred to your bank account on a 1-day rolling basis.
 
 Cancel whenever you want without additional costs.
 
@@ -26,7 +26,7 @@ Cancel whenever you want without additional costs.
 
 To do a refund, select the order and click the Refund button afterward. You will be able to type in the amount you would refund. The order status will change to “Refunded” once the order has been successfully refunded.
 
-On a side note, this plugin is provided “as-is” and we don't currently provide support around installing and optimizing it for your needs. 
+On a side note, this plugin is provided “as-is” and we don't currently provide support around installing and optimizing it for your needs.
 
 == Installation ==
 
@@ -48,6 +48,10 @@ On a side note, this plugin is provided “as-is” and we don't currently provi
 For more installation options check the [official WordPress documentation](https://wordpress.org/support/article/managing-plugins/#manual-plugin-installation) about installing plugins.
 
 == Changelog ==
+
+= 1.0.15 =
+* Add error log for refund request timeout.
+* Increase timeout for refund request.
 
 = 1.0.14 =
 * Changes to plugin support info.

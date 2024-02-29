@@ -11,6 +11,7 @@ jobs:
     - name: Push
       uses: heussd/mirror-to-bitbucket-github-action@v2
       with:
+        username: IvanPetakNeuralab
         password: ${{ secrets.BITBUCKET_PASSWORD }}
         spacename: erstedigital
         repository: keks_woocommerce

@@ -4,7 +4,7 @@ Tags: kekspay, woocommerce, gateway, payment
 Requires at least: 5.0
 Tested up to: 6.4
 Requires PHP: 7.2
-Stable tag: 1.0.15
+Stable tag: 1.0.16
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 

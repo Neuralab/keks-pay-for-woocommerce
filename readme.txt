@@ -49,6 +49,13 @@ For more installation options check the [official WordPress documentation](https
 
 == Changelog ==
 
+= 1.0.16 =
+* Update base url of kekspay API.
+
+= 1.0.15 =
+* Add error log for refund request timeout.
+* Increase timeout for refund request.
+
 = 1.0.15 =
 * Add error log for refund request timeout.
 * Increase timeout for refund request.

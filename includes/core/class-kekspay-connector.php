@@ -46,8 +46,6 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
 
     /**
      * Trigger refund for given order and amount.
-     * If failed to refund, method calls itself with $use_deprecated_id set to true
-     * to try to refund order with old version of transaction ID.
      *
      * @param  WC_Order $order
      * @param  float    $amount
@@ -71,13 +69,18 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
 
       $timestamp = time();
 
+      $hash = Kekspay_Data::get_hash( $order, $refund_amount, $timestamp );
+      if ( ! $hash ) {
+        return false;
+      }
+
       $body = array(
         'bill_id'   => Kekspay_Data::get_bill_id_by_order_id( $order->get_id() ),
         'tid'       => Kekspay_Data::get_settings( 'webshop-tid', true ),
         'cid'       => Kekspay_Data::get_settings( 'webshop-cid', true ),
         'amount'    => $refund_amount,
         'epochtime' => $timestamp,
-        'hash'      => Kekspay_Data::get_hash( $order, $refund_amount, $timestamp ),
+        'hash'      => $hash,
         'currency'  => $refund_currency,
       );
 

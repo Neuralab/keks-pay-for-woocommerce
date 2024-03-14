@@ -283,26 +283,60 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
     }
 
     /**
+     * Detects the cipher to use based on the key stored.
+     * Currently supporting: - 3DES
+     *                       - AES
+     *
+     * @param  string   $key  Secret key used for hashing.
+     *
+     * @return string
+     */
+    public static function get_cipher( $key ) {
+      $key_size = strlen( $key );
+
+      if ( ctype_xdigit( $key ) ) {
+        if ( $key_size === 24 ) {
+          return 'des-ede3-cbc';
+        } else {
+          throw new Exception( 'Secret key must be 24 bytes.' );
+        }
+      } else {
+        if ( in_array( $key_size, array( 16, 24, 32 ), true ) ) {
+          return 'aes-' . ( $key_size * 8 ) . '-cbc';
+        } else {
+          throw new Exception( 'Secret key must be 16, 24 or 32 bytes.' );
+        }
+      }
+    }
+
+    /**
      * Return hash created from the provided data and secret.
      *
-     * @param  string $order     Order from which to extract data for hash.
+     * @param  object $order     Order from which to extract data for hash.
      * @param  string $timestamp Timestamp for creating hash.
      *
      * @return string
      */
     public static function get_hash( $order, $amount, $timestamp ) {
-      // Get hashing key from the plugins settings.
-      $key = self::get_settings( 'webshop-secret-key', true );
-      // Concat epochtime + webshop tid + order amount + bill_id for payload.
-      $payload = $timestamp . self::get_settings( 'webshop-tid', true ) . $amount . self::get_bill_id_by_order_id( $order->get_id() );
-      // Extract bytes from md5 hex hash.
-      $payload_checksum = pack( 'H*', md5( $payload ) );
-      // Create 8 byte binary initialization vector.
-      $iv = str_repeat( pack( 'c', 0 ), 8 );
-      // Encrypt data using 3DES CBC algorithm and convert it to hex.
-      $hash = bin2hex( openssl_encrypt( $payload_checksum, 'des-ede3-cbc', $key, OPENSSL_RAW_DATA, $iv ) );
+      try {
+        // Get hashing key from the plugins settings.
+        $key = self::get_settings( 'webshop-secret-key', true );
+        // Define the cipher used for hashing.
+        $cipher = self::get_cipher( $key );
+        // Concat epochtime + webshop tid + order amount + bill_id for payload.
+        $payload = $timestamp . self::get_settings( 'webshop-tid', true ) . $amount . self::get_bill_id_by_order_id( $order->get_id() );
+        // Extract bytes from md5 hex hash.
+        $payload_checksum = pack( 'H*', md5( $payload ) );
+        // Create 8 or 16 (depending on cipher) byte binary initialization vector.
+        $iv = str_repeat( pack( 'c', 0 ), false !== strpos( $cipher, 'aes' ) ? 16 : 8 );
+        // Encrypt data using 3DES CBC algorithm and convert it to hex.
+        $hash = bin2hex( openssl_encrypt( $payload_checksum, $cipher, $key, OPENSSL_RAW_DATA, $iv ) );
 
-      return strtoupper( $hash );
+        return strtoupper( $hash );
+      } catch ( Exception $e ) {
+        Kekspay_Logger::log( 'Error while generating hash:' . $e->getMessage(), 'error' );
+      }
+
     }
 
   }

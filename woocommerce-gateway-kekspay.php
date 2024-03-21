@@ -303,7 +303,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
         $section = filter_input( INPUT_GET, 'section', FILTER_SANITIZE_STRING );
 
         if ( isset( $section ) && KEKSPAY_PLUGIN_ID === $section ) {
-          wp_enqueue_script( 'kekspay-admin-script', KEKSPAY_DIR_URL . '/assets/js/kekspay-admin.js', array( 'jquery' ), KEKSPAY_PLUGIN_VERSION, true );
+          wp_enqueue_script( 'kekspay-admin-script', KEKSPAY_DIR_URL . '/assets/dist/js/kekspay-admin.js', array( 'jquery' ), KEKSPAY_PLUGIN_VERSION, true );
         }
       }
     }
@@ -313,7 +313,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
      */
     public function register_client_script() {
       if ( is_checkout() ) {
-        wp_enqueue_style( 'kekspay-client-style', KEKSPAY_DIR_URL . '/assets/css/kekspay.css', array(), KEKSPAY_PLUGIN_VERSION );
+        wp_enqueue_style( 'kekspay-client-style', KEKSPAY_DIR_URL . '/assets/dist/css/kekspay.css', array(), KEKSPAY_PLUGIN_VERSION );
 
         // Add redirect js only on order-pay endpoint but not on wp-admin generated customer payment page.
         if ( is_wc_endpoint_url( 'order-pay' ) && ! filter_input( INPUT_GET, 'pay_for_order', FILTER_VALIDATE_BOOLEAN ) ) {
@@ -321,7 +321,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
           $order    = new WC_Order( $order_id );
 
           if ( 'erste-kekspay-woocommerce' === $order->get_payment_method() ) {
-            wp_enqueue_script( 'kekspay-client-script', KEKSPAY_DIR_URL . '/assets/js/kekspay.js', array( 'jquery' ), KEKSPAY_PLUGIN_VERSION, true );
+            wp_enqueue_script( 'kekspay-client-script', KEKSPAY_DIR_URL . '/assets/dist/js/kekspay.js', array( 'jquery' ), KEKSPAY_PLUGIN_VERSION, true );
 
             $localize_data = array(
                 'ajaxurl'     => admin_url( 'admin-ajax.php' ),

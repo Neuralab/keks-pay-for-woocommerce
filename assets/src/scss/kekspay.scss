@@ -1,0 +1,88 @@
+.kekspay {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.kekspay-url__wrap {
+  display: none;
+}
+
+.kekspay-qr {
+  margin-bottom: 24px;
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 782px) {
+  .kekspay-qr {
+    display: block;
+  }
+}
+
+.kekspay-qr-code {
+  background-repeat: no-repeat;
+  width: 245px;
+  height: 245px;
+}
+
+.kekspay-qr__instructions {
+  margin-right: 12px;
+}
+
+.kekspay-qr__instructions ol {
+  margin-bottom: 0;
+}
+
+/**
+ * Target smartphones and touch screen devices
+ *
+ * https://www.w3.org/TR/mediaqueries-4/#mf-interaction
+ */
+@media (hover:none), (hover:on-demand), (pointer:coarse) {
+  .kekspay-qr {
+    display: none;
+  }
+
+  .kekspay-url__wrap {
+    display: block;
+  }
+}
+
+.kekspay-logo {
+  width:  300px;
+  height: 129px;
+  margin: 0 auto;
+}
+
+.payment_method_erste-kekspay-woocommerce .kekspay-logo {
+  float:  right;
+  width:  70px;
+  height: 30px;
+}
+
+.kekspay-icon-pay {
+  display:        inline;
+  vertical-align: middle;
+
+  width:  34px;
+  height: 34px;
+}
+
+a.kekspay-sell-button {
+  background: #21A3E9;
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  padding: 16px 24px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+}
+
+a.kekspay-cancel {
+  display: inline-block;
+  margin-top: 24px;
+}

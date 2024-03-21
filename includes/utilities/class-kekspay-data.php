@@ -177,11 +177,11 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      * @return string
      */
     public static function get_svg( $svg ) {
-      if ( ! $svg || ! file_exists( KEKSPAY_DIR_PATH . 'assets/img/' . $svg . '.svg' ) ) {
+      if ( ! $svg || ! file_exists( KEKSPAY_DIR_PATH . 'assets/dist/img/' . $svg . '.svg' ) ) {
         return false;
       }
 
-      return file_get_contents( KEKSPAY_DIR_PATH . 'assets/img/' . $svg . '.svg' );
+      return file_get_contents( KEKSPAY_DIR_PATH . 'assets/dist/img/' . $svg . '.svg' );
     }
 
     /**

@@ -38,7 +38,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
      *
      * @var string
      */
-    private static $kekspay_api = 'https://ewa.erstebank.hr/tps/';
+    private static $kekspay_api = 'https://ewa.erstebank.hr/eretailer/';
 
     /**
      * Set base test url of kekspay API.

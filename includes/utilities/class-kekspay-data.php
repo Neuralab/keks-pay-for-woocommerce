@@ -48,6 +48,16 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
     private static $test_kekspay_api = 'https://kekspayuat.erstebank.hr/eretailer/';
 
     /**
+     * Per Kekpay documentation, parametar "algo" needs to be sent with the requests that use hash.
+     * Value of "algo" tells Kekspay servers which cipher was used for hashing:
+     *                0 : 3DES
+     *                1 : AES
+     *
+     * @var string
+     */
+    private static $algo;
+
+    /**
      * Init data class.
      */
     public function __construct() {
@@ -252,6 +262,15 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
     }
 
     /**
+     * Extract order id from kekspay bill id.
+     *
+     * @return string
+     */
+    public static function get_algo() {
+      return self::$algo;
+    }
+
+    /**
      * Gathers all data needed for payment and formats it as array.
      *
      * @param  object $order     Order from which to extract data.
@@ -296,12 +315,14 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
 
       if ( ctype_xdigit( $key ) ) {
         if ( $key_size === 24 ) {
+          self::$algo = 0;
           return 'des-ede3-cbc';
         } else {
           throw new Exception( 'Secret key must be 24 bytes.' );
         }
       } else {
         if ( in_array( $key_size, array( 16, 24, 32 ), true ) ) {
+          self::$algo = 1;
           return 'aes-' . ( $key_size * 8 ) . '-cbc';
         } else {
           throw new Exception( 'Secret key must be 16, 24 or 32 bytes.' );
@@ -329,7 +350,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
         $payload_checksum = pack( 'H*', md5( $payload ) );
         // Create 8 or 16 (depending on cipher) byte binary initialization vector.
         $iv = str_repeat( pack( 'c', 0 ), false !== strpos( $cipher, 'aes' ) ? 16 : 8 );
-        // Encrypt data using 3DES CBC algorithm and convert it to hex.
+        // Encrypt data using 3DES or AES cipher and convert it to hex.
         $hash = bin2hex( openssl_encrypt( $payload_checksum, $cipher, $key, OPENSSL_RAW_DATA, $iv ) );
 
         return strtoupper( $hash );

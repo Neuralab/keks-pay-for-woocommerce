@@ -81,6 +81,7 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
         'amount'    => $refund_amount,
         'epochtime' => $timestamp,
         'hash'      => $hash,
+        'algo'      => Kekspay_Data::get_algo(),
         'currency'  => $refund_currency,
       );
 

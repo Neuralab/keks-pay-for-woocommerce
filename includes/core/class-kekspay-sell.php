@@ -46,6 +46,7 @@ if ( ! class_exists( 'Kekspay_Sell' ) ) {
      */
     public function get_sell_qr( $order ) {
       $data = Kekspay_Data::get_sell_data( $order );
+
       try {
         $options = new QROptions(
           array(

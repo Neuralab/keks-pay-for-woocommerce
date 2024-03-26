@@ -37,8 +37,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 
       $this->supports = array( 'products', 'refunds' );
 
-      $this->connector = new Kekspay_Connector();
-      $this->sell      = new Kekspay_Sell();
+      $this->sell = new Kekspay_Sell();
 
       $this->title = esc_attr( Kekspay_Data::get_settings( 'title' ) );
 
@@ -217,7 +216,7 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
         return false;
       }
 
-      return $this->connector->refund( $order, $amount );
+      return Kekspay_Connector::refund( $order, $amount );
     }
 
   }

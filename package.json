@@ -1,7 +1,7 @@
 {
-  "name": "KEKS Pay for WooCommerce",
+  "name": "keks-pay-for-woocommerce",
   "version": "1.0.0",
-  "description": "KEKS Pay build",
+  "description": "KEKS Pay assets build",
   "private": true,
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",

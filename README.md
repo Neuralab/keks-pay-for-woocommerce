@@ -21,7 +21,7 @@ On a side note, this plugin is provided “as-is” and we don't currently provi
 #### MINIMUM REQUIREMENTS
 
 * WooCommerce 8.2 or greater.
-* WordPress 5.3 or greater.
+* WordPress 6.3 or greater.
 * PHP version 7.4 or greater.
 * SSL must be installed on your site and active on your Checkout pages.
 

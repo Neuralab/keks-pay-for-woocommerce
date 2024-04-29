@@ -12,12 +12,18 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
   class Kekspay_Connector {
 
     /**
+     * Class constructor.
+     */
+    public function __construct() {
+    }
+
+    /**
      * Return an array for default args or false if failed to JSON encode.
      *
      * @param  array  $body
      * @return array|false
      */
-    private static function get_default_args( $body ) {
+    private function get_default_args( $body ) {
       $encoded_body = wp_json_encode( $body );
 
       if ( ! $encoded_body ) {
@@ -46,7 +52,7 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
      *
      * @return array    [ 'success' => bool, 'message' => string ]
      */
-    public static function refund( $order, $amount ) {
+    public function refund( $order, $amount ) {
       if ( 'erste-kekspay-woocommerce' !== $order->get_payment_method() ) {
         return;
       }
@@ -81,7 +87,7 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
 
       $wc_price = wc_price( $amount, array( 'currency' => $currency ) );
 
-      $response = wp_safe_remote_post( Kekspay_Data::get_kekspay_api_base() . 'keksrefund', self::get_default_args( $body ) );
+      $response = wp_safe_remote_post( Kekspay_Data::get_kekspay_api_base() . 'keksrefund', $this->get_default_args( $body ) );
       Kekspay_Logger::log( 'Request sent to refund order ' . $order->get_id() . ' (' . $amount . $order->get_currency() . ') via KEKS Pay.', 'info' );
 
       if ( is_wp_error( $response ) ) {

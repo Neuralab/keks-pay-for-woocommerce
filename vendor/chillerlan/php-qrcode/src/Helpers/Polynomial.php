@@ -17,14 +17,12 @@ use chillerlan\QRCode\QRCodeException;
 use function array_fill, count, sprintf;
 
 /**
- * Polynomial long division helpers
- *
- * @see http://www.thonky.com/qr-code-tutorial/error-correction-coding
+ * @link http://www.thonky.com/qr-code-tutorial/error-correction-coding
  */
-final class Polynomial{
+class Polynomial{
 
 	/**
-	 * @see http://www.thonky.com/qr-code-tutorial/log-antilog-table
+	 * @link http://www.thonky.com/qr-code-tutorial/log-antilog-table
 	 */
 	protected const table = [
 		[  1,   0], [  2,   0], [  4,   1], [  8,  25], [ 16,   2], [ 32,  50], [ 64,  26], [128, 198],
@@ -62,26 +60,29 @@ final class Polynomial{
 	];
 
 	/**
-	 * @var int[]
+	 * @var array
 	 */
-	protected array $num = [];
+	protected $num = [];
 
 	/**
 	 * Polynomial constructor.
+	 *
+	 * @param array|null $num
+	 * @param int|null   $shift
 	 */
 	public function __construct(array $num = null, int $shift = null){
 		$this->setNum($num ?? [1], $shift);
 	}
 
 	/**
-	 *
+	 * @return array
 	 */
 	public function getNum():array{
 		return $this->num;
 	}
 
 	/**
-	 * @param int[]    $num
+	 * @param array    $num
 	 * @param int|null $shift
 	 *
 	 * @return \chillerlan\QRCode\Helpers\Polynomial
@@ -104,7 +105,7 @@ final class Polynomial{
 	}
 
 	/**
-	 * @param int[] $e
+	 * @param array $e
 	 *
 	 * @return \chillerlan\QRCode\Helpers\Polynomial
 	 */
@@ -126,7 +127,7 @@ final class Polynomial{
 	}
 
 	/**
-	 * @param int[] $e
+	 * @param array $e
 	 *
 	 * @return \chillerlan\QRCode\Helpers\Polynomial
 	 */
@@ -149,6 +150,9 @@ final class Polynomial{
 	}
 
 	/**
+	 * @param int $n
+	 *
+	 * @return int
 	 * @throws \chillerlan\QRCode\QRCodeException
 	 */
 	public function glog(int $n):int{
@@ -157,11 +161,13 @@ final class Polynomial{
 			throw new QRCodeException(sprintf('log(%s)', $n));
 		}
 
-		return self::table[$n][1];
+		return Polynomial::table[$n][1];
 	}
 
 	/**
+	 * @param int $n
 	 *
+	 * @return int
 	 */
 	public function gexp(int $n):int{
 
@@ -172,7 +178,7 @@ final class Polynomial{
 			$n -= 255;
 		}
 
-		return self::table[$n][0];
+		return Polynomial::table[$n][0];
 	}
 
 }

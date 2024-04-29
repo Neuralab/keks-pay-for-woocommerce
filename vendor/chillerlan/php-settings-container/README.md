@@ -1,65 +1,64 @@
 # chillerlan/php-settings-container
 
-A container class for settings objects - decouple configuration logic from your application! Not a DI container.
-- [`SettingsContainerInterface`](https://github.com/chillerlan/php-settings-container/blob/main/src/SettingsContainerInterface.php) provides immutable properties with magic getter & setter and some fancy.
+A container class for immutable settings objects. Not a DI container. PHP 7.2+
+- [`SettingsContainerInterface`](https://github.com/chillerlan/php-settings-container/blob/master/src/SettingsContainerInterface.php) provides immutable properties with magic getter & setter and some fancy
 
-[![PHP Version Support][php-badge]][php]
 [![version][packagist-badge]][packagist]
 [![license][license-badge]][license]
-[![Continuous Integration][gh-action-badge]][gh-action]
+[![Travis][travis-badge]][travis]
 [![Coverage][coverage-badge]][coverage]
-[![Codacy][codacy-badge]][codacy]
+[![Scrunitizer][scrutinizer-badge]][scrutinizer]
 [![Packagist downloads][downloads-badge]][downloads]
+[![PayPal donate][donate-badge]][donate]
 
-[php-badge]: https://img.shields.io/packagist/php-v/chillerlan/php-settings-container?logo=php&color=8892BF
-[php]: https://www.php.net/supported-versions.php
-[packagist-badge]: https://img.shields.io/packagist/v/chillerlan/php-settings-container.svg?logo=packagist
+[packagist-badge]: https://img.shields.io/packagist/v/chillerlan/php-settings-container.svg?style=flat-square
 [packagist]: https://packagist.org/packages/chillerlan/php-settings-container
-[license-badge]: https://img.shields.io/github/license/chillerlan/php-settings-container.svg
-[license]: https://github.com/chillerlan/php-settings-container/blob/main/LICENSE
-[coverage-badge]: https://img.shields.io/codecov/c/github/chillerlan/php-settings-container.svg?logo=codecov
+[license-badge]: https://img.shields.io/github/license/chillerlan/php-settings-container.svg?style=flat-square
+[license]: https://github.com/chillerlan/php-settings-container/blob/master/LICENSE
+[travis-badge]: https://img.shields.io/travis/chillerlan/php-settings-container.svg?style=flat-square
+[travis]: https://travis-ci.org/chillerlan/php-settings-container
+[coverage-badge]: https://img.shields.io/codecov/c/github/chillerlan/php-settings-container.svg?style=flat-square
 [coverage]: https://codecov.io/github/chillerlan/php-settings-container
-[codacy-badge]: https://img.shields.io/codacy/grade/bd2467799e2943d2853ce3ebad5af490/v2.x-php7.4?logo=codacy
-[codacy]: https://app.codacy.com/gh/chillerlan/php-settings-container/dashboard?branch=v2.x-php7.4
-[downloads-badge]: https://img.shields.io/packagist/dt/chillerlan/php-settings-container.svg?logo=packagist
+[scrutinizer-badge]: https://img.shields.io/scrutinizer/g/chillerlan/php-settings-container.svg?style=flat-square
+[scrutinizer]: https://scrutinizer-ci.com/g/chillerlan/php-settings-container
+[downloads-badge]: https://img.shields.io/packagist/dt/chillerlan/php-settings-container.svg?style=flat-square
 [downloads]: https://packagist.org/packages/chillerlan/php-settings-container/stats
-[gh-action-badge]: https://github.com/chillerlan/php-settings-container/workflows/CI/badge.svg
-[gh-action]: https://github.com/chillerlan/php-settings-container/actions?query=workflow%3A%22CI%22
+[donate-badge]: https://img.shields.io/badge/donate-paypal-ff33aa.svg?style=flat-square
+[donate]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WLYUNAT9ZTJZ4
 
 ## Documentation
 
 ### Installation
 **requires [composer](https://getcomposer.org)**
 
-*composer.json* (note: replace `dev-main` with a [version constraint](https://getcomposer.org/doc/articles/versions.md#writing-version-constraints), e.g. `^2.1` - see [releases](https://github.com/chillerlan/php-settings-container/releases) for valid versions)
+*composer.json* (note: replace `dev-master` with a version boundary)
 ```json
 {
 	"require": {
-		"php": "^7.4 || ^8.0",
-		"chillerlan/php-settings-container": "dev-main"
+		"php": "^7.2",
+		"chillerlan/php-settings-container": "^1.0"
 	}
 }
 ```
+
+### Manual installation
+Download the desired version of the package from [master](https://github.com/chillerlan/php-settings-container/archive/master.zip) or 
+[release](https://github.com/chillerlan/php-settings-container/releases) and extract the contents to your project folder.  After that:
+- run `composer install` to install the required dependencies and generate `/vendor/autoload.php`.
+- if you use a custom autoloader, point the namespace `chillerlan\Settings` to the folder `src` of the package 
 
 Profit!
 
 ## Usage
 
-The `SettingsContainerInterface` (wrapped in`SettingsContainerAbstract` ) provides plug-in functionality for immutable object properties and adds some fancy, like loading/saving JSON, arrays etc. 
-It takes an `iterable` as the only constructor argument and calls a method with the trait's name on invocation (`MyTrait::MyTrait()`) for each used trait.
+The `SettingsContainerInterface` (wrapped in`SettingsContainerAbstract` ) provides plug-in functionality for immutable object variables and adds some fancy, like loading/saving JSON, arrays etc. 
+It takes iterable as the only constructor argument and calls a method with the trait's name on invocation (`MyTrait::MyTrait()`) for each used trait.
 
 ### Simple usage
 ```php
 class MyContainer extends SettingsContainerAbstract{
 	protected $foo;
 	protected $bar;
-}
-```
-Typed properties in PHP 7.4+:
-```php
-class MyContainer extends SettingsContainerAbstract{
-	protected string $foo;
-	protected string $bar;
 }
 ```
 
@@ -79,8 +78,6 @@ $container->fromJSON('{"foo": "what", "bar": "foo"}');
 $container->toArray(); // -> ['foo' => 'what', 'bar' => 'foo']
 // or JSON
 $container->toJSON(); // -> {"foo": "what", "bar": "foo"}
-// JSON via JsonSerializable
-$json = json_encode($container); // -> {"foo": "what", "bar": "foo"}
 
 //non-existing properties will be ignored:
 $container->nope = 'what';
@@ -134,7 +131,7 @@ var_dump($container->what); // -> md5 hash of "some value"
 
 ### API
 
-#### [`SettingsContainerAbstract`](https://github.com/chillerlan/php-settings-container/blob/main/src/SettingsContainerAbstract.php)
+#### [`SettingsContainerAbstract`](https://github.com/chillerlan/php-settings-container/blob/master/src/SettingsContainerAbstract.php)
 
 method | return  | info
 -------- | ----  | -----------

@@ -12,11 +12,10 @@
 
 namespace chillerlan\QRCode\Output;
 
-use chillerlan\QRCode\QRCode;
-use chillerlan\QRCode\Data\QRMatrix;
+use chillerlan\QRCode\{Data\QRMatrix, QRCode};
 use chillerlan\Settings\SettingsContainerInterface;
 
-use function call_user_func_array, dirname, file_put_contents, get_called_class, in_array, is_writable, sprintf;
+use function call_user_func, dirname, file_put_contents, get_called_class, in_array, is_writable, sprintf;
 
 /**
  * common output abstract
@@ -24,53 +23,50 @@ use function call_user_func_array, dirname, file_put_contents, get_called_class,
 abstract class QROutputAbstract implements QROutputInterface{
 
 	/**
-	 * the current size of the QR matrix
-	 *
-	 * @see \chillerlan\QRCode\Data\QRMatrix::size()
+	 * @var int
 	 */
-	protected int $moduleCount;
+	protected $moduleCount;
 
 	/**
-	 * the current output mode
-	 *
-	 * @see \chillerlan\QRCode\QROptions::$outputType
+	 * @param \chillerlan\QRCode\Data\QRMatrix $matrix
 	 */
-	protected string $outputMode;
+	protected $matrix;
 
 	/**
-	 * the default output mode of the current output module
+	 * @var \chillerlan\QRCode\QROptions
 	 */
-	protected string $defaultMode;
+	protected $options;
 
 	/**
-	 * the current scaling for a QR pixel
-	 *
-	 * @see \chillerlan\QRCode\QROptions::$scale
+	 * @var string
 	 */
-	protected int $scale;
+	protected $outputMode;
 
 	/**
-	 * the side length of the QR image (modules * scale)
+	 * @var string;
 	 */
-	protected int $length;
+	protected $defaultMode;
 
 	/**
-	 * an (optional) array of color values for the several QR matrix parts
+	 * @var int
 	 */
-	protected array $moduleValues;
+	protected $scale;
 
 	/**
-	 * the (filled) data matrix object
+	 * @var int
 	 */
-	protected QRMatrix $matrix;
+	protected $length;
 
 	/**
-	 * @var \chillerlan\Settings\SettingsContainerInterface|\chillerlan\QRCode\QROptions
+	 * @var array
 	 */
-	protected SettingsContainerInterface $options;
+	protected $moduleValues;
 
 	/**
 	 * QROutputAbstract constructor.
+	 *
+	 * @param \chillerlan\Settings\SettingsContainerInterface $options
+	 * @param \chillerlan\QRCode\Data\QRMatrix      $matrix
 	 */
 	public function __construct(SettingsContainerInterface $options, QRMatrix $matrix){
 		$this->options     = $options;
@@ -90,6 +86,8 @@ abstract class QROutputAbstract implements QROutputInterface{
 
 	/**
 	 * Sets the initial module values (clean-up & defaults)
+	 *
+	 * @return void
 	 */
 	abstract protected function setModuleValues():void;
 
@@ -99,6 +97,10 @@ abstract class QROutputAbstract implements QROutputInterface{
 	 * @see file_put_contents()
 	 * @see \chillerlan\QRCode\QROptions::cachefile
 	 *
+	 * @param string $data
+	 * @param string $file
+	 *
+	 * @return bool
 	 * @throws \chillerlan\QRCode\Output\QRCodeOutputException
 	 */
 	protected function saveToFile(string $data, string $file):bool{
@@ -114,11 +116,9 @@ abstract class QROutputAbstract implements QROutputInterface{
 	 * @inheritDoc
 	 */
 	public function dump(string $file = null){
-		$file ??= $this->options->cachefile;
-
-		// call the built-in output method with the optional file path as parameter
-		// to make the called method aware if a cache file was given
-		$data = call_user_func_array([$this, $this->outputMode ?? $this->defaultMode], [$file]);
+		// call the built-in output method
+		$data = call_user_func([$this, $this->outputMode ?? $this->defaultMode]);
+		$file = $file ?? $this->options->cachefile;
 
 		if($file !== null){
 			$this->saveToFile($data, $file);

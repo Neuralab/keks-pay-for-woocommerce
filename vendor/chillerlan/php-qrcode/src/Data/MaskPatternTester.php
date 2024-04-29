@@ -8,51 +8,41 @@
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT
- *
- * @noinspection PhpUnused
  */
 
 namespace chillerlan\QRCode\Data;
 
-use function abs, array_search, call_user_func_array, min;
+use function abs, call_user_func_array;
 
 /**
- * Receives a QRDataInterface object and runs the mask pattern tests on it.
+ * The sole purpose of this class is to receive a QRMatrix object and run the pattern tests on it.
  *
- * ISO/IEC 18004:2000 Section 8.8.2 - Evaluation of masking results
- *
- * @see http://www.thonky.com/qr-code-tutorial/data-masking
+ * @link http://www.thonky.com/qr-code-tutorial/data-masking
  */
-final class MaskPatternTester{
+class MaskPatternTester{
 
 	/**
-	 * The data interface that contains the data matrix to test
+	 * @var \chillerlan\QRCode\Data\QRMatrix
 	 */
-	protected QRDataInterface $dataInterface;
+	protected $matrix;
 
 	/**
-	 * Receives the QRDataInterface
+	 * @var int
+	 */
+	protected $moduleCount;
+
+	/**
+	 * Receives the matrix an sets the module count
 	 *
 	 * @see \chillerlan\QRCode\QROptions::$maskPattern
 	 * @see \chillerlan\QRCode\Data\QRMatrix::$maskPattern
-	 */
-	public function __construct(QRDataInterface $dataInterface){
-		$this->dataInterface = $dataInterface;
-	}
-
-	/**
-	 * shoves a QRMatrix through the MaskPatternTester to find the lowest penalty mask pattern
+	 * @see \chillerlan\QRCode\QRCode::getBestMaskPattern()
 	 *
-	 * @see \chillerlan\QRCode\Data\MaskPatternTester
+	 * @param \chillerlan\QRCode\Data\QRMatrix $matrix
 	 */
-	public function getBestMaskPattern():int{
-		$penalties = [];
-
-		for($pattern = 0; $pattern < 8; $pattern++){
-			$penalties[$pattern] = $this->testPattern($pattern);
-		}
-
-		return array_search(min($penalties), $penalties, true);
+	public function __construct(QRMatrix $matrix){
+		$this->matrix      = $matrix;
+		$this->moduleCount = $this->matrix->size();
 	}
 
 	/**
@@ -60,13 +50,15 @@ final class MaskPatternTester{
 	 *
 	 * @see \chillerlan\QRCode\QROptions::$maskPattern
 	 * @see \chillerlan\QRCode\Data\QRMatrix::$maskPattern
+	 * @see \chillerlan\QRCode\QRCode::getBestMaskPattern()
+	 *
+	 * @return int
 	 */
-	public function testPattern(int $pattern):int{
-		$matrix  = $this->dataInterface->initMatrix($pattern, true);
-		$penalty = 0;
+	public function testPattern():int{
+		$penalty  = 0;
 
 		for($level = 1; $level <= 4; $level++){
-			$penalty += call_user_func_array([$this, 'testLevel'.$level], [$matrix->matrix(true), $matrix->size()]);
+			$penalty += call_user_func_array([$this, 'testLevel'.$level], [$this->matrix->matrix(true)]);
 		}
 
 		return (int)$penalty;
@@ -74,8 +66,10 @@ final class MaskPatternTester{
 
 	/**
 	 * Checks for each group of five or more same-colored modules in a row (or column)
+	 *
+	 * @return int
 	 */
-	protected function testLevel1(array $m, int $size):int{
+	protected function testLevel1(array $m):int{
 		$penalty = 0;
 
 		foreach($m as $y => $row){
@@ -84,13 +78,13 @@ final class MaskPatternTester{
 
 				for($ry = -1; $ry <= 1; $ry++){
 
-					if($y + $ry < 0 || $size <= $y + $ry){
+					if($y + $ry < 0 || $this->moduleCount <= $y + $ry){
 						continue;
 					}
 
 					for($rx = -1; $rx <= 1; $rx++){
 
-						if(($ry === 0 && $rx === 0) || (($x + $rx) < 0 || $size <= ($x + $rx))){
+						if(($ry === 0 && $rx === 0) || (($x + $rx) < 0 || $this->moduleCount <= ($x + $rx))){
 							continue;
 						}
 
@@ -113,24 +107,26 @@ final class MaskPatternTester{
 
 	/**
 	 * Checks for each 2x2 area of same-colored modules in the matrix
+	 *
+	 * @return int
 	 */
-	protected function testLevel2(array $m, int $size):int{
+	protected function testLevel2(array $m):int{
 		$penalty = 0;
 
 		foreach($m as $y => $row){
 
-			if($y > $size - 2){
+			if($y > ($this->moduleCount - 2)){
 				break;
 			}
 
 			foreach($row as $x => $val){
 
-				if($x > $size - 2){
+				if($x > ($this->moduleCount - 2)){
 					break;
 				}
 
 				if(
-					   $val === $row[$x + 1]
+					   $val === $m[$y][$x + 1]
 					&& $val === $m[$y + 1][$x]
 					&& $val === $m[$y + 1][$x + 1]
 				){
@@ -144,28 +140,30 @@ final class MaskPatternTester{
 
 	/**
 	 * Checks if there are patterns that look similar to the finder patterns (1:1:3:1:1 ratio)
+	 *
+	 * @return int
 	 */
-	protected function testLevel3(array $m, int $size):int{
+	protected function testLevel3(array $m):int{
 		$penalties = 0;
 
 		foreach($m as $y => $row){
 			foreach($row as $x => $val){
 
 				if(
-					$x + 6 < $size
+					($x + 6) < $this->moduleCount
 					&&  $val
-					&& !$row[$x + 1]
-					&&  $row[$x + 2]
-					&&  $row[$x + 3]
-					&&  $row[$x + 4]
-					&& !$row[$x + 5]
-					&&  $row[$x + 6]
+					&& !$m[$y][$x + 1]
+					&&  $m[$y][$x + 2]
+					&&  $m[$y][$x + 3]
+					&&  $m[$y][$x + 4]
+					&& !$m[$y][$x + 5]
+					&&  $m[$y][$x + 6]
 				){
 					$penalties++;
 				}
 
 				if(
-					$y + 6 < $size
+					($y + 6) < $this->moduleCount
 					&&  $val
 					&& !$m[$y + 1][$x]
 					&&  $m[$y + 2][$x]
@@ -185,19 +183,21 @@ final class MaskPatternTester{
 
 	/**
 	 * Checks if more than half of the modules are dark or light, with a larger penalty for a larger difference
+	 *
+	 * @return float
 	 */
-	protected function testLevel4(array $m, int $size):float{
+	protected function testLevel4(array $m):float{
 		$count = 0;
 
-		foreach($m as $row){
-			foreach($row as $val){
+		foreach($m as $y => $row){
+			foreach($row as $x => $val){
 				if($val){
 					$count++;
 				}
 			}
 		}
 
-		return (abs(100 * $count / $size / $size - 50) / 5) * 10;
+		return (abs(100 * $count / $this->moduleCount / $this->moduleCount - 50) / 5) * 10;
 	}
 
 }

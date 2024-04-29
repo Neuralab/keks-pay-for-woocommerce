@@ -1,10 +1,10 @@
 === KEKS Pay for WooCommerce ===
 Contributors: erstebank
 Tags: kekspay, woocommerce, gateway, payment
-Requires at least: 5.0
+Requires at least: 6.3
 Tested up to: 6.5
-Requires PHP: 7.2
-Stable tag: 1.1.0
+Requires PHP: 7.4
+Stable tag: 2.0.0
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,9 +32,9 @@ On a side note, this plugin is provided “as-is” and we don't currently provi
 
 = MINIMUM REQUIREMENTS =
 
-* WooCommerce 3.3 or greater.
-* WordPress 5.0 or greater.
-* PHP version 7.2 or greater.
+* WooCommerce 8.2 or greater.
+* WordPress 6.3 or greater.
+* PHP version 7.4 or greater.
 * SSL must be installed on your site and active on your Checkout pages.
 
 = INSTALL =
@@ -48,6 +48,9 @@ On a side note, this plugin is provided “as-is” and we don't currently provi
 For more installation options check the [official WordPress documentation](https://wordpress.org/support/article/managing-plugins/#manual-plugin-installation) about installing plugins.
 
 == Changelog ==
+
+= 2.0.0 =
+* Drop PHP 7.2 support.
 
 = 1.1.0 =
 * Add assets build

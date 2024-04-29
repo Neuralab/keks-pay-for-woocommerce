@@ -7,7 +7,7 @@ Currently KEKS Pay for WooCommerce is available for merchants only in CROATIA.
 
 ## Why choose KEKS Pay?
 
-KEKS Pay has no setup fees, no monthly fees, no hidden costs - you only get charged when you take payments through KEKS Pay. Earnings are transferred to your bank account on a 1-day rolling basis. 
+KEKS Pay has no setup fees, no monthly fees, no hidden costs - you only get charged when you take payments through KEKS Pay. Earnings are transferred to your bank account on a 1-day rolling basis.
 
 Cancel whenever you want without additional costs.
 
@@ -15,14 +15,14 @@ Cancel whenever you want without additional costs.
 
 To do a refund, select the order and click the Refund button afterward. You will be able to type in the amount you would refund. The order status will change to “Refunded” once the order has been successfully refunded.
 
-On a side note, this plugin is provided “as-is” and we don't currently provide support around installing and optimizing it for your needs. 
+On a side note, this plugin is provided “as-is” and we don't currently provide support around installing and optimizing it for your needs.
 
 ## Installation
 #### MINIMUM REQUIREMENTS
 
-* WooCommerce 3.3 or greater.
-* WordPress 5.0 or greater.
-* PHP version 7.2 or greater.
+* WooCommerce 8.2 or greater.
+* WordPress 6.3 or greater.
+* PHP version 7.4 or greater.
 * SSL must be installed on your site and active on your Checkout pages.
 
 #### INSTALL
@@ -34,3 +34,5 @@ On a side note, this plugin is provided “as-is” and we don't currently provi
 5. Visit plugin settings and fill in merchant info you received from ERSTE KEKS Pay team.
 
 For more installation options check the [official WordPress documentation](https://wordpress.org/support/article/managing-plugins/#manual-plugin-installation) about installing plugins.
+
+

@@ -299,12 +299,15 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
       $screen    = get_current_screen();
       $screen_id = $screen ? $screen->id : '';
 
-      if ( strpos( $screen_id, 'wc-settings' ) !== false ) {
-        $section = filter_input( INPUT_GET, 'section', FILTER_SANITIZE_STRING );
+      if ( strpos( $screen_id, 'wc-settings' ) !== false || strpos( $screen_id, 'wc-orders' ) !== false ) {
+        wp_enqueue_script( 'kekspay-admin-script', KEKSPAY_DIR_URL . '/assets/dist/js/kekspay-admin.js', array( 'jquery' ), KEKSPAY_PLUGIN_VERSION, true );
 
-        if ( isset( $section ) && KEKSPAY_PLUGIN_ID === $section ) {
-          wp_enqueue_script( 'kekspay-admin-script', KEKSPAY_DIR_URL . '/assets/dist/js/kekspay-admin.js', array( 'jquery' ), KEKSPAY_PLUGIN_VERSION, true );
-        }
+        $localize_data = array(
+            'ajaxurl'           => admin_url( 'admin-ajax.php' ),
+            'msg_error_default' => __( 'Something went wrong, please refresh the page and try again.', 'kekspay' ),
+        );
+
+        wp_localize_script( 'kekspay-admin-script', 'kekspayAdminScript', $localize_data );
       }
     }
 

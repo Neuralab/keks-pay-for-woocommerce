@@ -68,21 +68,24 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
       }
 
       $timestamp = time();
+      $tid       = Kekspay_Data::get_settings( 'webshop-tid', true );
+      $bill_id   = Kekspay_Data::get_bill_id_by_order_id( $order->get_id() );
 
-      $hash = Kekspay_Data::get_hash( $order, $refund_amount, $timestamp );
+      $hash = Kekspay_Data::get_hash( array( $timestamp, $tid, $refund_amount, $bill_id ) );
+
       if ( ! $hash ) {
         return false;
       }
 
       $body = array(
-        'bill_id'   => Kekspay_Data::get_bill_id_by_order_id( $order->get_id() ),
-        'tid'       => Kekspay_Data::get_settings( 'webshop-tid', true ),
-        'cid'       => Kekspay_Data::get_settings( 'webshop-cid', true ),
-        'amount'    => $refund_amount,
-        'epochtime' => $timestamp,
-        'hash'      => $hash,
-        'algo'      => Kekspay_Data::get_algo(),
-        'currency'  => $refund_currency,
+          'bill_id'   => $bill_id,
+          'tid'       => $tid,
+          'cid'       => Kekspay_Data::get_settings( 'webshop-cid', true ),
+          'amount'    => $refund_amount,
+          'epochtime' => $timestamp,
+          'hash'      => $hash,
+          'algo'      => Kekspay_Data::get_algo(),
+          'currency'  => $refund_currency,
       );
 
       $wc_price = wc_price( $amount, array( 'currency' => $currency ) );
@@ -129,6 +132,64 @@ if ( ! class_exists( 'Kekspay_Connector' ) ) {
 
         return false;
       }
+    }
+
+    /**
+     * Return Kekspay status for given order.
+     *
+     * @param  WC_Order $order
+     * @param  boolean $use_deprecated_id Defaults to false.
+     * @return array|false
+     */
+    public function get_kekspay_status( $order ) {
+      $timestamp = time();
+      $tid       = Kekspay_Data::get_settings( 'webshop-tid', true );
+      $keks_id   = Kekspay_Data::get_order_kekspay_id( $order );
+      $bill_id   = Kekspay_Data::get_bill_id_by_order_id( $order->get_id() );
+      $amount    = 0;
+
+      $hash = Kekspay_Data::get_hash( array( $timestamp, $tid, $amount, $bill_id ) );
+
+      if ( ! $hash ) {
+        return false;
+      }
+
+      $body = array(
+          'bill_id'   => $bill_id,
+          'keks_id'   => $keks_id,
+          'tid'       => $tid,
+          'epochtime' => $timestamp,
+          'algo'      => Kekspay_Data::get_algo(),
+          'hash'      => $hash,
+      );
+
+      $response = wp_safe_remote_get( Kekspay_Data::get_kekspay_api_base() . 'kekstrxinfo', $this->get_default_args( $body ) );
+      Kekspay_Logger::log( 'Request sent to refresh order status ' . $order->get_id() . ' via KEKS Pay.', 'info' );
+
+      if ( is_wp_error( $response ) ) {
+        Kekspay_Logger::log( $response->get_error_message(), 'error' );
+        return false;
+      }
+
+      $status_code = wp_remote_retrieve_response_code( $response );
+      if ( $status_code < 200 || $status_code > 299 ) {
+        Kekspay_Logger::log( 'Refresh status for order ' . $order->get_id() . ' via KEKS Pay failed, does not have a success status code.', 'error' );
+        return false;
+      }
+
+      $response_body = wp_remote_retrieve_body( $response );
+      if ( ! $response_body ) {
+        Kekspay_Logger::log( 'Refresh status for order ' . $order->get_id() . ' via KEKS Pay failed, body corrupted or missing.', 'error' );
+        return false;
+      }
+
+      Kekspay_Logger::log( $response_body, 'info' );
+
+      $response_data = json_decode( $response_body );
+
+      $status = isset( $response_data->status ) ? $response_data->status : false;
+
+      return $status;
     }
   }
 }

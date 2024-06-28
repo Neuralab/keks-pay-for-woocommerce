@@ -253,6 +253,15 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
     }
 
     /**
+     * Get order kekspay id.
+     *
+     * @return int
+     */
+    public static function get_order_kekspay_id( $order ) {
+      return $order->get_meta( 'kekspay_id' ) ?? false;
+    }
+
+    /**
      * Extract order id from kekspay bill id.
      *
      * @return string
@@ -333,19 +342,18 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
     /**
      * Return hash created from the provided data and secret.
      *
-     * @param  object $order     Order from which to extract data for hash.
-     * @param  string $timestamp Timestamp for creating hash.
+     * @param  array $hash_args Hash args for payload.
      *
      * @return string
      */
-    public static function get_hash( $order, $amount, $timestamp ) {
+    public static function get_hash( $hash_args ) {
       try {
         // Get hashing key from the plugins settings.
         $key = self::get_settings( 'webshop-secret-key', true );
         // Define the cipher used for hashing.
         $cipher = self::get_cipher( $key );
-        // Concat epochtime + webshop tid + order amount + bill_id for payload.
-        $payload = $timestamp . self::get_settings( 'webshop-tid', true ) . $amount . self::get_bill_id_by_order_id( $order->get_id() );
+        // Concat hash args for payload.
+        $payload = implode( '', $hash_args );
         // Extract bytes from md5 hex hash.
         $payload_checksum = pack( 'H*', md5( $payload ) );
         // Create 8 or 16 (depending on cipher) byte binary initialization vector.

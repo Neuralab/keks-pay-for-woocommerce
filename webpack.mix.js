@@ -16,6 +16,7 @@ if (!mix.inProduction()) {
 }
 
 mix.setPublicPath("./"); // set because of this issue: https://github.com/JeffreyWay/laravel-mix/issues/1126
+mix.js("assets/src/js/kekspay-blocks.js", "assets/dist/js/kekspay-blocks.js");
 mix.js("assets/src/js/kekspay-admin.js", "assets/dist/js/kekspay-admin.js");
 mix.js("assets/src/js/kekspay.js", "assets/dist/js/kekspay.js");
 

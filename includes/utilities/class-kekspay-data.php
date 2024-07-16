@@ -105,7 +105,7 @@ if ( ! class_exists( 'Kekspay_Data' ) ) {
 				self::load_settings();
 			}
 
-			return 'yes' === self::$settings['in-test-mode'];
+			return isset( self::$settings['in-test-mode'] ) && 'yes' === self::$settings['in-test-mode'];
 		}
 
 		/**

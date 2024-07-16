@@ -51,17 +51,19 @@ if ( ! kekspay_wc_active() ) {
 }
 
 /**
- * Declare Kekspay plugin compatible with HPOS.
+ * Declare Kekspay plugin compatibility for certain WooCommerce features:
+ *        - HPOS
+ *        - Checkout Blocks
  *
  * @return  void
  */
-function kekspay_hpos_compatible() {
+function kekspay_wc_features_compatibility() {
 	if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
 		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
 	}
 }
-add_action( 'before_woocommerce_init', 'kekspay_hpos_compatible' );
-
+add_action( 'before_woocommerce_init', 'kekspay_wc_features_compatibility' );
 
 if ( ! class_exists( 'WC_Kekspay' ) ) {
 	/**
@@ -106,6 +108,7 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
 			add_action( 'admin_init', [ $this, 'check_for_other_kekspay_gateways' ], 1 );
 			add_action( 'activated_plugin', [ $this, 'set_kekspay_plugins_check_required' ] );
 			add_action( 'woocommerce_admin_field_payment_gateways', [ $this, 'set_kekspay_plugins_check_required' ] );
+			add_action( 'woocommerce_blocks_loaded', [ $this, 'register_checkout_block_gateway' ] );
 		}
 
 		/**
@@ -241,6 +244,24 @@ if ( ! class_exists( 'WC_Kekspay' ) ) {
 		 */
 		public static function set_kekspay_plugins_check_required() {
 			update_option( 'kekspay_plugins_check_required', 'yes' );
+		}
+
+		/**
+		 * Register Kekspay method for block checkout.
+		 */
+		public function register_checkout_block_gateway() {
+			if ( ! class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+				return;
+			}
+
+			require_once KEKSPAY_DIR_PATH . 'includes/core/class-kekspay-block-checkout.php';
+
+			add_action(
+				'woocommerce_blocks_payment_method_type_registration',
+				function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+					$payment_method_registry->register( new Kekspay_Block_Checkout() );
+				}
+			);
 		}
 
 		/**

@@ -12,6 +12,12 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 	 * Kekspay_Payment_Gateway class
 	 */
 	class Kekspay_Payment_Gateway extends WC_Payment_Gateway {
+		/**
+		 * Instance of the current class, null before first usage.
+		 *
+		 * @var WC_Kekspay
+		 */
+		protected static $instance = null;
 
 		/**
 		 * App data handler.
@@ -42,6 +48,8 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 			$this->title = esc_attr( Kekspay_Data::get_settings( 'title' ) );
 
 			$this->add_hooks();
+
+			self::$instance = $this;
 		}
 
 		/**
@@ -49,7 +57,10 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 		 */
 		private function add_hooks() {
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, [ $this, 'process_admin_options' ] );
-			add_action( 'woocommerce_receipt_' . $this->id, [ $this, 'do_receipt_page' ] );
+
+			if ( ! self::$instance ) {
+				add_action( 'woocommerce_receipt_' . $this->id, [ $this, 'do_receipt_page' ] );
+			}
 		}
 
 		/**
@@ -217,5 +228,17 @@ if ( ! class_exists( 'Kekspay_Payment_Gateway' ) ) {
 			return Kekspay_Connector::refund( $order, $amount );
 		}
 
+		/**
+		 * Return class instance.
+		 *
+		 * @static
+		 * @return Kekspay_Payment_Gateway
+		 */
+		public static function get_instance() {
+			if ( is_null( self::$instance ) ) {
+				self::$instance = new self();
+			}
+			return self::$instance;
+		}
 	}
 }
